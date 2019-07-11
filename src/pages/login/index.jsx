@@ -60,7 +60,7 @@ class Login extends Component {
           memoryUtils.user = data;// 保存在内存中
           storageUtils.saveUser(data) // 保存到local中
           // 跳转到管理界面 (不需要再回退回到登陆),push是需要回退
-          this.props.history.replace('/')
+          this.props.history.replace('/backend')
         } else if(code === 5) {
           message.error('请输入用户名和密码');
         } else {
@@ -77,7 +77,7 @@ class Login extends Component {
     // 如果用户已经登陆, 自动跳转到管理界面
     const user = memoryUtils.user;
     if(user && user.user) {
-      return <Redirect to='/'/>
+      return <Redirect to='/backend'/>
     }
 
     // 得到强大的form对象

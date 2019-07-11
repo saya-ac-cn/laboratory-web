@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter,Route,Switch} from 'react-router-dom'
 
 import Login from './pages/login/index'
-import Admin from './pages/background/admin/index'
+import Backend from './pages/layout/backend'
 /**
  * 应用根组件
  * @returns {*}
@@ -14,7 +14,7 @@ function App() {
         {/*只匹配其中一个，匹配到了就显示*/}
         <Switch>
             <Route path='/login' component={Login}/>
-            <Route path='/' component={Admin}/>
+            <Route path='/backend' component={Backend}/>
         </Switch>
     </BrowserRouter>
   );
