@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import './index.less'
 import {Redirect, Route, Switch,Link, withRouter} from 'react-router-dom'
-import { Layout,Row, Col,Icon,Menu,Dropdown,Breadcrumb, } from 'antd';
+import { Row, Col,Icon,Menu,Dropdown,Breadcrumb,Modal } from 'antd';
+import {requestLogout} from '../../../api'
 import menuConfig from '../../../config/backendMenuConfig'
 import memoryUtils from '../../../utils/memoryUtils'
+import storageUtils from '../../../utils/storageUtils'
+import Info from '../../backend/info'
 import Log from '../../backend/log'
 import DB from '../../backend/db'
 /*
@@ -12,25 +15,10 @@ import DB from '../../backend/db'
  * 创建日期：2019-07-07 - 10:12
  * 描述：
  */
-const { Header, Footer, Sider, Content, } = Layout;
 const { SubMenu } = Menu;
-
-const onClick = ({ key }) => {
-  console.log(`Click on item ${key}`);
-};
-
-const menu = (
-    <Menu onClick={onClick}>
-      <Menu.Item key="1">我的信息</Menu.Item>
-      <Menu.Item key="2">设置</Menu.Item>
-      <Menu.Item key="3">退出</Menu.Item>
-    </Menu>
-);
 
 // 定义组件（ES6）
 class Admin extends Component {
-
-  rootSubmenuKeys = ['sub1', 'sub2', 'sub3','sub4', 'sub5', 'sub6'];
 
   constructor(props){
     super(props);
@@ -40,10 +28,18 @@ class Admin extends Component {
     };
   }
 
+  getHeaderMenu = () => (
+      <Menu>
+        <Menu.Item key="1">我的信息</Menu.Item>
+        <Menu.Item key="2">设置</Menu.Item>
+        <Menu.Item key="3" onClick={this.logout}>退出</Menu.Item>
+      </Menu>
+  );
+
   /*
- 根据menu的数据数组生成对应的标签数组
- 使用reduce() + 递归调用
- */
+   根据menu的数据数组生成对应的标签数组
+   使用reduce() + 递归调用
+   */
   getMenuNodes = (menuList) => {
     // 得到当前请求的路由路径
     const path = this.props.location.pathname;
@@ -71,14 +67,6 @@ class Admin extends Component {
     }, [])
   };
 
-  /*
-  在第一次render()之前执行一次
-  为第一个render()准备数据(必须同步的)
-   */
-  componentWillMount () {
-    this.menuNodes = this.getMenuNodes(menuConfig)
-  };
-
 
   // 切换面板
   handlTabClick = () =>{
@@ -87,7 +75,62 @@ class Admin extends Component {
     this.setState({collapsed:collapsed})
   };
 
+  /**
+   * 提取当前页面的标题
+   **/
+  getTitle = () => {
+    // 得到当前请求路径
+    const path = this.props.location.pathname;
+    let titles = {title:[],local:''};
+    menuConfig.forEach(item => {
+      if (item.key===path) { // 如果当前item对象的key与path一样,item的title就是需要显示的title
+        titles.title.push((<Breadcrumb.Item key={item.key}>{item.title}</Breadcrumb.Item>));
+        titles.local = item.title
+      } else if (item.children) {
+        // 在所有子item中查找匹配的
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0);
+        // 如果有值才说明有匹配的
+        if(cItem) {
+          // 取出它的一级和二级title
+          titles.title.push((<Breadcrumb.Item key={item.key}>{item.title}</Breadcrumb.Item>));
+          titles.title.push((<Breadcrumb.Item key={cItem.key}>{cItem.title}</Breadcrumb.Item>));
+          titles.local = cItem.title
+        }
+      }
+    });
+    return titles
+  };
 
+  /*
+  退出登陆
+   */
+  logout = () => {
+    // 显示确认框
+    Modal.confirm({
+      title: '确定退出吗?',
+      onOk: async () => {
+        // 请求注销接口
+        await requestLogout();
+        // 删除保存的user数据
+        storageUtils.removeUser();
+        memoryUtils.user = {};
+        // 跳转到login
+        this.props.history.replace('/login')
+      }
+    })
+  };
+
+
+  /*
+  *在第一次render()之前执行一次
+  * 为第一个render()准备数据(必须同步的)
+  */
+  componentWillMount () {
+    // 初始化左侧导航
+    this.menuNodes = this.getMenuNodes(menuConfig);
+    // 初始化顶部导航
+    this.headerMenu = this.getHeaderMenu;
+  };
 
   render() {
     const user = memoryUtils.user;
@@ -102,7 +145,8 @@ class Admin extends Component {
     const openKey = this.openKey;
     // 读取状态
     const {collapsed} = this.state;
-    console.log(this.props.location)
+    // 得到当前需要显示的title
+    const {title,local} = this.getTitle();
     return (
       <div className="container">
         <Row className="header">
@@ -115,9 +159,9 @@ class Admin extends Component {
             </div>
           </Col>
           <Col className="userinfo" span={4}>
-            <Dropdown overlay={menu}>
+            <Dropdown overlay={this.headerMenu}>
               <span className="el-dropdown-link userinfo-inner">
-                <img src="https://saya.ac.cn/files/picture/logo/Pandora/20190602/2019060212877.png" /> {user.user}<Icon type="down" />
+                <img src={user.logo} alt="logo"/> {user.user}<Icon type="down" />
               </span>
             </Dropdown>
           </Col>
@@ -135,24 +179,21 @@ class Admin extends Component {
           <section className='content-container'>
             <div className="grid-content bg-purple-light">
               <Col span={24} className="breadcrumb-container">
-                <strong className="title">主页</strong>
+                <strong className="title">{local}</strong>
                 <Breadcrumb className="breadcrumb-inner">
-                  <Breadcrumb.Item>Home</Breadcrumb.Item>
-                  <Breadcrumb.Item>
-                    <a href="">Application Center</a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>
-                    <a href="">Application List</a>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>An Application</Breadcrumb.Item>
+                  <Breadcrumb.Item>所在位置</Breadcrumb.Item>
+                  {
+                    title
+                  }
                 </Breadcrumb>
               </Col>
               <Col span={24} className="content-wrapper">
                   <Switch>
-                    <Route path='/backend/set/log' component={Log}/>
-                    <Route path='/backend/api/db' component={DB}/>
+                    <Route path='/backstage/set/info' component={Info}/>
+                    <Route path='/backstage/set/log' component={Log}/>
+                    <Route path='/backstage/api/db' component={DB}/>
                     {/*默认、及匹配不到时的页面*/}
-                    <Redirect to='/backend/set/log'/>
+                    <Redirect to='/backstage/set/info'/>
                   </Switch>
               </Col>
             </div>

@@ -11,6 +11,8 @@
 
 import axios from 'axios'
 import {message} from 'antd'
+import memoryUtils from '../utils/memoryUtils'
+import storageUtils from '../utils/storageUtils'
 
 export default function ajax(url, data={}, type='GET') {
 
@@ -32,7 +34,14 @@ export default function ajax(url, data={}, type='GET') {
         }
         // 2. 如果成功了, 调用resolve(value)
         promise.then(response => {
-            resolve(response.data)
+            resolve(response.data);
+            // 后台返回会话过期
+            if(response.data.code === -7){
+                // 删除保存的user数据
+                storageUtils.removeUser();
+                memoryUtils.user = {};
+                window.location.href = "/login";
+            }
             // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
         }).catch(error => {
             // reject(error)

@@ -10,10 +10,6 @@ import './index.less'
 // 定义组件（ES6）
 class DB extends Component {
 
-  constructor(props){
-    super(props)
-  }
-
 
   render() {
     return (

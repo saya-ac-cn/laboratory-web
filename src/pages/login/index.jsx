@@ -15,28 +15,23 @@ import storageUtils from '../../utils/storageUtils'
 // 定义组件（ES6）
 class Login extends Component {
 
-  constructor(props){
-    super(props)
-  }
-
   /*
   *对密码进行自定义验证
   */
   /*
    用户名/密码的的合法性要求
      1). 必须输入
-     2). 必须大于等于4位
-     3). 必须小于等于12位
+     2). 必须大于等于6位
+     3). 必须小于等于20位
      4). 必须是英文、数字或下划线组成
     */
   validatePwd = (rule, value, callback) => {
-    console.log('validatePwd()', rule, value);
     if(!value) {
       callback('密码必须输入')
-    } else if (value.length<4) {
-      callback('密码长度不能小于4位')
-    } else if (value.length>15) {
-      callback('密码长度不能大于15位')
+    } else if (value.length<6) {
+      callback('密码长度不能小于6位')
+    } else if (value.length>20) {
+      callback('密码长度不能大于20位')
     } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
       callback('密码必须是英文、数字或下划线组成')
     } else {
@@ -54,13 +49,13 @@ class Login extends Component {
       if (!err) {
         let loginParams = { user: values.username, password: values.password };
         const result = await requestLogin(loginParams);
-        let { msg, code, data } = result;
+        let { code, data } = result;
         if(code === 0)
         {
           memoryUtils.user = data;// 保存在内存中
-          storageUtils.saveUser(data) // 保存到local中
+          storageUtils.saveUser(data); // 保存到local中
           // 跳转到管理界面 (不需要再回退回到登陆),push是需要回退
-          this.props.history.replace('/backend')
+          this.props.history.replace('/backstage')
         } else if(code === 5) {
           message.error('请输入用户名和密码');
         } else {
@@ -77,7 +72,7 @@ class Login extends Component {
     // 如果用户已经登陆, 自动跳转到管理界面
     const user = memoryUtils.user;
     if(user && user.user) {
-      return <Redirect to='/backend'/>
+      return <Redirect to='/backstage'/>
     }
 
     // 得到强大的form对象
@@ -125,9 +120,8 @@ class Login extends Component {
                   }
                 ]
               })(
-                  <Input
+                  <Input.Password
                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      type="password"
                       placeholder="密码"
                   />
               )

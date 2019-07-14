@@ -1,5 +1,12 @@
 import ajax from './ajax'
 
+/**
+ * 重要说明！！！
+ * 因为，后台已对「/backend，/frontend，/files」接口代理,页面路由绝对禁止出现/backend、/frontend、/files（远景包括map）
+ * 在定义接口代理时，上述的路由单词已经被定义，如果使用，刷新页面将出现404，
+ * @type {string}
+ */
+
 // 后台api接口
 let backendAPI = '/backend';
 

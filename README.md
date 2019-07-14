@@ -1,4 +1,7 @@
 # 项目说明
+## 重要说明！！！
+* 页面路由绝对禁止出现/backend、/frontend、/files（远景包括map）
+* 在定义接口代理时，上述的路由单词已经被定义，如果使用，刷新页面将出现404，
 ## 参考
 * https://github.com/zxfjd3g/190105_ReactAdmin
 ## 安装antd
@@ -30,3 +33,7 @@
 * npm add axios
 ## 安装 store
 * npm install store
+## 安装 http-proxy-middleware 用于设置多个代理
+* npm install  http-proxy-middleware
+## 安装cropper（图片裁剪）
+* npm install react-cropper
