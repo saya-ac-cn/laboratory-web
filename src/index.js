@@ -17,5 +17,5 @@ memoryUtils.user = user;
 // 将App组件标签渲染到index页面的div上
 ReactDOM.render(
     <LocaleProvider locale={zhCN}>
-        <App />
+        <App/>
     </LocaleProvider>, document.getElementById('root'));

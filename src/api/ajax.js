@@ -14,29 +14,29 @@ import {message} from 'antd'
 import memoryUtils from '../utils/memoryUtils'
 import storageUtils from '../utils/storageUtils'
 
-export default function ajax(url, data={}, type='GET') {
+export default function ajax(url, data = {}, type = 'GET') {
 
     return new Promise((resolve, reject) => {
         let promise;
         // 1. 执行异步ajax请求
-        if(type==='GET') { // 发GET请求
+        if (type === 'GET') { // 发GET请求
             promise = axios.get(url, { // 配置对象
                 params: data // 指定请求参数
             })
-        } else if(type==='DELETE') { // 发DELETE请求
+        } else if (type === 'DELETE') { // 发DELETE请求
             promise = axios.delete(url, { // 配置对象
                 params: data // 指定请求参数
             })
-        } else if(type==='PUT') { // 发PUT请求
+        } else if (type === 'PUT') { // 发PUT请求
             promise = axios.put(url, data)
-        }else { // 发POST请求
+        } else { // 发POST请求
             promise = axios.post(url, data)
         }
         // 2. 如果成功了, 调用resolve(value)
         promise.then(response => {
             resolve(response.data);
             // 后台返回会话过期
-            if(response.data.code === -7){
+            if (response.data.code === -7) {
                 // 删除保存的user数据
                 storageUtils.removeUser();
                 memoryUtils.user = {};

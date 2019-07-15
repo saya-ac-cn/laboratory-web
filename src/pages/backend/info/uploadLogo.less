@@ -1,0 +1,90 @@
+.upload-cropper {
+  .upload-box {
+    display: table;
+    width: 160px;
+    height: 50px;
+    margin-top: 20px;
+    border: 1px solid #d9d9d9;
+    background-color: #00b3ee;
+    color: #fff;
+    border-radius: 4px;
+    -webkit-transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease;
+
+    .upload-span {
+      position: relative;
+      display: table-cell;
+      width: 100%;
+      height: 100%;
+      padding: 8px;
+      text-align: center;
+      vertical-align: middle;
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 14px;
+      font-variant: tabular-nums;
+      line-height: 1.5;
+      list-style: none;
+
+      .button {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        color: #fff;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input {
+        position: absolute;
+        opacity: 0;
+      }
+    }
+  }
+
+}
+
+.cropperModal {
+  display: flex;
+  flex-direction: column;
+
+  .preview-button {
+    margin-top: 30px;
+
+    .cropper-preview {
+      flex: 1;
+      overflow: hidden;
+      border: 1px solid #e8e8e8;
+    }
+  }
+
+  .cropper-view-box, .cropper-face {
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .cropperModal {
+    .preview-button {
+      display: none;
+    }
+  }
+}
+
+.show {
+  width: 160px;
+  height: 160px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 50%;
+  border: 1px solid #d5d5d5;
+
+  .picture {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}

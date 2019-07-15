@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './index.less'
 /*
  * 文件名：index.jsx
@@ -11,13 +11,13 @@ import './index.less'
 class DB extends Component {
 
 
-  render() {
-    return (
-      <div>
-数据库
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                数据库
+            </div>
+        );
+    }
 }
 
 // 对外暴露

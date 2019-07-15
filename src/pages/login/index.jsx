@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './index.less'
 import {requestLogin} from '../../api'
-import { Form, Icon, Input, Button, Checkbox,message } from 'antd';
+import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import {Redirect} from 'react-router-dom'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
@@ -15,130 +15,129 @@ import storageUtils from '../../utils/storageUtils'
 // 定义组件（ES6）
 class Login extends Component {
 
-  /*
-  *对密码进行自定义验证
-  */
-  /*
-   用户名/密码的的合法性要求
-     1). 必须输入
-     2). 必须大于等于6位
-     3). 必须小于等于20位
-     4). 必须是英文、数字或下划线组成
+    /*
+    *对密码进行自定义验证
     */
-  validatePwd = (rule, value, callback) => {
-    if(!value) {
-      callback('密码必须输入')
-    } else if (value.length<6) {
-      callback('密码长度不能小于6位')
-    } else if (value.length>20) {
-      callback('密码长度不能大于20位')
-    } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      callback('密码必须是英文、数字或下划线组成')
-    } else {
-      callback() // 验证通过
-    }
-    // callback('xxxx') // 验证失败, 并指定提示的文本
-  };
-
-  // 提交表单
-  handleSubmit = (e) =>{
-    // 阻止表单的默认提交
-    e.preventDefault();
-    this.props.form.validateFields(async (err, values) => {
-      // 通过验证
-      if (!err) {
-        let loginParams = { user: values.username, password: values.password };
-        const result = await requestLogin(loginParams);
-        let { code, data } = result;
-        if(code === 0)
-        {
-          memoryUtils.user = data;// 保存在内存中
-          storageUtils.saveUser(data); // 保存到local中
-          // 跳转到管理界面 (不需要再回退回到登陆),push是需要回退
-          this.props.history.replace('/backstage')
-        } else if(code === 5) {
-          message.error('请输入用户名和密码');
+    /*
+     用户名/密码的的合法性要求
+       1). 必须输入
+       2). 必须大于等于6位
+       3). 必须小于等于20位
+       4). 必须是英文、数字或下划线组成
+      */
+    validatePwd = (rule, value, callback) => {
+        if (!value) {
+            callback('密码必须输入')
+        } else if (value.length < 6) {
+            callback('密码长度不能小于6位')
+        } else if (value.length > 20) {
+            callback('密码长度不能大于20位')
+        } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+            callback('密码必须是英文、数字或下划线组成')
         } else {
-          message.error('用户名或密码错误');
+            callback() // 验证通过
         }
-      }else{
-        console.log('form check fail: ', values);
-      }
-    });
-  };
+        // callback('xxxx') // 验证失败, 并指定提示的文本
+    };
 
-  render() {
+    // 提交表单
+    handleSubmit = (e) => {
+        // 阻止表单的默认提交
+        e.preventDefault();
+        this.props.form.validateFields(async (err, values) => {
+            // 通过验证
+            if (!err) {
+                let loginParams = {user: values.username, password: values.password};
+                const result = await requestLogin(loginParams);
+                let {code, data} = result;
+                if (code === 0) {
+                    memoryUtils.user = data;// 保存在内存中
+                    storageUtils.saveUser(data); // 保存到local中
+                    // 跳转到管理界面 (不需要再回退回到登陆),push是需要回退
+                    this.props.history.replace('/backstage')
+                } else if (code === 5) {
+                    message.error('请输入用户名和密码');
+                } else {
+                    message.error('用户名或密码错误');
+                }
+            } else {
+                console.log('form check fail: ', values);
+            }
+        });
+    };
 
-    // 如果用户已经登陆, 自动跳转到管理界面
-    const user = memoryUtils.user;
-    if(user && user.user) {
-      return <Redirect to='/backstage'/>
+    render() {
+
+        // 如果用户已经登陆, 自动跳转到管理界面
+        const user = memoryUtils.user;
+        if (user && user.user) {
+            return <Redirect to='/backstage'/>
+        }
+
+        // 得到强大的form对象
+        const form = this.props.form;
+        const {getFieldDecorator} = form;
+        return (
+            <div className="core-div">
+                <Form onSubmit={this.handleSubmit} className="login-form login-container">
+                    <h2 className="title">统一身份认证</h2>
+                    <Form.Item>
+                        {
+                            /*
+                          用户名/密码的的合法性要求
+                            1). 必须输入
+                            2). 必须大于等于4位
+                            3). 必须小于等于12位
+                            4). 必须是英文、数字或下划线组成
+                           */
+                        }
+                        {
+                            getFieldDecorator('username', {
+                                // 配置对象: 属性名是特定的一些名称
+                                // 声明式验证: 直接使用别人定义好的验证规则进行验证
+                                rules: [
+                                    {required: true, whitespace: true, message: '用户名必须输入'},
+                                    {min: 4, message: '用户名至少4位'},
+                                    {max: 12, message: '用户名最多12位'},
+                                    {pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成'},
+                                ],
+                                // initialValue: 'admin', // 初始值
+                            })(
+                                <Input
+                                    prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="账号"
+                                />
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        {
+                            getFieldDecorator('password', {
+                                rules: [
+                                    {
+                                        validator: this.validatePwd
+                                    }
+                                ]
+                            })(
+                                <Input.Password
+                                    prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="密码"
+                                />
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        <Checkbox className="remember">记住密码</Checkbox>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">
+                            登录
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
+        );
     }
-
-    // 得到强大的form对象
-    const form = this.props.form;
-    const {getFieldDecorator} = form;
-    return (
-      <div className="core-div">
-        <Form onSubmit={this.handleSubmit} className="login-form login-container">
-          <h2 className="title">统一身份认证</h2>
-          <Form.Item>
-            {
-              /*
-            用户名/密码的的合法性要求
-              1). 必须输入
-              2). 必须大于等于4位
-              3). 必须小于等于12位
-              4). 必须是英文、数字或下划线组成
-             */
-            }
-            {
-              getFieldDecorator('username',{
-                // 配置对象: 属性名是特定的一些名称
-                // 声明式验证: 直接使用别人定义好的验证规则进行验证
-                rules: [
-                  { required: true, whitespace: true, message: '用户名必须输入' },
-                  { min: 4, message: '用户名至少4位' },
-                  { max: 12, message: '用户名最多12位' },
-                  { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
-                ],
-                // initialValue: 'admin', // 初始值
-              })(
-                  <Input
-                      prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      placeholder="账号"
-                  />
-              )
-            }
-          </Form.Item>
-          <Form.Item>
-            {
-              getFieldDecorator('password',{
-                rules:[
-                  {
-                    validator: this.validatePwd
-                  }
-                ]
-              })(
-                  <Input.Password
-                      prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      placeholder="密码"
-                  />
-              )
-            }
-          </Form.Item>
-          <Form.Item>
-            <Checkbox className="remember">记住密码</Checkbox>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-form-button">
-              登录
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    );
-  }
 }
 
 /*
