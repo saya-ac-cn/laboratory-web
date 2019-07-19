@@ -199,32 +199,25 @@ class Info extends Component {
                                 <Card title="查看资料" bordered={false}>
                                     <Form {...this.formItemLayout}>
                                         <Form.Item label="用户名" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.user} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.user} disabled={true}/>
                                         </Form.Item>
                                         <Form.Item label="性别" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.sex} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.sex} disabled={true}/>
                                         </Form.Item>
                                         <Form.Item label="邮箱" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.email} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.email} disabled={true}/>
                                         </Form.Item>
                                         <Form.Item label="qq" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.qq} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.qq} disabled={true}/>
                                         </Form.Item>
                                         <Form.Item label="phone" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.phone} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.phone} disabled={true}/>
                                         </Form.Item>
                                         <Form.Item label="生日" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.birthday} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.birthday} disabled={true}/>
                                         </Form.Item>
                                         <Form.Item label="故乡" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.hometown} disabled={true}
-                                                   placeholder="input placeholder"/>
+                                            <Input type='text' value={personalInfo.hometown} disabled={true}/>
                                         </Form.Item>
                                     </Form>
                                 </Card>

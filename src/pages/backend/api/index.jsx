@@ -1,19 +1,16 @@
 import React, {Component} from 'react';
-import './index.less'
-import {downloadBackUpDB, getBackUpDBList} from "../../../api";
+import {getApi} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
-import {Button, Col, Form, DatePicker, Table,Icon} from "antd";
-import axios from "axios";
+import {Button, Col, Form, Table, Icon, Input} from "antd";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
- * 创建日期：2019-07-09 - 22:44
- * 描述：
+ * 创建日期：2019-07-19 - 23:18
+ * 描述：接口管理
  */
-const {RangePicker} = DatePicker;
 
 // 定义组件（ES6）
-class DB extends Component {
+class Api extends Component {
 
     state = {
         // 返回的单元格数据
@@ -27,8 +24,7 @@ class DB extends Component {
         // 是否显示加载
         listLoading: false,
         filters: {
-            beginTime: '',// 搜索表单的开始时间
-            endTime: '',// 搜索表单的结束时间
+            name: ''// 按接口名检索
         },
     };
 
@@ -38,43 +34,46 @@ class DB extends Component {
     initColumns = () => {
         this.columns = [
             {
-                title: '归档日期',
-                dataIndex: 'archiveDate', // 显示数据对应的属性名
+                title: '接口名',
+                dataIndex: 'name', // 显示数据对应的属性名
             },
             {
-                title: '存放路径',
-                dataIndex: 'url', // 显示数据对应的属性名
+                title: '状态',
+                render: (text, record) => {
+                    if (record.status === 1){
+                        return '已开放'
+                    } else if (record.status === 2) {
+                        return '已关闭'
+                    } else {
+                        return '未知'
+                    }
+                }
             },
             {
-                title: '备份时间',
+                title: '创建日期',
                 dataIndex: 'createtime', // 显示数据对应的属性名
             },
             {
-                title: '下载',
-                render: (text, record) => (
-                    <span onClick={() => this.downloadFile(record)}>
-                        <Icon type="cloud-download" />
-                    </span>
-                ),
+                title: '修改日期',
+                dataIndex: 'updatetime', // 显示数据对应的属性名
             },
         ]
     };
 
     /**
-     * 获取备份数据
+     * 获取接口列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
         let para = {
             nowPage: this.state.nowPage,
             pageSize: this.state.pageSize,
-            beginTime: this.state.filters.beginTime,
-            endTime: this.state.filters.endTime,
+            name: this.state.filters.name,
         };
         // 在发请求前, 显示loading
         this.setState({listLoading: true});
         // 发异步ajax请求, 获取数据
-        const {msg, code, data} = await getBackUpDBList(para);
+        const {msg, code, data} = await getApi(para);
         // 在请求完成后, 隐藏loading
         this.setState({listLoading: false});
         if (code === 0) {
@@ -123,53 +122,6 @@ class DB extends Component {
         });
     };
 
-    // 日期选择发生变化
-    onChangeDate = (date, dateString) => {
-        let _this = this;
-        let {filters} = _this.state;
-        filters.beginTime = dateString[0];
-        filters.endTime = dateString[1];
-        _this.setState({
-            filters
-        }, function () {
-            _this.getDatas()
-        });
-    };
-
-    downloadFile = (row) => {
-        var _this = this;
-        // 在发请求前, 显示loading
-        _this.setState({listLoading: true});
-        axios({
-            method: "GET",
-            url: downloadBackUpDB+"?archiveDate="+row.archiveDate,   //接口地址
-            responseType: 'blob',
-            //上面这个参数不加会乱码，据说{responseType: 'arraybuffer'}也可以
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-            .then(function (res) {
-                _this.setState({listLoading: false});
-                let fileName = row.archiveDate+'.sql';//文件名称
-                let blob = new Blob([res.data]);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    navigator.msSaveBlob(blob, fileName);
-                } else {
-                    let link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = fileName;
-                    link.click();
-                    window.URL.revokeObjectURL(link.href);
-                }
-            })
-            .catch(function (res) {
-                _this.setState({listLoading: false});
-                openNotificationWithIcon("error", "错误提示", "导出数据库备份失败"+res);
-            });
-    };
-
-
     /*
     *为第一次render()准备数据
     * 因为要异步加载数据，所以方法改为async执行
@@ -195,7 +147,7 @@ class DB extends Component {
                 <Col span={24} className="toolbar">
                     <Form layout="inline">
                         <Form.Item>
-                            <RangePicker onChange={this.onChangeDate}/>
+                            <Input type='text' placeholder='请输入接口名'/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.getDatas}>
@@ -207,10 +159,15 @@ class DB extends Component {
                                 重置
                             </Button>
                         </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="button">
+                                添加
+                            </Button>
+                        </Form.Item>
                     </Form>
                 </Col>
                 <Col span={24}>
-                    <Table size="middle" rowKey="url" loading={listLoading} columns={this.columns} dataSource={datas}
+                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                            pagination={{
                                showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
@@ -224,4 +181,4 @@ class DB extends Component {
 }
 
 // 对外暴露
-export default DB;
+export default Api;

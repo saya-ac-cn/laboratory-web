@@ -44,7 +44,7 @@ const backstageMenuList = [
         children: [ // 子菜单列表
             {
                 title: '接口管理',
-                key: '/backstage/api/nama',
+                key: '/backstage/api/mana',
                 hidden: false,
                 requireAuth: true
             },

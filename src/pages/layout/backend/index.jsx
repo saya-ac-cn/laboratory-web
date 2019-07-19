@@ -9,6 +9,7 @@ import storageUtils from '../../../utils/storageUtils'
 import Info from '../../backend/info'
 import Log from '../../backend/log'
 import DB from '../../backend/db'
+import Api from '../../backend/api'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -191,6 +192,7 @@ class Admin extends Component {
                                 <Switch>
                                     <Route path='/backstage/set/info' component={Info}/>
                                     <Route path='/backstage/set/log' component={Log}/>
+                                    <Route path='/backstage/api/mana' component={Api}/>
                                     <Route path='/backstage/api/db' component={DB}/>
                                     {/*默认、及匹配不到时的页面*/}
                                     <Redirect to='/backstage/set/info'/>
