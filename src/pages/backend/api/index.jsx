@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {getApi} from "../../../api";
+import {getApi, createApi, editApi, deleteApi} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
-import {Button, Col, Form, Table, Icon, Input} from "antd";
+import {Button, Col, Form, Table, Icon, Input, Modal} from "antd";
+import AddForm from "./add-form"
+import EditForm from "./edit-form"
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -24,15 +26,17 @@ class Api extends Component {
         // 是否显示加载
         listLoading: false,
         filters: {
-            name: ''// 按接口名检索
+            name: null// 按接口名检索
         },
+        modalStatus: 0, // 标识添加/更新的确认框是否显示, 0: 都不显示, 1: 显示添加, 2: 显示更新
     };
 
     /*
     * 初始化Table所有列的数组
     */
     initColumns = () => {
-        this.columns = [
+        let _this = this;
+        _this.columns = [
             {
                 title: '接口名',
                 dataIndex: 'name', // 显示数据对应的属性名
@@ -40,8 +44,8 @@ class Api extends Component {
             {
                 title: '状态',
                 render: (text, record) => {
-                    if (record.status === 1){
-                        return '已开放'
+                    if (record.status === 1) {
+                        return '已开启'
                     } else if (record.status === 2) {
                         return '已关闭'
                     } else {
@@ -57,6 +61,16 @@ class Api extends Component {
                 title: '修改日期',
                 dataIndex: 'updatetime', // 显示数据对应的属性名
             },
+            {
+                title: '操作',
+                render: (text, record) => (
+                    <div>
+                        <Button type="primary" onClick={() => this.handleModalEdit(record)} shape="circle" icon="edit"/>
+                        &nbsp;
+                        <Button type="danger" onClick={() => this.handleDellApi(record)} shape="circle" icon="delete"/>
+                    </div>
+                ),
+            },
         ]
     };
 
@@ -65,19 +79,20 @@ class Api extends Component {
      * @returns {Promise<void>}
      */
     getDatas = async () => {
+        let _this = this;
         let para = {
-            nowPage: this.state.nowPage,
-            pageSize: this.state.pageSize,
-            name: this.state.filters.name,
+            nowPage: _this.state.nowPage,
+            pageSize: _this.state.pageSize,
+            name: _this.state.filters.name,
         };
         // 在发请求前, 显示loading
-        this.setState({listLoading: true});
+        _this.setState({listLoading: true});
         // 发异步ajax请求, 获取数据
         const {msg, code, data} = await getApi(para);
         // 在请求完成后, 隐藏loading
-        this.setState({listLoading: false});
+        _this.setState({listLoading: false});
         if (code === 0) {
-            this.setState({
+            _this.setState({
                 // 总数据量
                 dataTotal: data.dateSum,
                 // 表格数据
@@ -88,6 +103,9 @@ class Api extends Component {
         }
     };
 
+    /**
+     * 刷新页面
+     */
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
@@ -95,6 +113,7 @@ class Api extends Component {
         nowPage = 1;
         filters.beginTime = '';
         filters.endTime = '';
+        filters.name = '';
         _this.setState({
             nowPage: nowPage,
             filters: filters
@@ -105,22 +124,167 @@ class Api extends Component {
 
     // 回调函数,改变页宽大小
     changePageSize = (pageSize, current) => {
+        let _this = this;
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
-        this.setState({
+        _this.setState({
             pageSize: pageSize
         }, function () {
-            this.getDatas();
+            _this.getDatas();
         });
     };
 
     // 回调函数，页面发生跳转
     changePage = (current) => {
-        this.setState({
+        let _this = this;
+        _this.setState({
             nowPage: current,
         }, function () {
-            this.getDatas();
+            _this.getDatas();
         });
     };
+
+    /**
+     * 接口名文本框内容改变事件（用于双向绑定数据）
+     * @param event
+     */
+    nameInputChange = (event) => {
+        let _this = this;
+        const value = event.target.value;
+        let filters = _this.state.filters;
+        filters.name = value;
+        _this.setState(filters)
+    };
+
+    /*
+    * 显示添加的弹窗
+    */
+    handleModalAdd = () => {
+        this.setState({
+            modalStatus: 1
+        })
+    };
+    /*
+    * 显示修改的弹窗
+    */
+    handleModalEdit = (value) => {
+        this.lineDate = value;
+        this.setState({
+            modalStatus: 2
+        })
+    };
+
+    /*
+    * 响应点击取消: 隐藏弹窗
+    */
+    handleModalCancel = () => {
+        // 清除输入数据
+        this.form.resetFields();
+        // 隐藏确认框
+        this.setState({
+            modalStatus: 0
+        })
+    };
+
+    /**
+     * 提交表单，添加接口
+     */
+    handleAddApi = () => {
+        let _this = this;
+        _this.form.validateFields((err, values) => {
+            if (!err) {
+                Modal.confirm({
+                    title: '您确定创建该接口?',
+                    onOk: async () => {
+                        // 关闭页面表单
+                        _this.setState({
+                            modalStatus: 0
+                        });
+                        let para = {
+                            name: values.name,
+                            status: values.status,
+                            descript: values.descript
+                        };
+                        // 清除输入数据
+                        _this.form.resetFields();
+                        const {msg, code} = await createApi(para);
+                        if (code === 0) {
+                            openNotificationWithIcon("success", "操作结果", "添加成功");
+                            _this.getDatas();
+                        } else {
+                            openNotificationWithIcon("error", "错误提示", msg);
+                        }
+                    },
+                    onCancel() {
+                        return false;
+                    },
+                });
+            } else {
+                openNotificationWithIcon("error", "错误提示", "您填写的表单有误，请根据提示正确填写。");
+            }
+        })
+    };
+
+    /**
+     * 修改接口
+     */
+    handleEditApi = () => {
+        let _this = this;
+        // 进行表单验证, 只有通过了才处理
+        _this.form.validateFields(async (err, values) => {
+            if (!err) {
+                Modal.confirm({
+                    title: '您确定要保存此次修改结果?',
+                    onOk: async () => {
+                        // 关闭页面表单
+                        _this.setState({
+                            modalStatus: 0
+                        });
+                        let para = {
+                            id: _this.lineDate.id,
+                            name: values.name,
+                            status: values.status,
+                            descript: values.descript
+                        };
+                        // 清除输入数据
+                        _this.form.resetFields();
+                        const {msg, code} = await editApi(para);
+                        if (code === 0) {
+                            openNotificationWithIcon("success", "操作结果", "修改成功");
+                            _this.getDatas();
+                        } else {
+                            openNotificationWithIcon("error", "错误提示", msg);
+                        }
+                    },
+                    onCancel() {
+                        return false;
+                    },
+                });
+            } else {
+                openNotificationWithIcon("error", "错误提示", "您填写的表单有误，请根据提示正确填写。");
+            }
+        })
+    };
+
+    /*
+    * 删除指定接口
+    */
+    handleDellApi = (item) => {
+        let _this = this;
+        Modal.confirm({
+            title: `确认删除${item.name}接口吗?`,
+            onOk: async () => {
+                let para = { id: item.id };
+                const {msg, code} = await deleteApi(para);
+                if (code === 0) {
+                    openNotificationWithIcon("success", "操作结果", "删除成功");
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
+    };
+
 
     /*
     *为第一次render()准备数据
@@ -141,27 +305,30 @@ class Api extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading, filters, modalStatus} = this.state;
+        // 读取所选中的行数据
+        const api = this.lineDate || {}; // 如果还没有指定一个空对象
         return (
             <section>
                 <Col span={24} className="toolbar">
                     <Form layout="inline">
                         <Form.Item>
-                            <Input type='text' placeholder='请输入接口名'/>
+                            <Input type='text' value={filters.name} onChange={this.nameInputChange}
+                                   placeholder='请输入接口名'/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                查询
+                                <Icon type="search"/>查询
                             </Button>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                重置
+                                <Icon type="reload"/>重置
                             </Button>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="button">
-                                添加
+                            <Button type="primary" htmlType="button" onClick={this.handleModalAdd}>
+                                <Icon type="plus"/>添加
                             </Button>
                         </Form.Item>
                     </Form>
@@ -175,6 +342,24 @@ class Api extends Component {
                                onChange: this.changePage,
                            }}/>
                 </Col>
+                <Modal
+                    title="创建接口"
+                    visible={modalStatus === 1}
+                    onOk={this.handleAddApi}
+                    onCancel={this.handleModalCancel}>
+                    <AddForm setForm={(form) => {
+                        this.form = form
+                    }}/>
+                </Modal>
+                <Modal
+                    title="修改接口"
+                    visible={modalStatus === 2}
+                    onOk={this.handleEditApi}
+                    onCancel={this.handleModalCancel}>
+                    <EditForm api={api} setForm={(form) => {
+                        this.form = form
+                    }}/>
+                </Modal>
             </section>
         );
     }

@@ -3,6 +3,7 @@ import './index.less'
 import {downloadBackUpDB, getBackUpDBList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import {Button, Col, Form, DatePicker, Table,Icon} from "antd";
+import moment from 'moment';
 import axios from "axios";
 /*
  * 文件名：index.jsx
@@ -27,8 +28,8 @@ class DB extends Component {
         // 是否显示加载
         listLoading: false,
         filters: {
-            beginTime: '',// 搜索表单的开始时间
-            endTime: '',// 搜索表单的结束时间
+            beginTime: null,// 搜索表单的开始时间
+            endTime: null,// 搜索表单的结束时间
         },
     };
 
@@ -94,8 +95,8 @@ class DB extends Component {
         let _this = this;
         let {filters, nowPage} = _this.state;
         nowPage = 1;
-        filters.beginTime = '';
-        filters.endTime = '';
+        filters.beginTime = null;
+        filters.endTime = null;
         _this.setState({
             nowPage: nowPage,
             filters: filters
@@ -137,7 +138,7 @@ class DB extends Component {
     };
 
     downloadFile = (row) => {
-        var _this = this;
+        let _this = this;
         // 在发请求前, 显示loading
         _this.setState({listLoading: true});
         axios({
@@ -189,22 +190,29 @@ class DB extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading,filters} = this.state;
+        let {beginTime,endTime} = filters;
+        let rangeDate;
+        if (beginTime !== null && endTime !== null){
+            rangeDate = [moment(beginTime),moment(endTime)]
+        } else {
+            rangeDate = [null,null]
+        }
         return (
             <section>
                 <Col span={24} className="toolbar">
                     <Form layout="inline">
                         <Form.Item>
-                            <RangePicker onChange={this.onChangeDate}/>
+                            <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                查询
+                                <Icon type="search" />查询
                             </Button>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                重置
+                                <Icon type="reload" />重置
                             </Button>
                         </Form.Item>
                     </Form>

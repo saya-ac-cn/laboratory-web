@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Col, Form, Button, Table, DatePicker, Select} from 'antd';
+import {Col, Form, Button, Table, DatePicker, Select, Icon} from 'antd';
 import {getLogList, getLogType, downloadLogExcel} from '../../../api'
 import {openNotificationWithIcon} from '../../../utils/window'
+import moment from 'moment';
 import axios from 'axios'
 import './index.less'
 /*
@@ -29,9 +30,9 @@ class Log extends Component {
         listLoading: false,
         filters: {
             // 查询的日期
-            date: [],
-            beginTime: '',// 搜索表单的开始时间
-            endTime: '',// 搜索表单的结束时间
+            date: null,
+            beginTime: null,// 搜索表单的开始时间
+            endTime: null,// 搜索表单的结束时间
             type: [],// 系统返回的日志类别
             selectType: ''//用户选择的日志类别
         },
@@ -81,8 +82,8 @@ class Log extends Component {
             }, function () {
                 // 利用更新状态的回调函数，渲染下拉选框
                 _this.logType = [];
-                _this.logType.push((<Option key={-1} value="null">请选择</Option>));
-                let filters = this.state.filters;
+                _this.logType.push((<Option key={-1} value="">请选择</Option>));
+                let filters = _this.state.filters;
                 filters.type.forEach(item => {
                     _this.logType.push((<Option key={item.type} value={item.type}>{item.describe}</Option>));
                 });
@@ -97,21 +98,22 @@ class Log extends Component {
      * @returns {Promise<void>}
      */
     getDatas = async () => {
+        let _this = this;
         let para = {
-            nowPage: this.state.nowPage,
-            pageSize: this.state.pageSize,
-            type: this.state.filters.selectType,
-            beginTime: this.state.filters.beginTime,
-            endTime: this.state.filters.endTime,
+            nowPage: _this.state.nowPage,
+            pageSize: _this.state.pageSize,
+            type: _this.state.filters.selectType,
+            beginTime: _this.state.filters.beginTime,
+            endTime: _this.state.filters.endTime,
         };
         // 在发请求前, 显示loading
-        this.setState({listLoading: true});
+        _this.setState({listLoading: true});
         // 发异步ajax请求, 获取数据
         const {msg, code, data} = await getLogList(para);
         // 在请求完成后, 隐藏loading
-        this.setState({listLoading: false});
+        _this.setState({listLoading: false});
         if (code === 0) {
-            this.setState({
+            _this.setState({
                 // 总数据量
                 dataTotal: data.dateSum,
                 // 表格数据
@@ -127,8 +129,8 @@ class Log extends Component {
         let _this = this;
         let {filters, nowPage} = _this.state;
         nowPage = 1;
-        filters.beginTime = '';
-        filters.endTime = '';
+        filters.beginTime = null;
+        filters.endTime = null;
         filters.selectType = '';
         _this.setState({
             nowPage: nowPage,
@@ -140,20 +142,22 @@ class Log extends Component {
 
     // 回调函数,改变页宽大小
     changePageSize = (pageSize, current) => {
+        let _this = this;
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
-        this.setState({
+        _this.setState({
             pageSize: pageSize
         }, function () {
-            this.getDatas();
+            _this.getDatas();
         });
     };
 
     // 回调函数，页面发生跳转
     changePage = (current) => {
-        this.setState({
+        let _this = this;
+        _this.setState({
             nowPage: current,
         }, function () {
-            this.getDatas();
+            _this.getDatas();
         });
     };
 
@@ -173,9 +177,6 @@ class Log extends Component {
     // 日志选框发生改变
     onChangeType = (value) => {
         let _this = this;
-        if (value === 'null') {
-            value = ''
-        }
         let {filters} = _this.state;
         filters.selectType = value;
         _this.setState({
@@ -186,7 +187,7 @@ class Log extends Component {
     };
 
     exportExcel = () => {
-        var _this = this;
+        let _this = this;
         // 在发请求前, 显示loading
         _this.setState({listLoading: true});
         let para = {
@@ -246,33 +247,40 @@ class Log extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading,filters} = this.state;
+        let {beginTime,endTime} = filters;
+        let rangeDate;
+        if (beginTime !== null && endTime !== null){
+            rangeDate = [moment(beginTime),moment(endTime)]
+        } else {
+            rangeDate = [null,null]
+        }
         return (
             <section>
                 <Col span={24} className="toolbar">
                     <Form layout="inline">
                         <Form.Item>
-                            <Select className="queur-type" showSearch onChange={this.onChangeType}
+                            <Select value={filters.selectType} className="queur-type" showSearch onChange={this.onChangeType}
                                     placeholder="请选择日志类别">
                                 {this.logType}
                             </Select>
                         </Form.Item>
                         <Form.Item>
-                            <RangePicker onChange={this.onChangeDate}/>
+                            <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                查询
+                                <Icon type="search" />查询
                             </Button>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                重置
+                                <Icon type="reload" />重置
                             </Button>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.exportExcel}>
-                                Excel
+                                <Icon type="file-excel" />导出
                             </Button>
                         </Form.Item>
                     </Form>
