@@ -10,6 +10,8 @@ import Info from '../../backend/info'
 import Log from '../../backend/log'
 import DB from '../../backend/db'
 import Api from '../../backend/api'
+import News from '../../backend/news'
+import GuestBook from '../../backend/guestbook'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -31,7 +33,7 @@ class Admin extends Component {
 
     getHeaderMenu = () => (
         <Menu>
-            <Menu.Item key="1">我的信息</Menu.Item>
+            <Menu.Item key="1"><Link to='/backstage/set/info'>我的信息</Link></Menu.Item>
             <Menu.Item key="2">设置</Menu.Item>
             <Menu.Item key="3" onClick={this.logout}>退出</Menu.Item>
         </Menu>
@@ -190,10 +192,13 @@ class Admin extends Component {
                             </Col>
                             <Col span={24} className="content-wrapper">
                                 <Switch>
+                                   {/* <Route path='/backstage/set/info' component={Info} exact /> 路径全匹配*/}
                                     <Route path='/backstage/set/info' component={Info}/>
                                     <Route path='/backstage/set/log' component={Log}/>
                                     <Route path='/backstage/api/mana' component={Api}/>
                                     <Route path='/backstage/api/db' component={DB}/>
+                                    <Route path='/backstage/message/news' component={News}/>
+                                    <Route path='/backstage/message/guestbook' component={GuestBook}/>
                                     {/*默认、及匹配不到时的页面*/}
                                     <Redirect to='/backstage/set/info'/>
                                 </Switch>

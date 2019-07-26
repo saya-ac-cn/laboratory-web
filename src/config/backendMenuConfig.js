@@ -101,19 +101,7 @@ const backstageMenuList = [
                 key: '/backstage/message/news',
                 hidden: false,
                 requireAuth: true
-            },
-            {
-                title: '发布动态',
-                key: '/backstage/message/news/publish',
-                hidden: true,
-                requireAuth: true
-            },
-            {
-                title: '编辑动态',
-                key: '/backstage/message/news/edit',
-                hidden: true,
-                requireAuth: true
-            },
+            }
         ]
     },
     {

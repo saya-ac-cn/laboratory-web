@@ -1,20 +1,17 @@
 import React, {Component} from 'react';
-import './index.less'
-import {downloadBackUpDB, getBackUpDBList} from "../../../api";
+import {Button, Col, Icon, Table, DatePicker, Input, Form} from "antd";
+import {getNewsList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
-import {Button, Col, Form, DatePicker, Table,Icon} from "antd";
 import moment from 'moment';
-import axios from "axios";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
- * 创建日期：2019-07-09 - 22:44
- * 描述：数据库备份管理
+ * 创建日期：2019-07-24 - 22:28
+ * 描述：动态管理页面
  */
 const {RangePicker} = DatePicker;
-
 // 定义组件（ES6）
-class DB extends Component {
+class News extends Component {
 
     state = {
         // 返回的单元格数据
@@ -30,6 +27,7 @@ class DB extends Component {
         filters: {
             beginTime: null,// 搜索表单的开始时间
             endTime: null,// 搜索表单的结束时间
+            topic: null // 主题
         },
     };
 
@@ -39,34 +37,41 @@ class DB extends Component {
     initColumns = () => {
         this.columns = [
             {
-                title: '归档日期',
-                dataIndex: 'archiveDate', // 显示数据对应的属性名
+                title: '作者',
+                dataIndex: 'source', // 显示数据对应的属性名
             },
             {
-                title: '存放路径',
-                dataIndex: 'url', // 显示数据对应的属性名
+                title: '标题',
+                dataIndex: 'topic', // 显示数据对应的属性名
             },
             {
-                title: '备份时间',
+                title: '创建时间',
                 dataIndex: 'createtime', // 显示数据对应的属性名
             },
             {
-                title: '下载',
+                title: '修改时间',
+                dataIndex: 'updatetime', // 显示数据对应的属性名
+            },
+            {
+                title: '管理',
                 render: (text, record) => (
-                    <span onClick={() => this.downloadFile(record)}>
-                        <Icon type="cloud-download" />
-                    </span>
+                    <div>
+                        <Button type="primary" shape="circle" icon="edit"/>
+                        &nbsp;
+                        <Button type="danger"  shape="circle" icon="delete"/>
+                    </div>
                 ),
             },
         ]
     };
 
     /**
-     * 获取备份数据
+     * 获取动态列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
         let para = {
+            topic: this.state.filters.topic,
             nowPage: this.state.nowPage,
             pageSize: this.state.pageSize,
             beginTime: this.state.filters.beginTime,
@@ -75,7 +80,7 @@ class DB extends Component {
         // 在发请求前, 显示loading
         this.setState({listLoading: true});
         // 发异步ajax请求, 获取数据
-        const {msg, code, data} = await getBackUpDBList(para);
+        const {msg, code, data} = await getNewsList(para);
         // 在请求完成后, 隐藏loading
         this.setState({listLoading: false});
         if (code === 0) {
@@ -97,9 +102,10 @@ class DB extends Component {
         nowPage = 1;
         filters.beginTime = null;
         filters.endTime = null;
+        filters.topic = null;
         _this.setState({
             nowPage: nowPage,
-            filters: filters
+            filters: filters,
         }, function () {
             _this.getDatas()
         });
@@ -137,44 +143,23 @@ class DB extends Component {
         });
     };
 
-    downloadFile = (row) => {
-        let _this = this;
-        // 在发请求前, 显示loading
-        _this.setState({listLoading: true});
-        axios({
-            method: "GET",
-            url: downloadBackUpDB+"?archiveDate="+row.archiveDate,   //接口地址
-            responseType: 'blob',
-            //上面这个参数不加会乱码，据说{responseType: 'arraybuffer'}也可以
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-            .then(function (res) {
-                _this.setState({listLoading: false});
-                let fileName = row.archiveDate+'.sql';//文件名称
-                let blob = new Blob([res.data]);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    navigator.msSaveBlob(blob, fileName);
-                } else {
-                    let link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = fileName;
-                    link.click();
-                    window.URL.revokeObjectURL(link.href);
-                }
-            })
-            .catch(function (res) {
-                _this.setState({listLoading: false});
-                openNotificationWithIcon("error", "错误提示", "导出数据库备份失败"+res);
-            });
-    };
 
+    /**
+     * 双向绑定用户查询主题
+     * @param event
+     */
+    topicInputChange = (event) => {
+        let _this = this;
+        const value = event.target.value;
+        let filters = _this.state.filters;
+        filters.topic = value;
+        _this.setState(filters)
+    };
 
     /*
     *为第一次render()准备数据
     * 因为要异步加载数据，所以方法改为async执行
-    */
+*/
     componentWillMount() {
         // 初始化表格属性设置
         this.initColumns();
@@ -188,10 +173,11 @@ class DB extends Component {
         this.getDatas();
     };
 
+
     render() {
         // 读取状态数据
         const {datas, dataTotal, nowPage, pageSize, listLoading,filters} = this.state;
-        let {beginTime,endTime} = filters;
+        let {beginTime,endTime,topic} = filters;
         let rangeDate;
         if (beginTime !== null && endTime !== null){
             rangeDate = [moment(beginTime),moment(endTime)]
@@ -202,6 +188,10 @@ class DB extends Component {
             <section>
                 <Col span={24} className="toolbar">
                     <Form layout="inline">
+                        <Form.Item>
+                            <Input type='text' value={topic} onChange={this.topicInputChange}
+                                   placeholder='按主题检索'/>
+                        </Form.Item>
                         <Form.Item>
                             <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
                         </Form.Item>
@@ -218,7 +208,7 @@ class DB extends Component {
                     </Form>
                 </Col>
                 <Col span={24}>
-                    <Table size="middle" rowKey="url" loading={listLoading} columns={this.columns} dataSource={datas}
+                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                            pagination={{
                                showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
@@ -232,4 +222,4 @@ class DB extends Component {
 }
 
 // 对外暴露
-export default DB;
+export default News;
