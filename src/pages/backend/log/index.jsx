@@ -9,7 +9,7 @@ import './index.less'
  * 文件名：index.jsx
  * 作者：liunengkai
  * 创建日期：2019-07-09 - 22:31
- * 描述：
+ * 描述：日志查看
  */
 const {RangePicker} = DatePicker;
 const {Option} = Select;

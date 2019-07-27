@@ -9,7 +9,7 @@ const {TabPane} = Tabs;
  * 文件名：index.jsx
  * 作者：liunengkai
  * 创建日期：2019-07-14 - 17:30
- * 描述：
+ * 描述：个人信息管理
  */
 
 // 定义组件（ES6）

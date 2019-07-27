@@ -16,7 +16,7 @@ import GuestBook from '../../backend/guestbook'
  * 文件名：index.jsx
  * 作者：liunengkai
  * 创建日期：2019-07-07 - 10:12
- * 描述：
+ * 描述：后台页面布局
  */
 const {SubMenu} = Menu;
 
@@ -144,6 +144,10 @@ class Admin extends Component {
         }
         // 得到当前请求的路由路径
         let path = this.props.location.pathname;
+        if (path.indexOf('/backstage/message/news') === 0){
+            // 当前请求的是news及其下面的路由
+            path = '/backstage/message/news'
+        }
         // 得到需要打开菜单项的key
         const openKey = this.openKey;
         // 读取状态
@@ -192,7 +196,6 @@ class Admin extends Component {
                             </Col>
                             <Col span={24} className="content-wrapper">
                                 <Switch>
-                                   {/* <Route path='/backstage/set/info' component={Info} exact /> 路径全匹配*/}
                                     <Route path='/backstage/set/info' component={Info}/>
                                     <Route path='/backstage/set/log' component={Log}/>
                                     <Route path='/backstage/api/mana' component={Api}/>
