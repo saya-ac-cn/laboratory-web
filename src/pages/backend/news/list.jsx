@@ -3,6 +3,7 @@ import {Button, Col, Icon, Table, DatePicker, Input, Form} from "antd";
 import {getNewsList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from 'moment';
+import {Link} from "react-router-dom";
 /*
  * 文件名：list.jsx
  * 作者：liunengkai
@@ -203,6 +204,11 @@ class List extends Component {
                         <Form.Item>
                             <Button type="primary" htmlType="button" onClick={this.reloadPage}>
                                 <Icon type="reload" />重置
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="button">
+                                <Link to='/backstage/message/news/publish'><Icon type="plus"/>添加</Link>
                             </Button>
                         </Form.Item>
                     </Form>

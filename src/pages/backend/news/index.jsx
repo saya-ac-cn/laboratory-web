@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom'
 
 import NewsList from './list'
-import InsertPage from './insert'
+import EditPage from './edit'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -18,7 +18,7 @@ class News extends Component {
       return (
           <Switch>
               <Route path='/backstage/message/news' component={NewsList} exact/> {/*路径完全匹配*/}
-              <Route path='/backstage/message/news/publish' component={InsertPage}/>
+              <Route path='/backstage/message/news/publish' component={EditPage}/>
               <Redirect to='/backstage/message/news'/>
           </Switch>
       )

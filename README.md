@@ -37,3 +37,7 @@
 * npm install  http-proxy-middleware
 ## 安装cropper（图片裁剪）
 * npm install react-cropper
+## 安装富文本编辑器
+* npm install react-draft-wysiwyg
+## 安装draftjs转换html
+* npm install draftjs-to-html

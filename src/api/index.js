@@ -37,7 +37,7 @@ export const setPassword = params => ajax(`${backendAPI}/api/set/password`, para
 // 修改用户信息
 export const setUserInfo = params => ajax(`${backendAPI}/api/set/update`, params, 'PUT');
 // 上传笔记、消息图片
-export const updateNewsPicture = params => ajax(`${backendAPI}/api/oss/picture/illustrated`, params, 'POST');
+export const uploadNewsPicture = `${backendAPI}/api/oss/picture/illustrated`;
 // 获取动态
 export const getNewsList = params => ajax(`${backendAPI}/api/message/news`, params, 'GET');
 // 发布动态
