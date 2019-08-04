@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Col, DatePicker, Icon, Input, Table, Form, Select} from "antd";
-import {getGuestBookList} from "../../../api";
+import {Button, Col, DatePicker, Icon, Input, Table, Form, Select, Modal} from "antd";
+import {checkGuestBook, getGuestBookList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from "../news";
+import GuestBookEdit from "./edit-form"
 
 /*
  * 文件名：index.jsx
@@ -34,6 +35,7 @@ class GuestBook extends Component {
             type: [],// 系统返回的日志类别
             selectType: ''//用户选择的日志类别
         },
+        editVisible: false
     };
 
 
@@ -84,7 +86,7 @@ class GuestBook extends Component {
                 title: '管理',
                 render: (text, record) => (
                     <div>
-                        <Button type="primary" shape="circle" icon="edit"/>
+                        <Button type="primary" onClick={() => this.handleModalEdit(record)} shape="circle" icon="edit"/>
                     </div>
                 ),
             },
@@ -215,6 +217,72 @@ class GuestBook extends Component {
     };
 
     /*
+    * 显示修改的弹窗
+    */
+    handleModalEdit = (value) => {
+        this.lineDate = value;
+        this.setState({
+            editVisible: true
+        })
+    };
+
+    /*
+    * 响应点击取消: 隐藏弹窗
+    */
+    handleModalCancel = () => {
+        // 清除输入数据
+        this.form.resetFields();
+        // 隐藏确认框
+        this.setState({
+            editVisible: false
+        })
+    };
+
+    /**
+     * 修改接口
+     */
+    handleEditForm = () => {
+        let _this = this;
+        // 进行表单验证, 只有通过了才处理
+        _this.form.validateFields(async (err, values) => {
+            if (!err) {
+                Modal.confirm({
+                    title: '您确定要保存此次修改结果?',
+                    onOk: async () => {
+                        console.log(values)
+                        // 关闭页面表单
+                        _this.setState({
+                            editVisible: false,
+                            listLoading: true
+                        });
+                        let para = {
+                            id: _this.lineDate.id,
+                            status: values.status,
+                            reply: values.reply
+                        };
+                        // 清除输入数据
+                        _this.form.resetFields();
+                        const {msg, code} = await checkGuestBook(para);
+                        // 在请求完成后, 隐藏loading
+                        _this.setState({listLoading: false});
+                        if (code === 0) {
+                            openNotificationWithIcon("success", "审核结果", "审核成功");
+                            _this.getDatas();
+                        } else {
+                            openNotificationWithIcon("error", "错误提示", msg);
+                        }
+                    },
+                    onCancel() {
+                        return false;
+                    },
+                });
+            } else {
+                openNotificationWithIcon("error", "错误提示", "您填写的表单有误，请根据提示正确填写。");
+            }
+        })
+    };
+
+    /*
     *为第一次render()准备数据
     * 因为要异步加载数据，所以方法改为async执行
     */
@@ -235,7 +303,7 @@ class GuestBook extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading,filters} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading,filters,editVisible} = this.state;
         let {beginTime,endTime,name} = filters;
         let rangeDate;
         if (beginTime !== null && endTime !== null){
@@ -243,6 +311,8 @@ class GuestBook extends Component {
         } else {
             rangeDate = [null,null]
         }
+        // 读取所选中的行数据
+        const guest = this.lineDate || {}; // 如果还没有指定一个空对象
         return (
             <section>
                 <Col span={24} className="toolbar">
@@ -281,6 +351,16 @@ class GuestBook extends Component {
                                onChange: this.changePage,
                            }}/>
                 </Col>
+                <Modal
+                    width="60%"
+                    title="回复留言"
+                    onCancel={this.handleModalCancel}
+                    onOk={this.handleEditForm}
+                    visible={editVisible === true}>
+                    <GuestBookEdit guest={guest} setForm={(form) => {
+                        this.form = form
+                    }}/>
+                </Modal>
             </section>
         );
     }

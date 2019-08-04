@@ -163,6 +163,7 @@ class Api extends Component {
             modalStatus: 1
         })
     };
+
     /*
     * 显示修改的弹窗
     */
@@ -197,7 +198,8 @@ class Api extends Component {
                     onOk: async () => {
                         // 关闭页面表单
                         _this.setState({
-                            modalStatus: 0
+                            modalStatus: 0,
+                            listLoading: true
                         });
                         let para = {
                             name: values.name,
@@ -207,6 +209,8 @@ class Api extends Component {
                         // 清除输入数据
                         _this.form.resetFields();
                         const {msg, code} = await createApi(para);
+                        // 在请求完成后, 隐藏loading
+                        _this.setState({listLoading: false});
                         if (code === 0) {
                             openNotificationWithIcon("success", "操作结果", "添加成功");
                             _this.getDatas();
@@ -237,7 +241,8 @@ class Api extends Component {
                     onOk: async () => {
                         // 关闭页面表单
                         _this.setState({
-                            modalStatus: 0
+                            modalStatus: 0,
+                            listLoading: true
                         });
                         let para = {
                             id: _this.lineDate.id,
@@ -248,6 +253,8 @@ class Api extends Component {
                         // 清除输入数据
                         _this.form.resetFields();
                         const {msg, code} = await editApi(para);
+                        // 在请求完成后, 隐藏loading
+                        _this.setState({listLoading: false});
                         if (code === 0) {
                             openNotificationWithIcon("success", "操作结果", "修改成功");
                             _this.getDatas();
@@ -273,8 +280,12 @@ class Api extends Component {
         Modal.confirm({
             title: `确认删除${item.name}接口吗?`,
             onOk: async () => {
+                // 在发请求前, 显示loading
+                _this.setState({listLoading: true});
                 let para = { id: item.id };
                 const {msg, code} = await deleteApi(para);
+                // 在请求完成后, 隐藏loading
+                _this.setState({listLoading: false});
                 if (code === 0) {
                     openNotificationWithIcon("success", "操作结果", "删除成功");
                     _this.getDatas();

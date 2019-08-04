@@ -26,6 +26,7 @@ class RichTextEditor extends Component {
         editorState: EditorState.createEmpty(), // 创建一个没有内容的编辑对象
     };
 
+
     constructor(props) {
         super(props);
         const html = this.props.detail;
@@ -33,15 +34,44 @@ class RichTextEditor extends Component {
             const contentBlock = htmlToDraft(html);
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
             const editorState = EditorState.createWithContent(contentState);
-            this.state = {
-                editorState,
+            this.state ={
+                editorState:editorState,
+                enitNum:1,// 已直接初始化
             }
         } else {
             this.state = {
                 editorState: EditorState.createEmpty(), // 创建一个没有内容的编辑对象
+                enitNum:0,// 未初始化
             }
         }
 
+    }
+
+    /**
+     * 在组件接收新props时调用。初始渲染不调用此方法
+     * @param data
+     * 子父组件传值问题：https://www.jianshu.com/p/713206e571cf
+     */
+    componentWillReceiveProps(data) {
+        const enitNum = this.state.enitNum;
+        const html = data.detail;
+        // 只能执行一次
+        if (enitNum === 0){
+            if (html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
+                const contentBlock = htmlToDraft(html);
+                const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+                const editorState = EditorState.createWithContent(contentState);
+                this.setState({
+                    editorState:editorState,
+                    enitNum: enitNum+1
+                })
+            } else {
+                this.setState({
+                    editorState: EditorState.createEmpty(),
+                    enitNum: enitNum+1
+                })
+            }
+        }
     }
 
     /*

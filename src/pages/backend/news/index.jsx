@@ -19,6 +19,7 @@ class News extends Component {
           <Switch>
               <Route path='/backstage/message/news' component={NewsList} exact/> {/*路径完全匹配*/}
               <Route path='/backstage/message/news/publish' component={EditPage}/>
+              <Route path='/backstage/message/news/update' component={EditPage}/>
               <Redirect to='/backstage/message/news'/>
           </Switch>
       )

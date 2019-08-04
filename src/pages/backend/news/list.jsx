@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Col, Icon, Table, DatePicker, Input, Form} from "antd";
-import {getNewsList} from "../../../api";
+import {Button, Col, Icon, Table, DatePicker, Input, Form, Modal} from "antd";
+import {deleteNews, getNewsList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from 'moment';
 import {Link} from "react-router-dom";
@@ -57,9 +57,9 @@ class List extends Component {
                 title: '管理',
                 render: (text, record) => (
                     <div>
-                        <Button type="primary" shape="circle" icon="edit"/>
+                        <Button type="primary" onClick={() => this.props.history.push('/backstage/message/news/update', record)} shape="circle" icon="edit"/>
                         &nbsp;
-                        <Button type="danger"  shape="circle" icon="delete"/>
+                        <Button type="danger" onClick={() => this.handleDellNews(record)}  shape="circle" icon="delete"/>
                     </div>
                 ),
             },
@@ -96,6 +96,33 @@ class List extends Component {
         }
     };
 
+    /*
+    * 删除指定动态
+    */
+    handleDellNews = (item) => {
+        let _this = this;
+        Modal.confirm({
+            title: `确认删除主题为:${item.topic}的动态吗?`,
+            onOk: async () => {
+                // 在发请求前, 显示loading
+                _this.setState({listLoading: true});
+                let para = { id: item.id };
+                const {msg, code} = await deleteNews(para);
+                // 在请求完成后, 隐藏loading
+                _this.setState({listLoading: false});
+                if (code === 0) {
+                    openNotificationWithIcon("success", "操作结果", "删除成功");
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
+    };
+
+    /**
+     * 刷新
+     */
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
