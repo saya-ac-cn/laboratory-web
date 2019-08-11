@@ -12,6 +12,7 @@ import DB from '../../backend/db'
 import Api from '../../backend/api'
 import News from '../../backend/news'
 import GuestBook from '../../backend/guestbook'
+import FilesMana from '../../backend/file'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -200,6 +201,7 @@ class Admin extends Component {
                                     <Route path='/backstage/set/log' component={Log}/>
                                     <Route path='/backstage/api/mana' component={Api}/>
                                     <Route path='/backstage/api/db' component={DB}/>
+                                    <Route path='/backstage/oss/files' component={FilesMana}/>
                                     <Route path='/backstage/message/news' component={News}/>
                                     <Route path='/backstage/message/guestbook' component={GuestBook}/>
                                     {/*默认、及匹配不到时的页面*/}
