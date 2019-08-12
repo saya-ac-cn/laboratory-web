@@ -39,7 +39,8 @@ class FilesMane extends Component {
      * 初始化上传组件信息
      */
     initUpload = () => {
-        this.uploadConfig = {
+        let _this = this;
+        _this.uploadConfig = {
             name: 'file',
             multiple: true,
             action: uploadFile,
@@ -49,7 +50,8 @@ class FilesMane extends Component {
                 uid: file.uid,
             }),
             onRemove: file => {
-                console.log("删除"+ JSON.stringify(file));
+                // 删除文件
+                _this.deleteFile({'uid':file.uid})
             },
             onChange(info) {
                 const { status } = info.file;
@@ -58,6 +60,7 @@ class FilesMane extends Component {
                 }
                 if (status === 'done') {
                     openNotificationWithIcon("success", "上传成功", `${info.file.name} file uploaded successfully.`);
+                    _this.getDatas();
                 } else if (status === 'error') {
                     openNotificationWithIcon("error", "错误提示", `${info.file.name} file upload failed.`);
                 }
@@ -102,7 +105,7 @@ class FilesMane extends Component {
                         &nbsp;
                         <Button type="primary" shape="circle" icon="edit"/>
                         &nbsp;
-                        <Button type="danger" shape="circle" icon="delete"/>
+                        <Button type="danger" onClick={() => this.handleDeleteFile(record)} shape="circle" icon="delete"/>
                     </div>
                 ),
             },
@@ -225,6 +228,38 @@ class FilesMane extends Component {
         let uploadVisible = true;
         _this.setState({
             uploadVisible
+        })
+    };
+
+    /**
+     * 删除文件
+     */
+    deleteFile = async (para) => {
+        // 在发请求前, 显示loading
+        this.setState({listLoading: true});
+        // 发异步ajax请求, 获取数据
+        const {msg, code} = await deleteFile(para);
+        // 在请求完成后, 隐藏loading
+        this.setState({listLoading: false});
+        if (code === 0) {
+            openNotificationWithIcon("success", "操作结果", "删除成功");
+            this.getDatas();
+        } else {
+            openNotificationWithIcon("error", "错误提示", msg);
+        }
+    };
+
+    /**
+     * 弹框确认删除
+     */
+    handleDeleteFile = (item) => {
+        let _this = this;
+        Modal.confirm({
+            title: `确认文件名为:'${item.filename}'的文件吗?`,
+            onOk: () => {
+                let para = { id: item.id };
+                _this.deleteFile(para)
+            }
         })
     };
 
