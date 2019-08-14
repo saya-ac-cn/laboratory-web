@@ -65,7 +65,7 @@ export const getFileList = params => ajax(`${backendAPI}/api/oss/files`, params,
 // 删除文件
 export const deleteFile = params => ajax(`${backendAPI}/api/oss/files/delete`, params, 'DELETE');
 // 修改文件
-export const editFile = params => ajax(`${backendAPI}/api/oss/files/edit`, params);
+export const editFile = params => ajax(`${backendAPI}/api/oss/files/edit`, params, 'PUT');
 // 下载文件
 export const downloadFileForAdmin = `${backendAPI}/api/oss/files/download/`;
 // 创建笔记簿

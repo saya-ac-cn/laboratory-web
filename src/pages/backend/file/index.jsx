@@ -3,6 +3,7 @@ import {Button, Col, DatePicker, Icon, Table, Form, Input, Modal, Upload} from "
 import {getFileList, deleteFile, editFile, uploadFile, downloadFileForAdmin} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from 'moment';
+import axios from "axios";
 
 /*
  * 文件名：index.jsx
@@ -101,9 +102,9 @@ class FilesMane extends Component {
                 title: '下载',
                 render: (text, record) => (
                     <div>
-                        <Button type="primary" shape="circle" icon="cloud-download"/>
+                        <Button type="primary" onClick={() => this.downloadFile(record)} shape="circle" icon="cloud-download"/>
                         &nbsp;
-                        <Button type="primary" shape="circle" icon="edit"/>
+                        <Button type="primary" onClick={() => this.handleChangeFile(record)} shape="circle" icon="edit"/>
                         &nbsp;
                         <Button type="danger" onClick={() => this.handleDeleteFile(record)} shape="circle" icon="delete"/>
                     </div>
@@ -261,6 +262,83 @@ class FilesMane extends Component {
                 _this.deleteFile(para)
             }
         })
+    };
+
+    /**
+     * 下载文件
+     * @param row
+     */
+    downloadFile = (row) => {
+        let _this = this;
+        // 在发请求前, 显示loading
+        _this.setState({listLoading: true});
+        axios({
+            method: "GET",
+            url: downloadFileForAdmin+row.id,   //接口地址
+            responseType: 'blob',
+            //上面这个参数不加会乱码，据说{responseType: 'arraybuffer'}也可以
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+            .then(function (res) {
+                console.log(res)
+                _this.setState({listLoading: false});
+                let fileName = row.filename;//文件名称
+                let blob = new Blob([res.data]);
+                if (window.navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveBlob(blob, fileName);
+                } else {
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    link.click();
+                    window.URL.revokeObjectURL(link.href);
+                }
+            })
+            .catch(function (res) {
+                _this.setState({listLoading: false});
+                openNotificationWithIcon("error", "错误提示", "下载文件失败"+res);
+            });
+    };
+
+    /**
+     * 改变文件状态
+     * @param item
+     */
+    handleChangeFile = (item) => {
+        let _this = this;
+        var message = '';
+        var sendStatus = null;
+        if (item.status === '1')
+        {
+            // 屏蔽
+            sendStatus = 2;
+            message = `您确定要屏蔽文件名为：' ${item.filename} '的文件吗？`
+        } else {
+            // 显示
+            sendStatus = 1;
+            message = `您确定要显示文件名为：' ${item.filename} '的文件吗？`
+        }
+        Modal.confirm({
+            title: message,
+            onOk: async () => {
+                let para = { id: item.id, status: sendStatus };
+                // 在发请求前, 显示loading
+                _this.setState({listLoading: true});
+                // 发异步ajax请求, 获取数据
+                const {msg, code, data} = await editFile(para);
+                // 在请求完成后, 隐藏loading
+                _this.setState({listLoading: false});
+                if (code === 0) {
+                    openNotificationWithIcon("success", "操作结果", "修改成功");
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
+
     };
 
     /*
