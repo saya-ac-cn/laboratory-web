@@ -165,8 +165,14 @@ class Log extends Component {
     onChangeDate = (date, dateString) => {
         let _this = this;
         let {filters} = _this.state;
-        filters.beginTime = dateString[0];
-        filters.endTime = dateString[1];
+        // 为空要单独判断
+        if (dateString[0] !== '' && dateString[1] !== ''){
+            filters.beginTime = dateString[0];
+            filters.endTime = dateString[1];
+        }else{
+            filters.beginTime = null;
+            filters.endTime = null;
+        }
         _this.setState({
             filters
         }, function () {

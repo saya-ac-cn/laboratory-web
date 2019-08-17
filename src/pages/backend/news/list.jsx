@@ -162,8 +162,14 @@ class List extends Component {
     onChangeDate = (date, dateString) => {
         let _this = this;
         let {filters} = _this.state;
-        filters.beginTime = dateString[0];
-        filters.endTime = dateString[1];
+        // 为空要单独判断
+        if (dateString[0] !== '' && dateString[1] !== ''){
+            filters.beginTime = dateString[0];
+            filters.endTime = dateString[1];
+        }else{
+            filters.beginTime = null;
+            filters.endTime = null;
+        }
         _this.setState({
             filters
         }, function () {
@@ -235,7 +241,7 @@ class List extends Component {
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="button">
-                                <Link to='/backstage/message/news/publish'><Icon type="plus"/>添加</Link>
+                                <Link to='/backstage/message/news/publish'><Icon type="plus"/>发布</Link>
                             </Button>
                         </Form.Item>
                     </Form>
