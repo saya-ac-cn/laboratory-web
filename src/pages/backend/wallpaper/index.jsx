@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-import {Button, Row, Col, Icon, Input, Form, DatePicker, Modal, Spin} from "antd";
+import {Button, Row, Col, Icon, Input, Form, DatePicker, Modal, Spin, Upload} from "antd";
 import moment from 'moment';
 import './index.less'
-import {getPictureList, deletePicture} from "../../../api";
+import {getPictureList, deletePicture, uploadWallpaper} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
+
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
  * 创建日期：2019-08-17 - 20:40
- * 描述：插图管理
+ * 描述：壁纸管理
  */
 const {RangePicker} = DatePicker;
 
 // 定义组件（ES6）
-class Lllustration extends Component {
+class Wallpaper extends Component {
 
     state = {
         filters: {
@@ -29,7 +30,13 @@ class Lllustration extends Component {
         listLoading: false,
         // 页面宽度
         pageSize: 10,
+        // 是否显示上传层
+        uploadVisible: false,
+        previewVisible: false,
+        previewImage: '',
+        fileList: [],
     };
+
 
     /**
      * 获取插图列表数据
@@ -37,7 +44,7 @@ class Lllustration extends Component {
      */
     getDatas = async () => {
         let para = {
-            type: 2,
+            type: 1,
             nowPage: this.state.nowPage,
             pageSize: this.state.pageSize,
             beginTime: this.state.filters.beginTime,
@@ -186,6 +193,113 @@ class Lllustration extends Component {
         }
     };
 
+    /**
+     * 取消上传
+     */
+    handleCancelUpload = () => {
+        let _this = this;
+        let uploadVisible = false;
+        _this.setState({
+            uploadVisible:uploadVisible,
+            fileList: []
+        })
+    };
+
+    /**
+     * 打开上传框
+     */
+    handleOpenUpload = () => {
+        let _this = this;
+        let uploadVisible = true;
+        _this.setState({
+            uploadVisible
+        })
+    };
+
+    /**
+     * 处理图片为Base64
+     * @param file
+     * @returns {Promise<any>}
+     */
+    getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    };
+
+    /**
+     * 关闭图片预览
+     */
+    handleCancel = () => this.setState({ previewVisible: false });
+
+    /**
+     * 预览图片
+     * @param file
+     * @returns {Promise<void>}
+     */
+    handlePreview = async (file) => {
+        // if (!file.url && !file.preview) {
+        //     file.preview = this.getBase64(file.originFileObj);
+        // }
+        this.setState({
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
+        });
+    };
+
+    /**
+     * 上传前添加到list，
+     * @param fileList
+     */
+    handleChange = (info) => {
+        let fileList = info.fileList;
+        const { status } = info.file;
+        // 注意，发生一次上传后，会有三个顺序的status变化，done，uploading，dong，而，只需要处理最后一个状态即可
+        if (status !== 'uploading') {
+            console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+            openNotificationWithIcon("success", "上传成功", `${info.file.name} file uploaded successfully.`);
+            this.getDatas();
+        } else if (status === 'error') {
+            openNotificationWithIcon("error", "错误提示", `${info.file.name} file upload failed.`);
+        }
+        this.setState({ fileList });
+    };
+
+    // handleChange = ({ fileList }) => {
+    //     this.setState({ fileList });
+    // };
+
+    /**
+     * 删除图片
+     * @param file
+     */
+    handleDelete = (file) => {
+        console.log(file)
+        this.setState(state => {
+            const index = state.fileList.indexOf(file);
+            console.log(index)
+            const newFileList = state.fileList.slice();
+            newFileList.splice(index, 1);
+            return {
+                fileList: newFileList,
+            };
+        },function () {
+            console.log(this.state.fileList)
+        });
+    };
+
+    /**
+     * 大图预览
+     */
+    previewPhoto = () => {
+        console.log("进入大图预览")
+    };
+
     /*
     执行异步任务: 发异步ajax请求
      */
@@ -197,7 +311,7 @@ class Lllustration extends Component {
 
     render() {
         // 读取状态数据
-        const {filters, datas, nextpage, listLoading} = this.state;
+        const {filters, datas, nextpage, listLoading, uploadVisible, previewVisible, previewImage, fileList} = this.state;
         let {beginTime, endTime} = filters;
         let rangeDate;
         if (beginTime !== null && endTime !== null) {
@@ -205,8 +319,33 @@ class Lllustration extends Component {
         } else {
             rangeDate = [null, null]
         }
+        const uploadButton = (
+            <div>
+                <Icon type="plus" />
+                <div className="ant-upload-text">Upload</div>
+            </div>
+        );
         return (
             <section>
+                <Modal
+                    title="壁纸文件"
+                    visible={uploadVisible === true}
+                    onOk={this.handleCancelUpload}
+                    onCancel={this.handleCancelUpload}>
+                    <Upload
+                        action={uploadWallpaper}
+                        listType="picture-card"
+                        accept="image/jpeg,image/jpg,image/png,image/bmp"
+                        fileList={fileList}
+                        onPreview={this.handlePreview}
+                        onChange={this.handleChange}
+                        onRemove={this.handleDelete}>
+                        {fileList.length >= 8 ? null : uploadButton}
+                    </Upload>
+                </Modal>
+                <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                </Modal>
                 <Row>
                     <Col span={24} className="toolbar">
                         <Form layout="inline">
@@ -227,6 +366,11 @@ class Lllustration extends Component {
                                     <Icon type="reload"/>重置
                                 </Button>
                             </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.handleOpenUpload}>
+                                    <Icon type="cloud-upload" />上传
+                                </Button>
+                            </Form.Item>
                         </Form>
                     </Col>
                 </Row>
@@ -238,7 +382,7 @@ class Lllustration extends Component {
                                     <div className="tools">
                                         <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
                                     </div>
-                                    <a href="#toolbar" rel="noopener noreferrer" className="a-img">
+                                    <a href="#toolbar" onClick={this.previewPhoto} rel="noopener noreferrer" className="a-img">
                                         <img src={item.weburl} alt={item.filename}
                                              className="img-responsive"/>
                                     </a>
@@ -254,7 +398,7 @@ class Lllustration extends Component {
                             </Col>
                             :
                             <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完插图了"/>
+                                <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完壁纸了"/>
                             </Col>
                         }
                     </Row>
@@ -265,4 +409,4 @@ class Lllustration extends Component {
 }
 
 // 对外暴露
-export default Lllustration;
+export default Wallpaper;

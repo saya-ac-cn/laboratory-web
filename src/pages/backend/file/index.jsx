@@ -333,7 +333,7 @@ class FilesMane extends Component {
                 // 在发请求前, 显示loading
                 _this.setState({listLoading: true});
                 // 发异步ajax请求, 获取数据
-                const {msg, code, data} = await editFile(para);
+                const {msg, code} = await editFile(para);
                 // 在请求完成后, 隐藏loading
                 _this.setState({listLoading: false});
                 if (code === 0) {

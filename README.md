@@ -41,3 +41,5 @@
 * npm install react-draft-wysiwyg
 ## 安装draftjs转换html
 * npm install draftjs-to-html
+## 安装react-document-title用于设置页面标题
+* npm install --save react-document-title

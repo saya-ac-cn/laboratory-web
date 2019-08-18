@@ -14,6 +14,7 @@ import News from '../../backend/news'
 import GuestBook from '../../backend/guestbook'
 import FilesMana from '../../backend/file'
 import Lllustration from '../../backend/illustration'
+import Wallpaper from '../../backend/wallpaper'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -198,14 +199,15 @@ class Admin extends Component {
                             </Col>
                             <Col span={24} className="content-wrapper">
                                 <Switch>
-                                    <Route path='/backstage/set/info' component={Info}/>
-                                    <Route path='/backstage/set/log' component={Log}/>
-                                    <Route path='/backstage/api/mana' component={Api}/>
-                                    <Route path='/backstage/api/db' component={DB}/>
-                                    <Route path='/backstage/oss/illustration' component={Lllustration}/>
-                                    <Route path='/backstage/oss/files' component={FilesMana}/>
-                                    <Route path='/backstage/message/news' component={News}/>
-                                    <Route path='/backstage/message/guestbook' component={GuestBook}/>
+                                    <Route path='/backstage/set/info' component={Info} onEnter={()=>{document.title="基本信息"}}/>
+                                    <Route path='/backstage/set/log' component={Log} onEnter={()=>{document.title="操作日志"}}/>
+                                    <Route path='/backstage/api/mana' component={Api} onEnter={()=>{document.title="接口管理"}}/>
+                                    <Route path='/backstage/api/db' component={DB} onEnter={()=>{document.title="数据备份"}}/>
+                                    <Route path='/backstage/oss/wallpaper' component={Wallpaper} onEnter={()=>{document.title="图片壁纸"}}/>
+                                    <Route path='/backstage/oss/illustration' component={Lllustration} onEnter={()=>{document.title="文章插图"}}/>
+                                    <Route path='/backstage/oss/files' component={FilesMana} onEnter={()=>{document.title="文档资料"}}/>
+                                    <Route path='/backstage/message/news' component={News} onEnter={()=>{document.title="消息动态"}}/>
+                                    <Route path='/backstage/message/guestbook' component={GuestBook} onEnter={()=>{document.title="平台留言"}}/>
                                     {/*默认、及匹配不到时的页面*/}
                                     <Redirect to='/backstage/set/info'/>
                                 </Switch>

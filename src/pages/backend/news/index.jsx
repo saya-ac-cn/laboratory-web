@@ -17,9 +17,9 @@ class News extends Component {
   render() {
       return (
           <Switch>
-              <Route path='/backstage/message/news' component={NewsList} exact/> {/*路径完全匹配*/}
-              <Route path='/backstage/message/news/publish' component={EditPage}/>
-              <Route path='/backstage/message/news/update' component={EditPage}/>
+              <Route path='/backstage/message/news' component={NewsList} onEnter={()=>{document.title="消息动态"}} exact/> {/*路径完全匹配*/}
+              <Route path='/backstage/message/news/publish' component={EditPage} onEnter={()=>{document.title="发布动态"}}/>
+              <Route path='/backstage/message/news/update' component={EditPage} onEnter={()=>{document.title="编辑动态"}}/>
               <Redirect to='/backstage/message/news'/>
           </Switch>
       )
