@@ -193,7 +193,7 @@ class List extends Component {
     /*
     *为第一次render()准备数据
     * 因为要异步加载数据，所以方法改为async执行
-*/
+    */
     componentWillMount() {
         // 初始化表格属性设置
         this.initColumns();

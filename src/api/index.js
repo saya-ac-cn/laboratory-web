@@ -91,7 +91,7 @@ export const getNotesList = params => ajax(`${backendAPI}/api/message/notes`, pa
 // 查询单条笔记
 export const getNotes = params => ajax(`${backendAPI}/api/message/notes/show`, params, 'GET');
 // 获取该月计划
-export const getPlanList = params => ajax(`${backendAPI}/api/set/plan`, params, 'GEt');
+export const getPlanList = params => ajax(`${backendAPI}/api/set/plan`, params, 'GET');
 // 添加计划
 export const createPlan = params => ajax(`${backendAPI}/api/set/plan/create`, params, 'POST');
 // 修改计划
