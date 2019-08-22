@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Col, DatePicker, Icon, Form, Row, Modal, Input} from "antd";
+import {Button, Col, DatePicker, Icon, Form, Row, Modal, Input, Spin, Popconfirm} from "antd";
 import DocumentTitle from 'react-document-title'
 import './index.less'
 import {getPlanList, createPlan, updatePlan, deletePlan} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
-import PropTypes from "prop-types";
 import moment from 'moment';
 /*
  * 文件名：index.jsx
@@ -138,7 +137,7 @@ class Plan extends Component {
     onChangeDate = (date, dateString) => {
         let _this = this
         let filters = _this.state.filters
-        if (JSON.stringify(dateString) === null || JSON.stringify(dateString) === 'null'){
+        if (dateString === '' || JSON.stringify(dateString) === null || JSON.stringify(dateString) === 'null'){
             filters.date = this.getNowFormatDate()
         }else {
             filters.date = dateString
@@ -203,6 +202,8 @@ class Plan extends Component {
         if (id === -1 || id === '-1'){
             // 该天无计划
             editForm.planDate = key
+            editForm.planContent = null
+            editForm.id = null
         } else {
             // 该天有计划
             let value =  e.currentTarget.getAttribute('data-value')
@@ -217,7 +218,7 @@ class Plan extends Component {
     };
 
     /**
-     * 取消上传
+     * 关闭计划弹窗
      */
     handleCloseForm = () => {
         let _this = this;
@@ -228,20 +229,103 @@ class Plan extends Component {
     };
 
     /**
-     * 打开上传框
+     * 提交修改
      */
     handleSubmitForm = () => {
         let _this = this;
-        let formVisible = true;
-        _this.setState({
-            formVisible
+        let form = _this.state.editForm
+        _this.props.form.validateFields( (err, values) => {
+            // 通过验证
+            if (!err) {
+                form.planContent = values.planContent
+                if (form.id === null){
+                    // 提交到创建接口
+                    _this.sendInsertRequest(form)
+                } else {
+                    // 提交到修改接口
+                    _this.sendUpdateRequest(form)
+                }
+            }
         })
     };
 
+    /**
+     * 发送添加请求
+     * @param form
+     * @returns {Promise<void>}
+     */
+    sendInsertRequest = async (form) => {
+        let _this = this;
+        let para = {
+            describe: form.planContent,
+            plandate: form.planDate
+        };
+        // 在发请求前, 显示loading
+        _this.setState({listLoading: true});
+        const {msg, code} = await createPlan(para)
+        // 在请求完成后, 隐藏loading
+        _this.setState({listLoading: false});
+        if (code === 0) {
+            openNotificationWithIcon("success", "操作结果", "创建成功");
+            _this.handleCloseForm()
+            _this.props.form.resetFields()
+            _this.getDatas();
+        } else {
+            openNotificationWithIcon("error", "错误提示", msg);
+        }
+    };
+
+    sendUpdateRequest = async (form) => {
+        let _this = this;
+        let para = {
+            id: form.id,
+            describe:form.planContent,
+            plandate: form.planDate
+        };
+        // 在发请求前, 显示loading
+        _this.setState({listLoading: true});
+        const {msg, code} = await updatePlan(para)
+        // 在请求完成后, 隐藏loading
+        _this.setState({listLoading: false});
+        if (code === 0) {
+            openNotificationWithIcon("success", "操作结果", "修改成功");
+            _this.handleCloseForm()
+            _this.props.form.resetFields()
+            _this.getDatas();
+        } else {
+            openNotificationWithIcon("error", "错误提示", msg);
+        }
+    };
+
+    /**
+     * 删除计划
+     * @param e
+     */
+    handleDeletePlan = async (e) =>{
+        let _this = this;
+        let editForm = _this.state.editForm
+        let para = {
+            id: editForm.id
+        };
+        // 在发请求前, 显示loading
+        _this.setState({listLoading: true});
+        const {msg, code} = await deletePlan(para)
+        // 在请求完成后, 隐藏loading
+        _this.setState({listLoading: false});
+        if (code === 0) {
+            openNotificationWithIcon("success", "操作结果", "删除成功");
+            _this.handleCloseForm()
+            _this.props.form.resetFields()
+            _this.getDatas();
+        } else {
+            openNotificationWithIcon("error", "错误提示", msg);
+        }
+    }
+
     /*
-    *为第一次render()准备数据
-    * 因为要异步加载数据，所以方法改为async执行
-    */
+     * 为第一次render()准备数据
+     * 因为要异步加载数据，所以方法改为async执行
+     */
     componentWillMount() {
         let filters = this.state.filters
         filters.date = this.getNowFormatDate()
@@ -251,6 +335,9 @@ class Plan extends Component {
         this.formItemLayout = {
             labelCol: {span: 4},
             wrapperCol: {span: 14},
+        };
+        this.buttonItemLayout = {
+            wrapperCol: {span: 14, offset: 4},
         };
     }
 
@@ -264,7 +351,7 @@ class Plan extends Component {
 
 
     render() {
-        const {formVisible, editForm} = this.state;
+        const {formVisible, editForm, listLoading} = this.state;
         const {date} = this.state.filters;
         const outhtml = this.state.outhtml
         const {getFieldDecorator} = this.props.form;
@@ -284,7 +371,7 @@ class Plan extends Component {
                             </Form.Item>
                             <Form.Item label="计划内容：" {...this.formItemLayout}>
                                 {
-                                    getFieldDecorator('reply', {
+                                    getFieldDecorator('planContent', {
                                         initialValue: editForm.planContent,
                                         rules: [
                                             {required: true, message: '请输入计划内容'},
@@ -296,6 +383,19 @@ class Plan extends Component {
                                     )
                                 }
                             </Form.Item>
+                            {
+                                !!editForm.id &&
+                                <Form.Item {...this.buttonItemLayout}>
+                                    <Popconfirm
+                                        title="您确定要删除该计划?"
+                                        onConfirm={this.handleDeletePlan}
+                                        okText="确定"
+                                        cancelText="取消"
+                                    >
+                                        <Button type="link">删除计划</Button>
+                                    </Popconfirm>
+                                </Form.Item>
+                            }
                         </Form>
                     </Modal>
                     <Row>
@@ -303,11 +403,6 @@ class Plan extends Component {
                             <Form layout="inline">
                                 <Form.Item>
                                     <DatePicker defaultValue={moment(date, 'YYYY-MM-DD')} onChange={this.onChangeDate}/>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="button">
-                                        <Icon type="reload"/>重置
-                                    </Button>
                                 </Form.Item>
                             </Form>
                         </Col>
@@ -330,6 +425,7 @@ class Plan extends Component {
                     </Row>
                     <Row>
                         <Col span={24}>
+                            {listLoading === true ? <Spin/> :
                             <table id="plantanle" border="1px" cellPadding="0" cellSpacing="0">
                                 <thead>
                                 <tr>
@@ -346,6 +442,7 @@ class Plan extends Component {
                                 {outhtml}
                                 </tbody>
                             </table>
+                            }
                         </Col>
                     </Row>
                 </section>
