@@ -16,6 +16,7 @@ import FilesMana from '../../backend/file'
 import Lllustration from '../../backend/illustration'
 import Wallpaper from '../../backend/wallpaper'
 import Plan from '../../backend/plan'
+import NoteBook from '../../backend/notebook'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -210,6 +211,7 @@ class Admin extends Component {
                                     <Route path='/backstage/message/news' component={News}/>
                                     <Route path='/backstage/message/guestbook' component={GuestBook}/>
                                     <Route path='/backstage/grow/plan' component={Plan}/>
+                                    <Route path='/backstage/grow/notebook' component={NoteBook}/>
                                     {/*默认、及匹配不到时的页面*/}
                                     <Redirect to='/backstage/set/info'/>
                                 </Switch>
