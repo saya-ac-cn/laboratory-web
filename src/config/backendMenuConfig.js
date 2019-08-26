@@ -162,18 +162,6 @@ const backstageMenuList = [
                 hidden: false,
                 requireAuth: true
             },
-            {
-                title: '创建笔记',
-                key: '/backstage/grow/notes/publish',
-                hidden: true,
-                requireAuth: true
-            },
-            {
-                title: '编辑笔记',
-                key: '/backstage/grow/notes/publish',
-                hidden: true,
-                requireAuth: true
-            },
         ]
     },
 ]

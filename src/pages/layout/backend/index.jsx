@@ -11,6 +11,7 @@ import Log from '../../backend/log'
 import DB from '../../backend/db'
 import Api from '../../backend/api'
 import News from '../../backend/news'
+import Notes from '../../backend/notes'
 import GuestBook from '../../backend/guestbook'
 import FilesMana from '../../backend/file'
 import Lllustration from '../../backend/illustration'
@@ -212,6 +213,7 @@ class Admin extends Component {
                                     <Route path='/backstage/message/guestbook' component={GuestBook}/>
                                     <Route path='/backstage/grow/plan' component={Plan}/>
                                     <Route path='/backstage/grow/notebook' component={NoteBook}/>
+                                    <Route path='/backstage/grow/notes' component={Notes}/>
                                     {/*默认、及匹配不到时的页面*/}
                                     <Redirect to='/backstage/set/info'/>
                                 </Switch>

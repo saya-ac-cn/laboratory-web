@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Col, Icon, Input, Table, Form, Modal} from "antd";
-import {createNoteBook, updateNoteBook, deleteNoteBook, getNoteBookList, getNoteBook} from "../../../api";
+import {createNoteBook, updateNoteBook, deleteNoteBook, getNoteBookList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import DocumentTitle from 'react-document-title'
 import EditNoteBook from "./edit";
@@ -263,8 +263,16 @@ class NoteBook extends Component {
     */
     handleDeleteNoteBook = (item) => {
         let _this = this;
+        var tips = '';
+        if (item.notesCount > 0){
+            tips = `“${item.name}”笔记簿下还有：${item.notesCount}条笔记，您确认删除该笔记簿及该笔记簿下的所有笔记？`
+        }else{
+            tips = `您确认删除“${item.name}”空笔记簿？`
+        }
         Modal.confirm({
-            title: `确认删除${item.name}笔记簿吗?`,
+            title: tips,
+            cancelText: '再想想',
+            okText: '不要啦',
             onOk: async () => {
                 // 在发请求前, 显示loading
                 _this.setState({listLoading: true});
