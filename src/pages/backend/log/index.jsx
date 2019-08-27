@@ -33,9 +33,9 @@ class Log extends Component {
             date: null,
             beginTime: null,// 搜索表单的开始时间
             endTime: null,// 搜索表单的结束时间
-            type: [],// 系统返回的日志类别
             selectType: ''//用户选择的日志类别
         },
+        type: [],// 系统返回的日志类别
     };
 
     /*
@@ -75,18 +75,14 @@ class Log extends Component {
         // 发异步ajax请求, 获取数据
         const {msg, code, data} = await getLogType();
         if (code === 0) {
-            let filters = _this.state.filters;
-            filters.type = data;
+            // 利用更新状态的回调函数，渲染下拉选框
+            let type = [];
+            type.push((<Option key={-1} value="">请选择</Option>));
+            data.forEach(item => {
+                type.push((<Option key={item.type} value={item.type}>{item.describe}</Option>));
+            });
             _this.setState({
-                filters
-            }, function () {
-                // 利用更新状态的回调函数，渲染下拉选框
-                _this.logType = [];
-                _this.logType.push((<Option key={-1} value="">请选择</Option>));
-                let filters = _this.state.filters;
-                filters.type.forEach(item => {
-                    _this.logType.push((<Option key={item.type} value={item.type}>{item.describe}</Option>));
-                });
+                type
             });
         } else {
             openNotificationWithIcon("error", "错误提示", msg);
@@ -253,7 +249,7 @@ class Log extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading,filters} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading,filters, type} = this.state;
         let {beginTime,endTime} = filters;
         let rangeDate;
         if (beginTime !== null && endTime !== null){
@@ -268,7 +264,7 @@ class Log extends Component {
                         <Form.Item>
                             <Select value={filters.selectType} className="queur-type" showSearch onChange={this.onChangeType}
                                     placeholder="请选择日志类别">
-                                {this.logType}
+                                {type}
                             </Select>
                         </Form.Item>
                         <Form.Item>

@@ -113,7 +113,7 @@ const backstageMenuList = [
         children: [ // 子菜单列表
             {
                 title: '财务流水',
-                key: '/backstage/financial/transactionlist',
+                key: '/backstage/financial/transaction',
                 hidden: false,
                 requireAuth: true
             },

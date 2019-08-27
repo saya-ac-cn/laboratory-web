@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Col, DatePicker, Icon, Input, Table, Form} from "antd";
+import {Button, Col, DatePicker, Icon, Input, Table, Form, Modal} from "antd";
 import {getNotesList, deleteNotes} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import {Link} from "react-router-dom";
@@ -63,9 +63,9 @@ class NotesList extends Component {
                 title: '管理',
                 render: (text, record) => (
                     <div>
-                        <Button type="primary" shape="circle" icon="edit"/>
+                        <Button type="primary" onClick={() => this.props.history.push('/backstage/grow/notes/update', record)} shape="circle" icon="edit"/>
                         &nbsp;
-                        <Button type="danger"  shape="circle" icon="delete"/>
+                        <Button type="danger"  shape="circle" onClick={() => this.handleDeleteNotes(record)} icon="delete"/>
                     </div>
                 ),
             },
@@ -185,6 +185,30 @@ class NotesList extends Component {
         let filters = _this.state.filters;
         filters.name = value;
         _this.setState(filters)
+    };
+
+    /*
+    * 删除指定笔记
+    */
+    handleDeleteNotes = (item) => {
+        let _this = this;
+        Modal.confirm({
+            title: `确认删除主题为:${item.topic}的笔记吗?`,
+            onOk: async () => {
+                // 在发请求前, 显示loading
+                _this.setState({listLoading: true});
+                let para = { id: item.id };
+                const {msg, code} = await deleteNotes(para);
+                // 在请求完成后, 隐藏loading
+                _this.setState({listLoading: false});
+                if (code === 0) {
+                    openNotificationWithIcon("success", "操作结果", "删除成功");
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
     };
 
     /*

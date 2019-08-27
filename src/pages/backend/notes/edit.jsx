@@ -125,7 +125,7 @@ class EditPage extends Component {
                         notebookId: values.notebookId,
                     };
                     console.log(para)
-                    //_this.updateNotes(para)
+                    _this.updateNotes(para)
                 } else{
                     // 走发布的流程
                     let para = {
@@ -146,7 +146,7 @@ class EditPage extends Component {
     updateNotes = async (param) => {
         const {msg, code} = await updateNotes(param);
         if (code === 0) {
-            openNotificationWithIcon("success", "操作结果", "笔记保存成功");
+            openNotificationWithIcon("success", "操作结果", "笔记修改成功");
         } else {
             openNotificationWithIcon("error", "错误提示", msg);
         }

@@ -18,6 +18,7 @@ import Lllustration from '../../backend/illustration'
 import Wallpaper from '../../backend/wallpaper'
 import Plan from '../../backend/plan'
 import NoteBook from '../../backend/notebook'
+import Transaction from '../../backend/financial/transaction'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -211,6 +212,7 @@ class Admin extends Component {
                                     <Route path='/backstage/oss/files' component={FilesMana}/>
                                     <Route path='/backstage/message/news' component={News}/>
                                     <Route path='/backstage/message/guestbook' component={GuestBook}/>
+                                    <Route path='/backstage/financial/transaction' component={Transaction}/>
                                     <Route path='/backstage/grow/plan' component={Plan}/>
                                     <Route path='/backstage/grow/notebook' component={NoteBook}/>
                                     <Route path='/backstage/grow/notes' component={Notes}/>

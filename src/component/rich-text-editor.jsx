@@ -30,7 +30,7 @@ class RichTextEditor extends Component {
     constructor(props) {
         super(props);
         const html = this.props.detail;
-        if (html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
+        if (!!html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
             const contentBlock = htmlToDraft(html);
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
             const editorState = EditorState.createWithContent(contentState);
@@ -38,6 +38,7 @@ class RichTextEditor extends Component {
                 editorState:editorState,
                 enitNum:1,// 已直接初始化
             }
+            console.log("直接初始化",html)
         } else {
             this.state = {
                 editorState: EditorState.createEmpty(), // 创建一个没有内容的编辑对象
@@ -55,9 +56,11 @@ class RichTextEditor extends Component {
     componentWillReceiveProps(data) {
         const enitNum = this.state.enitNum;
         const html = data.detail;
+
         // 只能执行一次
         if (enitNum === 0){
-            if (html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
+            if (!!html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
+                console.log("自加",html)
                 const contentBlock = htmlToDraft(html);
                 const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
                 const editorState = EditorState.createWithContent(contentState);
@@ -66,9 +69,9 @@ class RichTextEditor extends Component {
                     enitNum: enitNum+1
                 })
             } else {
+                console.log("不自加")
                 this.setState({
                     editorState: EditorState.createEmpty(),
-                    enitNum: enitNum+1
                 })
             }
         }
