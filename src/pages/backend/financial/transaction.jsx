@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title'
 import moment from 'moment';
 import {getTransactionList, getFinancialType, applyTransaction,updateTransaction,deleteTransaction,getTransactionInfo,insertTransactioninfo,updateTransactioninfo,deleteTransactioninfo,downTransaction,outTransactionInfoExcel} from '../../../api'
-import {Button, Col, DatePicker, Icon, Input, Form, Select, Table} from "antd";
+import {Button, Col, DatePicker, Icon, Input, Form, Select, Table, Modal} from "antd";
 import {openNotificationWithIcon} from "../../../utils/window";
+import AddForm from './addForm'
 /*
  * 文件名：transaction.jsx
  * 作者：liunengkai
@@ -32,6 +33,7 @@ class Transaction extends Component {
             tradeType: ''//用户选择的交易类别
         },
         type: [],// 系统返回的交易类别
+        addModalVisible:false,
     }
 
 
@@ -210,6 +212,18 @@ class Transaction extends Component {
     };
 
     /**
+     * 财务流水申报弹框事件
+     * @param flag
+     */
+    handleAddModal = (flag) => {
+        let _this = this;
+        let addModalVisible = flag;
+        _this.setState({
+            addModalVisible
+        })
+    }
+
+    /**
      * 初始化页面配置信息
      */
     componentWillMount() {
@@ -228,7 +242,7 @@ class Transaction extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading, type, filters} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading, type, filters,addModalVisible} = this.state;
         let {beginTime,endTime,tradeType} = filters;
         let rangeDate;
         if (beginTime !== null && endTime !== null){
@@ -239,6 +253,15 @@ class Transaction extends Component {
         return (
             <DocumentTitle title="财务流水">
                 <section>
+                    <Modal
+                        title="流水申报"
+                        width="70%"
+                        visible={addModalVisible === true}
+                        okText='提交'
+                        onOk={()=>this.handleAddModal(false)}
+                        onCancel={()=>this.handleAddModal(false)}>
+                        <AddForm type={type || {}} setForm={(form) => {this.form = form}}/>
+                    </Modal>
                     <Col span={24} className="toolbar">
                         <Form layout="inline">
                             <Form.Item>
@@ -261,7 +284,7 @@ class Transaction extends Component {
                                 </Button>
                             </Form.Item>
                             <Form.Item>
-                                <Button type="primary" htmlType="button">
+                                <Button type="primary" htmlType="button" onClick={()=>this.handleAddModal(true)}>
                                     <Icon type="plus"/>申报
                                 </Button>
                             </Form.Item>

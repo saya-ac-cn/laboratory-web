@@ -7,7 +7,7 @@ const proxy = require('http-proxy-middleware');
 module.exports = function (app) {
     // ...You can now register proxies as you wish!
     app.use(proxy('/backend/**', {
-        target: 'http://127.0.0.1:8080', //'http://laboratory.saya.ac.cn',
+        target: 'http://laboratory.saya.ac.cn',
         changeOrigin: true,
     }));
     app.use(proxy('/frontend/**', {
@@ -15,7 +15,7 @@ module.exports = function (app) {
         changeOrigin: true,
     }));
     app.use(proxy('/files/**', {
-        target: 'http://127.0.0.1:8080', //'http://laboratory.saya.ac.cn',
+        target: 'http://laboratory.saya.ac.cn',
         changeOrigin: true,
     }));
 };
