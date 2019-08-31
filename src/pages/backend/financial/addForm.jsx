@@ -35,46 +35,40 @@ class AddForm extends Component {
         }
     }
 
-    // 继续添加财政明细
+    /**
+     * 继续添加财政明细
+     */
     continueAdd = () => {
-        let form = this.state.form
+        const { form } = this.props;
+        const list = form.getFieldValue('applyList')
         let item = {
             flog: 1,
             currencyNumber: 0,
             currencyDetails: ''
         }
-        form.infoList.push(item);
-        this.setState({form})
-        return false;
-    }
-
-    // 删除明细添加行
-    deleteLine = (index) => {
-        let _this = this
-        let form = _this.state.form
-        console.log(index,form.infoList)
-        if(form.infoList.length <= 1){
-            openNotificationWithIcon("error", "错误提示", '每一笔流水申请下边必须要有一条详情记录');
-        }else{
-            form.infoList.splice(index,1);
-            _this.setState({form},function () {
-                console.log(_this.state.form.infoList)
-            })
-        }
+        const nestList = list.concat(item)
+        form.setFieldsValue({
+            applyList:nestList
+        })
     }
 
     /**
-     * 双向绑定用户查询主题
-     * @param event
+     * 删除明细添加行
+     * @param index
      */
-    onChangeDate = (event) => {
-        let _this = this;
-        const value = event.target.value;
-        let form = _this.state.form;
-        let currencyNumber =  event.currentTarget.getAttribute('data-currencynumber')
-        form.infoList[currencyNumber].currencyNumber = value
-        _this.setState({form})
-    };
+    deleteLine = (index) => {
+        const { form } = this.props;
+        const list = form.getFieldValue('applyList')
+        const content = form.getFieldValue('applyContent')
+        if(list.length === 1){
+            openNotificationWithIcon("error", "错误提示", '每一笔流水申请下边必须要有一条详情记录');
+        }else{
+            form.setFieldsValue({
+                applyList: list.filter((item, key) => key !== index),
+                applyContent: content.filter((item, key) => key !== index),
+            })
+        }
+    }
 
 
     componentWillMount() {
@@ -89,8 +83,10 @@ class AddForm extends Component {
     render() {
         const {tradeType, transactionAmount, infoList} = this.state.form
         const {type} = this.props;
-        const {getFieldDecorator} = this.props.form;
+        const {getFieldDecorator, getFieldValue} = this.props.form;
         let _this = this
+        getFieldDecorator('applyList', { initialValue: infoList });
+        const list = getFieldValue('applyList');
         return (
             <section>
                 <div className="mytips">
@@ -138,24 +134,27 @@ class AddForm extends Component {
                         }
                     </Form.Item>
                 </Form>
-                {
-                    infoList.map(function (item,index) {
-                        return (
-                            <Row key={index} style={{display: 'flex', alignItems: 'center', justifyItems: 'center', marginBottom: '1em'}}>
-                                <Col span={4} style={{
-                                    textAlign: 'right',
+                <Form layout="inline">
+                    {
+                        list.map(function (item, index) {
+                            return (
+                                <Row key={index} style={{
                                     display: 'flex',
-                                    alignContent: 'center',
-                                    justifyContent: 'flex-end'
+                                    marginBottom: '1em'
                                 }}>
-                                    <div>流水{(index+1)}：</div>
-                                </Col>
-                                <Col span={18}>
-                                    <div>
-                                        <Form layout="inline">
+                                    <Col span={4} style={{
+                                        textAlign: 'right',
+                                        display: 'flex',
+                                        alignContent: 'center',
+                                        justifyContent: 'flex-end'
+                                    }}>
+                                        <Button type="link">流水{(index + 1)}:</Button>
+                                    </Col>
+                                    <Col span={18}>
+                                        <div>
                                             <Form.Item>
-                                                {getFieldDecorator("flog"+index, {
-                                                    initialValue: item.flog+'',
+                                                {getFieldDecorator(`applyContent[${index}].flog`, {
+                                                    initialValue: item.flog + '' || '1',
                                                     rules: [{required: true, message: '请选择出入方式'}],
                                                 })(
                                                     <Select suffixIcon={<Icon type="select"/>}
@@ -166,9 +165,8 @@ class AddForm extends Component {
                                                 )}
                                             </Form.Item>
                                             <Form.Item>
-                                                {getFieldDecorator('currencyNumber'+index, {
-                                                    initialValue: item.currencyNumber,
-
+                                                {getFieldDecorator(`applyContent[${index}].currencyNumber`, {
+                                                    initialValue: item.currencyNumber || 0,
                                                     rules: [
                                                         {required: true, message: '请填写金额'},
                                                         {max: 12, message: '长度在 12个字符以内'},
@@ -177,14 +175,12 @@ class AddForm extends Component {
                                                     <Input
                                                         prefix={<Icon type="pay-circle"/>}
                                                         type="number"
-                                                        data-currencynumber={index}
-                                                        onChange={_this.onChangeDate}
                                                         placeholder="金额"
                                                     />,
                                                 )}
                                             </Form.Item>
                                             <Form.Item>
-                                                {getFieldDecorator('currencyDetails'+index, {
+                                                {getFieldDecorator(`applyContent[${index}].currencyDetails`, {
                                                     rules: [
                                                         {required: true, message: '请填写摘要'},
                                                         {min: 2, message: '长度在 2 到 20 个字符'},
@@ -199,17 +195,18 @@ class AddForm extends Component {
                                                 )}
                                             </Form.Item>
                                             <Form.Item>
-                                                <Button type="primary" htmlType="button" onClick={()=>_this.deleteLine(index)}>
-                                                    删除{index}
+                                                <Button type="primary" htmlType="button"
+                                                        onClick={() => _this.deleteLine(index)}>
+                                                    删除
                                                 </Button>
                                             </Form.Item>
-                                        </Form>
-                                    </div>
-                                </Col>
-                            </Row>
-                        )
-                    })
-                }
+                                        </div>
+                                    </Col>
+                                </Row>
+                            )
+                        })
+                    }
+                </Form>
                 <Row>
                     <Col offset={4} span={18}>
                         <Button type="primary" htmlType="button" onClick={this.continueAdd}>

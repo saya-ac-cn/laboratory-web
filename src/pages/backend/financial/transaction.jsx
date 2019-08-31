@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title'
 import moment from 'moment';
-import {getTransactionList, getFinancialType, applyTransaction,updateTransaction,deleteTransaction,getTransactionInfo,insertTransactioninfo,updateTransactioninfo,deleteTransactioninfo,downTransaction,outTransactionInfoExcel} from '../../../api'
+import {getTransactionList, getFinancialType, applyTransaction, updateTransaction, deleteTransaction, downTransaction,outTransactionInfoExcel,} from '../../../api'
 import {Button, Col, DatePicker, Icon, Input, Form, Select, Table, Modal} from "antd";
 import {openNotificationWithIcon} from "../../../utils/window";
 import AddForm from './addForm'
+import ViewInfo from './viewInfo'
 /*
  * 文件名：transaction.jsx
  * 作者：liunengkai
@@ -33,7 +34,9 @@ class Transaction extends Component {
             tradeType: ''//用户选择的交易类别
         },
         type: [],// 系统返回的交易类别
+        queryType: [],// 查询专用类别
         addModalVisible:false,
+        viewModalVisible:false,
     }
 
 
@@ -68,17 +71,17 @@ class Transaction extends Component {
             },
             {
                 title: '创建时间',
-                dataIndex: 'createtime', // 显示数据对应的属性名
+                dataIndex: 'createTime', // 显示数据对应的属性名
             },
             {
                 title: '修改时间',
-                dataIndex: 'updatetime', // 显示数据对应的属性名
+                dataIndex: 'updateTime', // 显示数据对应的属性名
             },
             {
                 title: '管理',
                 render: (text, record) => (
                     <div>
-                        <Button type="primary" shape="circle" icon="eye"/>
+                        <Button type="primary" onClick={() => this.openViewModal(record)} shape="circle" icon="eye"/>
                         &nbsp;
                         <Button type="primary" shape="circle" icon="edit"/>
                         &nbsp;
@@ -172,8 +175,12 @@ class Transaction extends Component {
             data.forEach(item => {
                 type.push((<Option key={item.id} value={item.id}>{item.transactionType}</Option>));
             });
+            let copyType = []
+            copyType.push(<Option key='-1' value="">请选择</Option>)
+            copyType.push(type)
             _this.setState({
-                type
+                type: type,
+                queryType: copyType
             })
         } else {
             openNotificationWithIcon("error", "错误提示", msg);
@@ -199,7 +206,7 @@ class Transaction extends Component {
         });
     };
 
-    // 日志选框发生改变
+    // 交易方式选框发生改变
     onChangeType = (value) => {
         let _this = this;
         let {filters} = _this.state;
@@ -224,6 +231,61 @@ class Transaction extends Component {
     }
 
     /**
+     * 递交申请
+     * @param e
+     */
+    handleApply = (e) => {
+        // 阻止表单的默认提交
+        e.preventDefault();
+        let _this = this
+        _this.form.validateFields(['transactionAmount', 'tradeType', 'applyContent'], async (err, values) =>{
+            console.log(values)
+            if (!err) {
+                _this.setState({listLoading: true});
+                let para = {
+                    tradeType: values.tradeType,
+                    transactionAmount: values.transactionAmount,
+                    infoList: values.applyContent
+                }
+                const {msg, code} = await applyTransaction(para)
+                _this.setState({listLoading: false});
+                if (code === 0) {
+                    _this.form.resetFields(['applyList', 'tradeType', 'transactionAmount', 'applyContent'])
+                    _this.handleAddModal(false)
+                    openNotificationWithIcon("success", "操作结果", "申报成功");
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
+    }
+
+    /**
+     * 财务流水明细弹框事件
+     * @param flag
+     */
+    handleViewModal = (flag) => {
+        let _this = this;
+        let viewModalVisible = flag;
+        _this.setState({
+            viewModalVisible
+        },function () {
+            if (flag === false){
+                _this.getDatas()
+            }
+        })
+    }
+
+    /**
+     * 预览流水详情
+     */
+    openViewModal = (value) => {
+        this.viewData = value.tradeId;
+        this.handleViewModal(true)
+    }
+
+    /**
      * 初始化页面配置信息
      */
     componentWillMount() {
@@ -242,7 +304,7 @@ class Transaction extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading, type, filters,addModalVisible} = this.state;
+        const {datas, dataTotal, nowPage, pageSize, listLoading, type, queryType, filters,addModalVisible,viewModalVisible} = this.state;
         let {beginTime,endTime,tradeType} = filters;
         let rangeDate;
         if (beginTime !== null && endTime !== null){
@@ -258,16 +320,22 @@ class Transaction extends Component {
                         width="70%"
                         visible={addModalVisible === true}
                         okText='提交'
-                        onOk={()=>this.handleAddModal(false)}
-                        onCancel={()=>this.handleAddModal(false)}>
+                        onCancel={()=>this.handleAddModal(false)}
+                        onOk={this.handleApply}>
                         <AddForm type={type || {}} setForm={(form) => {this.form = form}}/>
+                    </Modal>
+                    <Modal
+                        title={`流水明细:id-${this.viewData}`}
+                        width="80%"
+                        visible={viewModalVisible === true}
+                        onCancel={()=>this.handleViewModal(false)} footer={null}>
+                        <ViewInfo tradeId={this.viewData || -1} setForm={(form) => {this.form = form}}/>
                     </Modal>
                     <Col span={24} className="toolbar">
                         <Form layout="inline">
                             <Form.Item>
-                                <Select style={{width:'200px'}} value={tradeType} showSearch onChange={this.onChangeType}
-                                        allowClear={true}  placeholder="请选择交易类别">
-                                    {type}
+                                <Select style={{width:'200px'}} value={tradeType} showSearch onChange={this.onChangeType}  placeholder="请选择交易类别">
+                                    {queryType}
                                 </Select>
                             </Form.Item>
                             <Form.Item>
