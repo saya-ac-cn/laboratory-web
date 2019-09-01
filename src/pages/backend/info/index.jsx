@@ -3,7 +3,7 @@ import {Col, Tabs, Card, Form, Input, Button, Spin} from 'antd';
 import {getPersonal, setPassword, setUserInfo} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import UploadLogo from './uploadLogo'
-
+import DocumentTitle from 'react-document-title'
 const {TabPane} = Tabs;
 /*
  * 文件名：index.jsx
@@ -23,7 +23,7 @@ class Info extends Component {
     };
 
     /**
-     * 获取日志类别
+     * 获取个人信息
      * @returns {Promise<void>}
      */
     getPersonalInfo = async () => {
@@ -174,117 +174,119 @@ class Info extends Component {
         // 读取状态数据
         const {personalInfo, loading} = this.state;
         return (
-            <section>
-                <div className="mytips">
-                    <p>修改前的提示：</p>
-                    <blockquote>
-                        <p>
-                            <i>1、查看资料栏目不允许修改。</i>
-                        </p>
-                        <p>
-                            <i>2、修改签名栏目，用户可以填写的签名最多字数不超过140个（含标点）。</i>
-                        </p>
-                        <p>
-                            <i>3、修改头像栏目，用户可以上传任意格式的图片，大小在5M以内。</i>
-                        </p>
-                        <p>
-                            <i>4、修改密码栏目，用户填写的密码两次必须一致，长度在6至20个字符内。</i>
-                        </p>
-                    </blockquote>
-                </div>
-                <Col span={24}>
-                    <Spin spinning={loading}>
-                        <Tabs defaultActiveKey="1">
-                            <TabPane tab="查看资料" key="1">
-                                <Card title="查看资料" bordered={false}>
-                                    <Form {...this.formItemLayout}>
-                                        <Form.Item label="用户名" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.user} disabled={true}/>
-                                        </Form.Item>
-                                        <Form.Item label="性别" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.sex} disabled={true}/>
-                                        </Form.Item>
-                                        <Form.Item label="邮箱" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.email} disabled={true}/>
-                                        </Form.Item>
-                                        <Form.Item label="qq" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.qq} disabled={true}/>
-                                        </Form.Item>
-                                        <Form.Item label="phone" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.phone} disabled={true}/>
-                                        </Form.Item>
-                                        <Form.Item label="生日" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.birthday} disabled={true}/>
-                                        </Form.Item>
-                                        <Form.Item label="故乡" {...this.formItemLayout}>
-                                            <Input type='text' value={personalInfo.hometown} disabled={true}/>
-                                        </Form.Item>
-                                    </Form>
-                                </Card>
-                            </TabPane>
-                            <TabPane tab="修改签名" key="2">
-                                <Card title="修改签名" bordered={false}>
-                                    <Form {...this.formItemLayout} onSubmit={this.handleAutographSubmit}>
-                                        <Form.Item label="个性签名" {...this.formItemLayout}>
-                                            {
-                                                getFieldDecorator('autograph', {
-                                                    initialValue: personalInfo.autograph,
-                                                    rules: [
-                                                        {required: true, message: '请输入个性签名'},
-                                                        {min: 1, message: '长度在 1 到 140 个字符'},
-                                                        {max: 140, message: '长度在 1 到 140 个字符'},
-                                                    ]
-                                                })(<Input.TextArea autosize={{minRows: 4, maxRows: 6}}/>)
-                                            }
-                                        </Form.Item>
-                                        <Form.Item {...this.buttonItemLayout}>
-                                            <Button type="primary" htmlType="submit">提交</Button>
-                                        </Form.Item>
-                                    </Form>
-                                </Card>
-                            </TabPane>
-                            <TabPane tab="修改头像" key="3">
-                                <Card title="修改头像" bordered={false}>
-                                    <UploadLogo/>
-                                </Card>
-                            </TabPane>
-                            <TabPane tab="修改密码" key="4">
-                                <Card title="修改密码" bordered={false}>
-                                    <Form {...this.formItemLayout} onSubmit={this.handlePwdSubmit}>
-                                        <Form.Item label="请输入密码" {...this.formItemLayout}>
-                                            {
-                                                getFieldDecorator('password1', {
-                                                    rules: [
-                                                        {
-                                                            validator: this.validatePwd1
-                                                        }
-                                                    ]
-                                                })(
-                                                    <Input.Password/>
-                                                )}
-                                        </Form.Item>
-                                        <Form.Item label="请再次输入密码" {...this.formItemLayout}>
-                                            {
-                                                getFieldDecorator('password2', {
-                                                    rules: [
-                                                        {
-                                                            validator: this.validatePwd2
-                                                        }
-                                                    ]
-                                                })(
-                                                    <Input.Password/>
-                                                )}
-                                        </Form.Item>
-                                        <Form.Item {...this.buttonItemLayout}>
-                                            <Button type="primary" htmlType="submit">提交</Button>
-                                        </Form.Item>
-                                    </Form>
-                                </Card>
-                            </TabPane>
-                        </Tabs>
-                    </Spin>
-                </Col>
-            </section>
+            <DocumentTitle title='个人信息'>
+                <section>
+                    <div className="mytips">
+                        <p>修改前的提示：</p>
+                        <blockquote>
+                            <p>
+                                <i>1、查看资料栏目不允许修改。</i>
+                            </p>
+                            <p>
+                                <i>2、修改签名栏目，用户可以填写的签名最多字数不超过140个（含标点）。</i>
+                            </p>
+                            <p>
+                                <i>3、修改头像栏目，用户可以上传任意格式的图片，大小在5M以内。</i>
+                            </p>
+                            <p>
+                                <i>4、修改密码栏目，用户填写的密码两次必须一致，长度在6至20个字符内。</i>
+                            </p>
+                        </blockquote>
+                    </div>
+                    <Col span={24}>
+                        <Spin spinning={loading}>
+                            <Tabs defaultActiveKey="1">
+                                <TabPane tab="查看资料" key="1">
+                                    <Card title="查看资料" bordered={false}>
+                                        <Form {...this.formItemLayout}>
+                                            <Form.Item label="用户名" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.user} disabled={true}/>
+                                            </Form.Item>
+                                            <Form.Item label="性别" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.sex} disabled={true}/>
+                                            </Form.Item>
+                                            <Form.Item label="邮箱" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.email} disabled={true}/>
+                                            </Form.Item>
+                                            <Form.Item label="qq" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.qq} disabled={true}/>
+                                            </Form.Item>
+                                            <Form.Item label="phone" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.phone} disabled={true}/>
+                                            </Form.Item>
+                                            <Form.Item label="生日" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.birthday} disabled={true}/>
+                                            </Form.Item>
+                                            <Form.Item label="故乡" {...this.formItemLayout}>
+                                                <Input type='text' value={personalInfo.hometown} disabled={true}/>
+                                            </Form.Item>
+                                        </Form>
+                                    </Card>
+                                </TabPane>
+                                <TabPane tab="修改签名" key="2">
+                                    <Card title="修改签名" bordered={false}>
+                                        <Form {...this.formItemLayout} onSubmit={this.handleAutographSubmit}>
+                                            <Form.Item label="个性签名" {...this.formItemLayout}>
+                                                {
+                                                    getFieldDecorator('autograph', {
+                                                        initialValue: personalInfo.autograph,
+                                                        rules: [
+                                                            {required: true, message: '请输入个性签名'},
+                                                            {min: 1, message: '长度在 1 到 140 个字符'},
+                                                            {max: 140, message: '长度在 1 到 140 个字符'},
+                                                        ]
+                                                    })(<Input.TextArea autosize={{minRows: 4, maxRows: 6}}/>)
+                                                }
+                                            </Form.Item>
+                                            <Form.Item {...this.buttonItemLayout}>
+                                                <Button type="primary" htmlType="submit">提交</Button>
+                                            </Form.Item>
+                                        </Form>
+                                    </Card>
+                                </TabPane>
+                                <TabPane tab="修改头像" key="3">
+                                    <Card title="修改头像" bordered={false}>
+                                        <UploadLogo/>
+                                    </Card>
+                                </TabPane>
+                                <TabPane tab="修改密码" key="4">
+                                    <Card title="修改密码" bordered={false}>
+                                        <Form {...this.formItemLayout} onSubmit={this.handlePwdSubmit}>
+                                            <Form.Item label="请输入密码" {...this.formItemLayout}>
+                                                {
+                                                    getFieldDecorator('password1', {
+                                                        rules: [
+                                                            {
+                                                                validator: this.validatePwd1
+                                                            }
+                                                        ]
+                                                    })(
+                                                        <Input.Password/>
+                                                    )}
+                                            </Form.Item>
+                                            <Form.Item label="请再次输入密码" {...this.formItemLayout}>
+                                                {
+                                                    getFieldDecorator('password2', {
+                                                        rules: [
+                                                            {
+                                                                validator: this.validatePwd2
+                                                            }
+                                                        ]
+                                                    })(
+                                                        <Input.Password/>
+                                                    )}
+                                            </Form.Item>
+                                            <Form.Item {...this.buttonItemLayout}>
+                                                <Button type="primary" htmlType="submit">提交</Button>
+                                            </Form.Item>
+                                        </Form>
+                                    </Card>
+                                </TabPane>
+                            </Tabs>
+                        </Spin>
+                    </Col>
+                </section>
+            </DocumentTitle>
         );
     }
 }

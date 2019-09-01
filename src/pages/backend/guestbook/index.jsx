@@ -4,7 +4,7 @@ import {checkGuestBook, getGuestBookList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from "../news";
 import GuestBookEdit from "./edit-form"
-
+import DocumentTitle from 'react-document-title'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -94,7 +94,7 @@ class GuestBook extends Component {
     };
 
     /**
-     * 获取动态列表数据
+     * 获取留言列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
@@ -253,7 +253,8 @@ class GuestBook extends Component {
         _this.form.validateFields(async (err, values) => {
             if (!err) {
                 Modal.confirm({
-                    title: '您确定要保存此次修改结果?',
+                    title: '操作确认',
+                    content: '您确定要保存此次修改结果?',
                     onOk: async () => {
                         console.log(values)
                         // 关闭页面表单
@@ -320,54 +321,56 @@ class GuestBook extends Component {
         // 读取所选中的行数据
         const guest = this.lineDate || {}; // 如果还没有指定一个空对象
         return (
-            <section>
-                <Col span={24} className="toolbar">
-                    <Form layout="inline">
-                        <Form.Item>
-                            <Select value={filters.selectType} className="queur-type" onChange={this.onChangeType}
-                                    placeholder="请选择留言状态">
-                                {filters.type}
-                            </Select>
-                        </Form.Item>
-                        <Form.Item>
-                            <Input type='text' value={name} onChange={this.nameInputChange}
-                                   placeholder='按主题检索'/>
-                        </Form.Item>
-                        <Form.Item>
-                            <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                <Icon type="search" />查询
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                <Icon type="reload" />重置
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col span={24}>
-                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
-                           pagination={{
-                               showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                               pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
-                               onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-                               onChange: this.changePage,
-                           }}/>
-                </Col>
-                <Modal
-                    width="60%"
-                    title="回复留言"
-                    onCancel={this.handleModalCancel}
-                    onOk={this.handleEditForm}
-                    visible={editVisible === true}>
-                    <GuestBookEdit guest={guest} setForm={(form) => {
-                        this.form = form
-                    }}/>
-                </Modal>
-            </section>
+            <DocumentTitle title='留言管理'>
+                <section>
+                    <Col span={24} className="toolbar">
+                        <Form layout="inline">
+                            <Form.Item>
+                                <Select value={filters.selectType} className="queur-type" onChange={this.onChangeType}
+                                        placeholder="请选择留言状态">
+                                    {filters.type}
+                                </Select>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input type='text' value={name} onChange={this.nameInputChange}
+                                       placeholder='按主题检索'/>
+                            </Form.Item>
+                            <Form.Item>
+                                <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                    <Icon type="search" />查询
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                    <Icon type="reload" />重置
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={24}>
+                        <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
+                               pagination={{
+                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+                                   pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
+                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+                                   onChange: this.changePage,
+                               }}/>
+                    </Col>
+                    <Modal
+                        width="60%"
+                        title="回复留言"
+                        onCancel={this.handleModalCancel}
+                        onOk={this.handleEditForm}
+                        visible={editVisible === true}>
+                        <GuestBookEdit guest={guest} setForm={(form) => {
+                            this.form = form
+                        }}/>
+                    </Modal>
+                </section>
+            </DocumentTitle>
         );
     }
 }

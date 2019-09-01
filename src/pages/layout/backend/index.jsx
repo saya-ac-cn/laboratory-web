@@ -18,7 +18,11 @@ import Lllustration from '../../backend/illustration'
 import Wallpaper from '../../backend/wallpaper'
 import Plan from '../../backend/plan'
 import NoteBook from '../../backend/notebook'
-import Transaction from '../../backend/financial/transaction'
+import Transaction from '../../backend/transaction'
+import FinancialForDay from '../../backend/financialforday'
+import FinancialForMonth from '../../backend/financialformonth'
+import FinancialForYear from '../../backend/financialforyear'
+import DashBoard from '../../backend/dashboard'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -205,6 +209,7 @@ class Admin extends Component {
                                 <Switch>
                                     <Route path='/backstage/set/info' component={Info}/>
                                     <Route path='/backstage/set/log' component={Log}/>
+                                    <Route path='/backstage/set/dashBoard' component={DashBoard}/>
                                     <Route path='/backstage/api/mana' component={Api}/>
                                     <Route path='/backstage/api/db' component={DB}/>
                                     <Route path='/backstage/oss/wallpaper' component={Wallpaper}/>
@@ -213,6 +218,9 @@ class Admin extends Component {
                                     <Route path='/backstage/message/news' component={News}/>
                                     <Route path='/backstage/message/guestbook' component={GuestBook}/>
                                     <Route path='/backstage/financial/transaction' component={Transaction}/>
+                                    <Route path='/backstage/financial/financialForDay' component={FinancialForDay}/>
+                                    <Route path='/backstage/financial/financialForMonth' component={FinancialForMonth}/>
+                                    <Route path='/backstage/financial/financialForYear' component={FinancialForYear}/>
                                     <Route path='/backstage/grow/plan' component={Plan}/>
                                     <Route path='/backstage/grow/notebook' component={NoteBook}/>
                                     <Route path='/backstage/grow/notes' component={Notes}/>

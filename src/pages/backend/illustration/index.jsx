@@ -4,6 +4,8 @@ import moment from 'moment';
 import './index.less'
 import {getPictureList, deletePicture} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
+import DocumentTitle from 'react-document-title'
+
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -139,7 +141,7 @@ class Lllustration extends Component {
     };
 
     /**
-     * 接口名文本框内容改变事件（用于双向绑定数据）
+     * 文件名名文本框内容改变事件（用于双向绑定数据）
      * @param event
      */
     fileInputInputChange = (event) => {
@@ -158,7 +160,8 @@ class Lllustration extends Component {
         // 得到自定义属性
         let id =  e.currentTarget.getAttribute('data-id')
         Modal.confirm({
-            title: `确认编号为:'${id}'的壁纸吗?`,
+            title: '删除确认',
+            content: `确认编号为:'${id}'的壁纸吗?`,
             onOk: () => {
                 let para = { id: id};
                 _this.deletePicture(para)
@@ -206,60 +209,62 @@ class Lllustration extends Component {
             rangeDate = [null, null]
         }
         return (
-            <section>
-                <Row>
-                    <Col span={24} className="toolbar">
-                        <Form layout="inline">
-                            <Form.Item>
-                                <Input type='text' value={filters.filename} onChange={this.fileInputInputChange}
-                                       placeholder='请输入文件名'/>
-                            </Form.Item>
-                            <Form.Item>
-                                <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                    <Icon type="search"/>查询
-                                </Button>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                    <Icon type="reload"/>重置
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Col>
-                </Row>
-                {
-                    listLoading === true ? <Spin/> :
+            <DocumentTitle title='插图管理'>
+                <section>
                     <Row>
-                        {datas !=='null' ? datas.map((item) => (
-                                <Col span={6} className="album-div-imgdiv" key={item.id}>
-                                    <div className="tools">
-                                        <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
-                                    </div>
-                                    <a href="#toolbar" rel="noopener noreferrer" className="a-img">
-                                        <img src={item.weburl} alt={item.filename}
-                                             className="img-responsive"/>
-                                    </a>
-                                </Col>
-                            )):
-                            <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="minus" size="small" title="好像并没有照片诶"/>
-                            </Col>
-                        }
-                        {nextpage !=='null' ?
-                            <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="more" size="small" title="加载更多"/>
-                            </Col>
-                            :
-                            <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完插图了"/>
-                            </Col>
-                        }
+                        <Col span={24} className="toolbar">
+                            <Form layout="inline">
+                                <Form.Item>
+                                    <Input type='text' value={filters.filename} onChange={this.fileInputInputChange}
+                                           placeholder='请输入文件名'/>
+                                </Form.Item>
+                                <Form.Item>
+                                    <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                        <Icon type="search"/>查询
+                                    </Button>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                        <Icon type="reload"/>重置
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Col>
                     </Row>
-                }
-            </section>
+                    {
+                        listLoading === true ? <Spin/> :
+                            <Row>
+                                {datas !=='null' ? datas.map((item) => (
+                                        <Col span={6} className="album-div-imgdiv" key={item.id}>
+                                            <div className="tools">
+                                                <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
+                                            </div>
+                                            <a href="#toolbar" rel="noopener noreferrer" className="a-img">
+                                                <img src={item.weburl} alt={item.filename}
+                                                     className="img-responsive"/>
+                                            </a>
+                                        </Col>
+                                    )):
+                                    <Col span={6} className="album-div-imgdiv">
+                                        <Button type="primary" shape="circle" icon="minus" size="small" title="好像并没有照片诶"/>
+                                    </Col>
+                                }
+                                {nextpage !=='null' ?
+                                    <Col span={6} className="album-div-imgdiv">
+                                        <Button type="primary" shape="circle" icon="more" size="small" title="加载更多"/>
+                                    </Col>
+                                    :
+                                    <Col span={6} className="album-div-imgdiv">
+                                        <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完插图了"/>
+                                    </Col>
+                                }
+                            </Row>
+                    }
+                </section>
+            </DocumentTitle>
         );
     }
 }

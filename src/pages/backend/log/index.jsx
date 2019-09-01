@@ -4,6 +4,7 @@ import {getLogList, getLogType, downloadLogExcel} from '../../../api'
 import {openNotificationWithIcon} from '../../../utils/window'
 import moment from 'moment';
 import axios from 'axios'
+import DocumentTitle from 'react-document-title'
 import './index.less'
 /*
  * 文件名：index.jsx
@@ -200,7 +201,7 @@ class Log extends Component {
         axios({
             method: "GET",
             url: downloadLogExcel,   //接口地址
-            data: para,           //接口参数
+            params: para,           //接口参数
             responseType: 'blob',
             //上面这个参数不加会乱码，据说{responseType: 'arraybuffer'}也可以
             headers: {
@@ -258,45 +259,47 @@ class Log extends Component {
             rangeDate = [null,null]
         }
         return (
-            <section>
-                <Col span={24} className="toolbar">
-                    <Form layout="inline">
-                        <Form.Item>
-                            <Select value={filters.selectType} className="queur-type" showSearch onChange={this.onChangeType}
-                                    placeholder="请选择日志类别">
-                                {type}
-                            </Select>
-                        </Form.Item>
-                        <Form.Item>
-                            <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                <Icon type="search" />查询
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                <Icon type="reload" />重置
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.exportExcel}>
-                                <Icon type="file-excel" />导出
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col span={24}>
-                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
-                           pagination={{
-                               showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                               pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
-                               onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-                               onChange: this.changePage,
-                           }}/>
-                </Col>
-            </section>
+            <DocumentTitle title='操作日志'>
+                <section>
+                    <Col span={24} className="toolbar">
+                        <Form layout="inline">
+                            <Form.Item>
+                                <Select value={filters.selectType} className="queur-type" showSearch onChange={this.onChangeType}
+                                        placeholder="请选择日志类别">
+                                    {type}
+                                </Select>
+                            </Form.Item>
+                            <Form.Item>
+                                <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                    <Icon type="search" />查询
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                    <Icon type="reload" />重置
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.exportExcel}>
+                                    <Icon type="file-excel" />导出
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={24}>
+                        <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
+                               pagination={{
+                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+                                   pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
+                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+                                   onChange: this.changePage,
+                               }}/>
+                    </Col>
+                </section>
+            </DocumentTitle>
         );
     }
 }

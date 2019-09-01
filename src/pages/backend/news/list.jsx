@@ -4,6 +4,7 @@ import {deleteNews, getNewsList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from 'moment';
 import {Link} from "react-router-dom";
+import DocumentTitle from 'react-document-title'
 /*
  * 文件名：list.jsx
  * 作者：liunengkai
@@ -102,7 +103,8 @@ class List extends Component {
     handleDellNews = (item) => {
         let _this = this;
         Modal.confirm({
-            title: `确认删除主题为:${item.topic}的动态吗?`,
+            title: '删除确认',
+            content: `确认删除主题为:${item.topic}的动态吗?`,
             onOk: async () => {
                 // 在发请求前, 显示loading
                 _this.setState({listLoading: true});
@@ -219,43 +221,45 @@ class List extends Component {
             rangeDate = [null,null]
         }
         return (
-            <section>
-                <Col span={24} className="toolbar">
-                    <Form layout="inline">
-                        <Form.Item>
-                            <Input type='text' value={topic} onChange={this.topicInputChange}
-                                   placeholder='按主题检索'/>
-                        </Form.Item>
-                        <Form.Item>
-                            <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                <Icon type="search" />查询
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                <Icon type="reload" />重置
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button">
-                                <Link to='/backstage/message/news/publish'><Icon type="plus"/>发布</Link>
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col span={24}>
-                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
-                           pagination={{
-                               showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                               pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
-                               onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-                               onChange: this.changePage,
-                           }}/>
-                </Col>
-            </section>
+            <DocumentTitle title='动态管理'>
+                <section>
+                    <Col span={24} className="toolbar">
+                        <Form layout="inline">
+                            <Form.Item>
+                                <Input type='text' value={topic} onChange={this.topicInputChange}
+                                       placeholder='按主题检索'/>
+                            </Form.Item>
+                            <Form.Item>
+                                <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                    <Icon type="search" />查询
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                    <Icon type="reload" />重置
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button">
+                                    <Link to='/backstage/message/news/publish'><Icon type="plus"/>发布</Link>
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={24}>
+                        <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
+                               pagination={{
+                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+                                   pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
+                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+                                   onChange: this.changePage,
+                               }}/>
+                    </Col>
+                </section>
+            </DocumentTitle>
         );
     }
 }

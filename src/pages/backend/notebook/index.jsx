@@ -76,7 +76,7 @@ class NoteBook extends Component {
     };
 
     /**
-     * 获取动态列表数据
+     * 获取笔记簿列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
@@ -270,7 +270,8 @@ class NoteBook extends Component {
             tips = `您确认删除“${item.name}”空笔记簿？`
         }
         Modal.confirm({
-            title: tips,
+            title: '删除确认',
+            content: tips,
             cancelText: '再想想',
             okText: '不要啦',
             onOk: async () => {

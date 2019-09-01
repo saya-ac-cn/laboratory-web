@@ -43,3 +43,8 @@
 * npm install draftjs-to-html
 ## 安装react-document-title用于设置页面标题
 * npm install --save react-document-title
+## 安装echarts
+npm install --save echarts-for-react
+npm install echarts --save
+## 安装词云统计
+* npm install echarts-wordcloud

@@ -3,6 +3,7 @@ import {Button, Form, Col, Input, Tag, Icon} from "antd";
 import RichTextEditor from '../../../component/rich-text-editor'
 import {openNotificationWithIcon} from "../../../utils/window";
 import {getNews, editNews, publishNews} from "../../../api/index"
+import DocumentTitle from 'react-document-title'
 /*
  * 文件名：edit.jsx
  * 作者：liunengkai
@@ -210,65 +211,67 @@ class EditPage extends Component {
         const { tags, inputVisible, inputValue,form } = this.state;
         const tagChild = tags.map(this.forMap);
         return (
-            <section>
-                <div className="mytips">
-                    <p>平台发布动态约定：</p>
-                    <blockquote>
-                        <p>
-                            <i>1、动态标题必须填写。</i>
-                        </p>
-                        <p>
-                            <i>2、标签可以填写也可以不填写，最多不超过5个(≤5)标签。</i>
-                        </p>
-                        <p>
-                            <i>3、动态内容必须填写，书写采用暂采用Html语法，后期将升级为MarkDown语法。书写完毕后，建议到前台页面查看实际效果，以便造成格式不兼容。</i>
-                        </p>
-                    </blockquote>
-                </div>
-                <Col span={24}>
-                    <Form {...this.formItemLayout}>
-                        <Form.Item label="标题" {...this.formItemLayout}>
-                            {
-                                getFieldDecorator('topic', {
-                                    initialValue: form.topic,
-                                    rules: [
-                                        {required: true, message: '请输入标题'},
-                                        {max: 50, message: '最多不超过50个字符'},
-                                    ]
-                                })(<Input type='text'/>)
-                            }
-                        </Form.Item>
-                        <Form.Item label="标签" {...this.formItemLayout}>
-                            <div style={{ marginBottom: 16 }}>
+            <DocumentTitle title='编辑动态'>
+                <section>
+                    <div className="mytips">
+                        <p>平台发布动态约定：</p>
+                        <blockquote>
+                            <p>
+                                <i>1、动态标题必须填写。</i>
+                            </p>
+                            <p>
+                                <i>2、标签可以填写也可以不填写，最多不超过5个(≤5)标签。</i>
+                            </p>
+                            <p>
+                                <i>3、动态内容必须填写，书写采用暂采用Html语法，后期将升级为MarkDown语法。书写完毕后，建议到前台页面查看实际效果，以便造成格式不兼容。</i>
+                            </p>
+                        </blockquote>
+                    </div>
+                    <Col span={24}>
+                        <Form {...this.formItemLayout}>
+                            <Form.Item label="标题" {...this.formItemLayout}>
+                                {
+                                    getFieldDecorator('topic', {
+                                        initialValue: form.topic,
+                                        rules: [
+                                            {required: true, message: '请输入标题'},
+                                            {max: 50, message: '最多不超过50个字符'},
+                                        ]
+                                    })(<Input type='text'/>)
+                                }
+                            </Form.Item>
+                            <Form.Item label="标签" {...this.formItemLayout}>
+                                <div style={{ marginBottom: 16 }}>
                                     {tagChild}
-                            </div>
-                            {inputVisible && (
-                                <Input
-                                    ref={input => this.input = input}
-                                    type="text"
-                                    size="small"
-                                    style={{ width: 78 }}
-                                    value={inputValue}
-                                    onChange={this.handleInputChange}
-                                    onBlur={this.handleInputConfirm}
-                                    onPressEnter={this.handleInputConfirm}
-                                />
-                            )}
-                            {!inputVisible && (
-                                <Tag onClick={this.showInput} >
-                                    <Icon type="plus" /> New Tag
-                                </Tag>
-                            )}
-                        </Form.Item>
-                        <Form.Item label="内容" {...this.formItemLayout}>
-                            <RichTextEditor ref={this.editor} detail={form.content}/>
-                        </Form.Item>
-                        <Form.Item {...this.buttonItemLayout}>
-                            <Button htmlType="button" type="primary" onClick={this.submit}>提交</Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-            </section>
+                                </div>
+                                {inputVisible && (
+                                    <Input
+                                        ref={input => this.input = input}
+                                        type="text"
+                                        size="small"
+                                        style={{ width: 78 }}
+                                        value={inputValue}
+                                        onChange={this.handleInputChange}
+                                        onBlur={this.handleInputConfirm}
+                                        onPressEnter={this.handleInputConfirm}
+                                    />
+                                )}
+                                {!inputVisible && (
+                                    <Tag onClick={this.showInput} >
+                                        <Icon type="plus" /> New Tag
+                                    </Tag>
+                                )}
+                            </Form.Item>
+                            <Form.Item label="内容" {...this.formItemLayout}>
+                                <RichTextEditor ref={this.editor} detail={form.content}/>
+                            </Form.Item>
+                            <Form.Item {...this.buttonItemLayout}>
+                                <Button htmlType="button" type="primary" onClick={this.submit}>提交</Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                </section>
+            </DocumentTitle>
         );
     }
 }

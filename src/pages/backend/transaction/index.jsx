@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import {getTransactionList, getFinancialType, applyTransaction, updateTransaction, deleteTransaction, downTransaction, outTransactionInfoExcel} from '../../../api'
 import DocumentTitle from 'react-document-title'
 import moment from 'moment';
-import {getTransactionList, getFinancialType, applyTransaction, updateTransaction, deleteTransaction, downTransaction,outTransactionInfoExcel,} from '../../../api'
-import {Button, Col, DatePicker, Icon, Input, Form, Select, Table, Modal} from "antd";
+import {Button, Col, DatePicker, Icon, Form, Select, Table, Modal} from "antd";
 import {openNotificationWithIcon} from "../../../utils/window";
 import AddForm from './addForm'
 import ViewInfo from './viewInfo'
+import EditForm from './editForm'
+import axios from "axios";
 /*
  * 文件名：transaction.jsx
  * 作者：liunengkai
@@ -14,6 +16,7 @@ import ViewInfo from './viewInfo'
  */
 const {RangePicker} = DatePicker;
 const {Option} = Select;
+
 // 定义组件（ES6）
 class Transaction extends Component {
 
@@ -35,8 +38,9 @@ class Transaction extends Component {
         },
         type: [],// 系统返回的交易类别
         queryType: [],// 查询专用类别
-        addModalVisible:false,
-        viewModalVisible:false,
+        addModalVisible: false,
+        viewModalVisible: false,
+        editModalVisible: false,
     }
 
 
@@ -83,9 +87,9 @@ class Transaction extends Component {
                     <div>
                         <Button type="primary" onClick={() => this.openViewModal(record)} shape="circle" icon="eye"/>
                         &nbsp;
-                        <Button type="primary" shape="circle" icon="edit"/>
+                        <Button type="primary" onClick={() => this.openEditModal(record)} shape="circle" icon="edit"/>
                         &nbsp;
-                        <Button type="danger"  shape="circle" icon="delete"/>
+                        <Button type="danger" onClick={() => this.handleDelete(record)} shape="circle" icon="delete"/>
                     </div>
                 ),
             },
@@ -238,7 +242,7 @@ class Transaction extends Component {
         // 阻止表单的默认提交
         e.preventDefault();
         let _this = this
-        _this.form.validateFields(['transactionAmount', 'tradeType', 'applyContent'], async (err, values) =>{
+        _this.form.validateFields(['transactionAmount', 'tradeType', 'applyContent'], async (err, values) => {
             console.log(values)
             if (!err) {
                 _this.setState({listLoading: true});
@@ -270,8 +274,8 @@ class Transaction extends Component {
         let viewModalVisible = flag;
         _this.setState({
             viewModalVisible
-        },function () {
-            if (flag === false){
+        }, function () {
+            if (flag === false) {
                 _this.getDatas()
             }
         })
@@ -283,6 +287,171 @@ class Transaction extends Component {
     openViewModal = (value) => {
         this.viewData = value.tradeId;
         this.handleViewModal(true)
+    }
+
+    /**
+     * 编辑财务申报弹窗
+     * @param flog
+     */
+    handleEditModal = (flog) => {
+        let _this = this
+        let editModalVisible = flog
+        _this.setState({
+            editModalVisible
+        })
+    }
+
+    /**
+     * 打开编辑弹窗
+     * @param value
+     */
+    openEditModal = (value) => {
+        this.updateData = value
+        this.handleEditModal(true)
+    }
+
+    /**
+     * 提交到后台修改
+     * @param e
+     */
+    handleEdit = (e) => {
+        // 阻止表单的默认提交
+        e.preventDefault();
+        let _this = this
+        _this.form.validateFields(['updateTradeType', 'updateTransactionAmount'], async (err, values) => {
+            console.log(values)
+            if (!err) {
+                let para = {
+                    tradeId: _this.updateData.tradeId,
+                    tradeType: values.updateTradeType,
+                    transactionAmount: values.updateTransactionAmount,
+                }
+                const {msg, code} = await updateTransaction(para)
+                _this.setState({listLoading: false});
+                if (code === 0) {
+                    openNotificationWithIcon("success", "操作结果", "修改成功");
+                    // 重置表单
+                    _this.form.resetFields(['updateTradeType', 'updateTransactionAmount'])
+                    // 关闭弹窗
+                    _this.handleEditModal(false)
+                    // 重新加载数据
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
+    }
+
+    /**
+     * 删除流水申报
+     */
+    handleDelete = (item) => {
+        let _this = this;
+        Modal.confirm({
+            title: '删除确认',
+            content: `您确定删除流水号为${item.tradeId}的流水及该流水下的所有明细的记录吗?`,
+            onOk: async () => {
+                // 在发请求前, 显示loading
+                _this.setState({listLoading: true});
+                let para = {tradeId: item.tradeId };
+                const {msg, code} = await deleteTransaction(para)
+                // 在请求完成后, 隐藏loading
+                _this.setState({listLoading: false});
+                if (code === 0) {
+                    openNotificationWithIcon("success", "操作结果", "删除成功");
+                    _this.getDatas();
+                } else {
+                    openNotificationWithIcon("error", "错误提示", msg);
+                }
+            }
+        })
+    }
+
+    /**
+     * 导出财务流水
+     */
+    exportListExcel = () =>{
+        let _this = this;
+        // 在发请求前, 显示loading
+        _this.setState({listLoading: true});
+        let para = {
+            tradeType: this.state.filters.tradeType,
+            beginTime: this.state.filters.beginTime,
+            endTime: this.state.filters.endTime,
+        };
+        console.log(para)
+        axios({
+            method: "GET",
+            url: downTransaction,   //接口地址
+            params: para,           //接口参数
+            responseType: 'blob',
+            //上面这个参数不加会乱码，据说{responseType: 'arraybuffer'}也可以
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+            .then(function (res) {
+                _this.setState({listLoading: false});
+                let fileName = '财务流水报表.xlsx';//excel文件名称
+                let blob = new Blob([res.data], {type: 'application/x-xlsx'});   //word文档为msword,pdf文档为pdf，excel文档为x-xls
+                if (window.navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveBlob(blob, fileName);
+                } else {
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    link.click();
+                    window.URL.revokeObjectURL(link.href);
+                }
+            })
+            .catch(function (res) {
+                _this.setState({listLoading: false});
+                openNotificationWithIcon("error", "错误提示", "导出财务流水报表失败");
+            });
+    }
+
+    /**
+     * 导出财务流水明细
+     */
+    exportInfoExcel = () => {
+        let _this = this;
+        // 在发请求前, 显示loading
+        _this.setState({listLoading: true});
+        let para = {
+            tradeType: this.state.filters.tradeType,
+            beginTime: this.state.filters.beginTime,
+            endTime: this.state.filters.endTime,
+        };
+        console.log(para)
+        axios({
+            method: "GET",
+            url: outTransactionInfoExcel,   //接口地址
+            params: para,           //接口参数
+            responseType: 'blob',
+            //上面这个参数不加会乱码，据说{responseType: 'arraybuffer'}也可以
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+            .then(function (res) {
+                _this.setState({listLoading: false});
+                let fileName = '财务流水明细.xlsx';//excel文件名称
+                let blob = new Blob([res.data], {type: 'application/x-xlsx'});   //word文档为msword,pdf文档为pdf，excel文档为x-xls
+                if (window.navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveBlob(blob, fileName);
+                } else {
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    link.click();
+                    window.URL.revokeObjectURL(link.href);
+                }
+            })
+            .catch(function (res) {
+                _this.setState({listLoading: false});
+                openNotificationWithIcon("error", "错误提示", "导出财务流水明细报表失败");
+            });
     }
 
     /**
@@ -304,13 +473,13 @@ class Transaction extends Component {
 
     render() {
         // 读取状态数据
-        const {datas, dataTotal, nowPage, pageSize, listLoading, type, queryType, filters,addModalVisible,viewModalVisible} = this.state;
-        let {beginTime,endTime,tradeType} = filters;
+        const {datas, dataTotal, nowPage, pageSize, listLoading, type, queryType, filters, addModalVisible, viewModalVisible, editModalVisible} = this.state;
+        let {beginTime, endTime, tradeType} = filters;
         let rangeDate;
-        if (beginTime !== null && endTime !== null){
-            rangeDate = [moment(beginTime),moment(endTime)]
+        if (beginTime !== null && endTime !== null) {
+            rangeDate = [moment(beginTime), moment(endTime)]
         } else {
-            rangeDate = [null,null]
+            rangeDate = [null, null]
         }
         return (
             <DocumentTitle title="财务流水">
@@ -320,21 +489,37 @@ class Transaction extends Component {
                         width="70%"
                         visible={addModalVisible === true}
                         okText='提交'
-                        onCancel={()=>this.handleAddModal(false)}
+                        onCancel={() => this.handleAddModal(false)}
                         onOk={this.handleApply}>
-                        <AddForm type={type || {}} setForm={(form) => {this.form = form}}/>
+                        <AddForm type={type || {}} setForm={(form) => {
+                            this.form = form
+                        }}/>
                     </Modal>
                     <Modal
                         title={`流水明细:id-${this.viewData}`}
                         width="80%"
                         visible={viewModalVisible === true}
-                        onCancel={()=>this.handleViewModal(false)} footer={null}>
-                        <ViewInfo tradeId={this.viewData || -1} setForm={(form) => {this.form = form}}/>
+                        onCancel={() => this.handleViewModal(false)} footer={null}>
+                        <ViewInfo tradeId={this.viewData || -1} setForm={(form) => {
+                            this.form = form
+                        }}/>
+                    </Modal>
+                    <Modal
+                        title="修改流水"
+                        width="70%"
+                        visible={editModalVisible === true}
+                        okText='提交'
+                        onCancel={() => this.handleEditModal(false)}
+                        onOk={this.handleEdit}>
+                        <EditForm line={this.updateData || {}} type={type || {}} setForm={(form) => {
+                            this.form = form
+                        }}/>
                     </Modal>
                     <Col span={24} className="toolbar">
                         <Form layout="inline">
                             <Form.Item>
-                                <Select style={{width:'200px'}} value={tradeType} showSearch onChange={this.onChangeType}  placeholder="请选择交易类别">
+                                <Select style={{width: '200px'}} value={tradeType} showSearch
+                                        onChange={this.onChangeType} placeholder="请选择交易类别">
                                     {queryType}
                                 </Select>
                             </Form.Item>
@@ -343,23 +528,34 @@ class Transaction extends Component {
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                    <Icon type="search" />查询
+                                    <Icon type="search"/>查询
                                 </Button>
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                    <Icon type="reload" />重置
+                                    <Icon type="reload"/>重置
                                 </Button>
                             </Form.Item>
                             <Form.Item>
-                                <Button type="primary" htmlType="button" onClick={()=>this.handleAddModal(true)}>
+                                <Button type="primary" htmlType="button" onClick={() => this.handleAddModal(true)}>
                                     <Icon type="plus"/>申报
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.exportListExcel}>
+                                    <Icon type="file-excel" />流水
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.exportInfoExcel}>
+                                    <Icon type="file-excel" />明细
                                 </Button>
                             </Form.Item>
                         </Form>
                     </Col>
                     <Col span={24}>
-                        <Table size="middle" rowKey="tradeId" loading={listLoading} columns={this.columns} dataSource={datas}
+                        <Table size="middle" rowKey="tradeId" loading={listLoading} columns={this.columns}
+                               dataSource={datas}
                                pagination={{
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                    pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,

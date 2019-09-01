@@ -4,7 +4,7 @@ import moment from 'moment';
 import './index.less'
 import {getPictureList, deletePicture, uploadWallpaper} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
-
+import DocumentTitle from 'react-document-title'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -39,7 +39,7 @@ class Wallpaper extends Component {
 
 
     /**
-     * 获取插图列表数据
+     * 获取壁纸列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
@@ -165,7 +165,8 @@ class Wallpaper extends Component {
         // 得到自定义属性
         let id =  e.currentTarget.getAttribute('data-id')
         Modal.confirm({
-            title: `确认编号为:'${id}'的壁纸吗?`,
+            title: '删除确认',
+            content: `确认编号为:'${id}'的壁纸吗?`,
             onOk: () => {
                 let para = { id: id};
                 _this.deletePicture(para)
@@ -326,84 +327,86 @@ class Wallpaper extends Component {
             </div>
         );
         return (
-            <section>
-                <Modal
-                    title="壁纸文件"
-                    visible={uploadVisible === true}
-                    onOk={this.handleCancelUpload}
-                    onCancel={this.handleCancelUpload}>
-                    <Upload
-                        action={uploadWallpaper}
-                        listType="picture-card"
-                        accept="image/jpeg,image/jpg,image/png,image/bmp"
-                        fileList={fileList}
-                        onPreview={this.handlePreview}
-                        onChange={this.handleChange}
-                        onRemove={this.handleDelete}>
-                        {fileList.length >= 8 ? null : uploadButton}
-                    </Upload>
-                </Modal>
-                <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                </Modal>
-                <Row>
-                    <Col span={24} className="toolbar">
-                        <Form layout="inline">
-                            <Form.Item>
-                                <Input type='text' value={filters.filename} onChange={this.fileInputInputChange}
-                                       placeholder='请输入文件名'/>
-                            </Form.Item>
-                            <Form.Item>
-                                <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                    <Icon type="search"/>查询
-                                </Button>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                    <Icon type="reload"/>重置
-                                </Button>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="button" onClick={this.handleOpenUpload}>
-                                    <Icon type="cloud-upload" />上传
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Col>
-                </Row>
-                {
-                    listLoading === true ? <Spin/> :
+            <DocumentTitle title='壁纸管理'>
+                <section>
+                    <Modal
+                        title="壁纸文件"
+                        visible={uploadVisible === true}
+                        onOk={this.handleCancelUpload}
+                        onCancel={this.handleCancelUpload}>
+                        <Upload
+                            action={uploadWallpaper}
+                            listType="picture-card"
+                            accept="image/jpeg,image/jpg,image/png,image/bmp"
+                            fileList={fileList}
+                            onPreview={this.handlePreview}
+                            onChange={this.handleChange}
+                            onRemove={this.handleDelete}>
+                            {fileList.length >= 8 ? null : uploadButton}
+                        </Upload>
+                    </Modal>
+                    <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                    </Modal>
                     <Row>
-                        {datas !=='null' ? datas.map((item) => (
-                                <Col span={6} className="album-div-imgdiv" key={item.id}>
-                                    <div className="tools">
-                                        <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
-                                    </div>
-                                    <a href="#toolbar" onClick={this.previewPhoto} rel="noopener noreferrer" className="a-img">
-                                        <img src={item.weburl} alt={item.filename}
-                                             className="img-responsive"/>
-                                    </a>
-                                </Col>
-                            )):
-                            <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="minus" size="small" title="好像并没有照片诶"/>
-                            </Col>
-                        }
-                        {nextpage !=='null' ?
-                            <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="more" size="small" title="加载更多"/>
-                            </Col>
-                            :
-                            <Col span={6} className="album-div-imgdiv">
-                                <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完壁纸了"/>
-                            </Col>
-                        }
+                        <Col span={24} className="toolbar">
+                            <Form layout="inline">
+                                <Form.Item>
+                                    <Input type='text' value={filters.filename} onChange={this.fileInputInputChange}
+                                           placeholder='请输入文件名'/>
+                                </Form.Item>
+                                <Form.Item>
+                                    <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                        <Icon type="search"/>查询
+                                    </Button>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                        <Icon type="reload"/>重置
+                                    </Button>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="button" onClick={this.handleOpenUpload}>
+                                        <Icon type="cloud-upload" />上传
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Col>
                     </Row>
-                }
-            </section>
+                    {
+                        listLoading === true ? <Spin/> :
+                            <Row>
+                                {datas !=='null' ? datas.map((item) => (
+                                        <Col span={6} className="album-div-imgdiv" key={item.id}>
+                                            <div className="tools">
+                                                <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
+                                            </div>
+                                            <a href="#toolbar" onClick={this.previewPhoto} rel="noopener noreferrer" className="a-img">
+                                                <img src={item.weburl} alt={item.filename}
+                                                     className="img-responsive"/>
+                                            </a>
+                                        </Col>
+                                    )):
+                                    <Col span={6} className="album-div-imgdiv">
+                                        <Button type="primary" shape="circle" icon="minus" size="small" title="好像并没有照片诶"/>
+                                    </Col>
+                                }
+                                {nextpage !=='null' ?
+                                    <Col span={6} className="album-div-imgdiv">
+                                        <Button type="primary" shape="circle" icon="more" size="small" title="加载更多"/>
+                                    </Col>
+                                    :
+                                    <Col span={6} className="album-div-imgdiv">
+                                        <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完壁纸了"/>
+                                    </Col>
+                                }
+                            </Row>
+                    }
+                </section>
+            </DocumentTitle>
         );
     }
 }

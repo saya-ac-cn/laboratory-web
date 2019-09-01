@@ -4,6 +4,7 @@ import {openNotificationWithIcon} from "../../../utils/window";
 import {Button, Col, Form, Table, Icon, Input, Modal} from "antd";
 import AddForm from "./add-form"
 import EditForm from "./edit-form"
+import DocumentTitle from 'react-document-title'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -194,7 +195,8 @@ class Api extends Component {
         _this.form.validateFields((err, values) => {
             if (!err) {
                 Modal.confirm({
-                    title: '您确定创建该接口?',
+                    title: '操作确认',
+                    content: '您确定创建该接口?',
                     onOk: async () => {
                         // 关闭页面表单
                         _this.setState({
@@ -237,7 +239,8 @@ class Api extends Component {
         _this.form.validateFields(async (err, values) => {
             if (!err) {
                 Modal.confirm({
-                    title: '您确定要保存此次修改结果?',
+                    title: '修改确认',
+                    content: '您确定要保存此次修改结果?',
                     onOk: async () => {
                         // 关闭页面表单
                         _this.setState({
@@ -278,7 +281,8 @@ class Api extends Component {
     handleDellApi = (item) => {
         let _this = this;
         Modal.confirm({
-            title: `确认删除${item.name}接口吗?`,
+            title: '删除确认',
+            content: `确认删除${item.name}接口吗?`,
             onOk: async () => {
                 // 在发请求前, 显示loading
                 _this.setState({listLoading: true});
@@ -320,58 +324,60 @@ class Api extends Component {
         // 读取所选中的行数据
         const api = this.lineDate || {}; // 如果还没有指定一个空对象
         return (
-            <section>
-                <Col span={24} className="toolbar">
-                    <Form layout="inline">
-                        <Form.Item>
-                            <Input type='text' value={filters.name} onChange={this.nameInputChange}
-                                   placeholder='请输入接口名'/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                <Icon type="search"/>查询
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                <Icon type="reload"/>重置
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.handleModalAdd}>
-                                <Icon type="plus"/>添加
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col span={24}>
-                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
-                           pagination={{
-                               showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                               pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
-                               onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-                               onChange: this.changePage,
-                           }}/>
-                </Col>
-                <Modal
-                    title="创建接口"
-                    visible={modalStatus === 1}
-                    onOk={this.handleAddApi}
-                    onCancel={this.handleModalCancel}>
-                    <AddForm setForm={(form) => {
-                        this.form = form
-                    }}/>
-                </Modal>
-                <Modal
-                    title="修改接口"
-                    visible={modalStatus === 2}
-                    onOk={this.handleEditApi}
-                    onCancel={this.handleModalCancel}>
-                    <EditForm api={api} setForm={(form) => {
-                        this.form = form
-                    }}/>
-                </Modal>
-            </section>
+            <DocumentTitle title='接口管理'>
+                <section>
+                    <Col span={24} className="toolbar">
+                        <Form layout="inline">
+                            <Form.Item>
+                                <Input type='text' value={filters.name} onChange={this.nameInputChange}
+                                       placeholder='请输入接口名'/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                    <Icon type="search"/>查询
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                    <Icon type="reload"/>重置
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.handleModalAdd}>
+                                    <Icon type="plus"/>添加
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={24}>
+                        <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
+                               pagination={{
+                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+                                   pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
+                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+                                   onChange: this.changePage,
+                               }}/>
+                    </Col>
+                    <Modal
+                        title="创建接口"
+                        visible={modalStatus === 1}
+                        onOk={this.handleAddApi}
+                        onCancel={this.handleModalCancel}>
+                        <AddForm setForm={(form) => {
+                            this.form = form
+                        }}/>
+                    </Modal>
+                    <Modal
+                        title="修改接口"
+                        visible={modalStatus === 2}
+                        onOk={this.handleEditApi}
+                        onCancel={this.handleModalCancel}>
+                        <EditForm api={api} setForm={(form) => {
+                            this.form = form
+                        }}/>
+                    </Modal>
+                </section>
+            </DocumentTitle>
         );
     }
 }

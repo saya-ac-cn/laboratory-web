@@ -73,7 +73,7 @@ class NotesList extends Component {
     };
 
     /**
-     * 获取动态列表数据
+     * 获取笔记列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
@@ -193,7 +193,8 @@ class NotesList extends Component {
     handleDeleteNotes = (item) => {
         let _this = this;
         Modal.confirm({
-            title: `确认删除主题为:${item.topic}的笔记吗?`,
+            title: '删除确认',
+            content: `确认删除主题为:${item.topic}的笔记吗?`,
             onOk: async () => {
                 // 在发请求前, 显示loading
                 _this.setState({listLoading: true});

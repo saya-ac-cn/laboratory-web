@@ -238,10 +238,10 @@ class EditPage extends Component {
         const { tags, inputVisible, inputValue,form,notebooks} = this.state;
         const tagChild = tags.map(this.forMap);
         return (
-            <DocumentTitle title="编辑动态">
+            <DocumentTitle title="编辑笔记">
                 <section>
                     <div className="mytips">
-                        <p>平台发布动态约定：</p>
+                        <p>平台发布笔记约定：</p>
                         <blockquote>
                             <p>
                                 <i>1、笔记标题必须填写。</i>

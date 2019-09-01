@@ -4,7 +4,7 @@ import {getFileList, deleteFile, editFile, uploadFile, downloadFileForAdmin} fro
 import {openNotificationWithIcon} from "../../../utils/window";
 import moment from 'moment';
 import axios from "axios";
-
+import DocumentTitle from 'react-document-title'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -262,7 +262,8 @@ class FilesMane extends Component {
     handleDeleteFile = (item) => {
         let _this = this;
         Modal.confirm({
-            title: `确认文件名为:'${item.filename}'的文件吗?`,
+            title: '删除确认',
+            content: `确认文件名为:'${item.filename}'的文件吗?`,
             onOk: () => {
                 let para = { id: item.id };
                 _this.deleteFile(para)
@@ -327,7 +328,8 @@ class FilesMane extends Component {
             message = `您确定要显示文件名为：' ${item.filename} '的文件吗？`
         }
         Modal.confirm({
-            title: message,
+            title: '修改确认',
+            content: message,
             onOk: async () => {
                 let para = { id: item.id, status: sendStatus };
                 // 在发请求前, 显示loading
@@ -378,58 +380,60 @@ class FilesMane extends Component {
             rangeDate = [null,null]
         }
         return (
-            <section>
-                <Col span={24} className="toolbar">
-                    <Form layout="inline">
-                        <Form.Item>
-                            <Input type='text' value={filters.filename} onChange={this.fileInputInputChange}
-                                   placeholder='请输入文件名'/>
-                        </Form.Item>
-                        <Form.Item>
-                            <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.getDatas}>
-                                <Icon type="search" />查询
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.reloadPage}>
-                                <Icon type="reload" />重置
-                            </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={this.handleOpenUpload}>
-                                <Icon type="cloud-upload" />上传
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col span={24}>
-                    <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
-                           pagination={{
-                               showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                               pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
-                               onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-                               onChange: this.changePage,
-                           }}/>
-                </Col>
-                <Modal
-                    title="上传文件"
-                    visible={uploadVisible === true}
-                    onOk={this.handleCancelUpload}
-                    onCancel={this.handleCancelUpload}>
-                    <Dragger {...this.uploadConfig}>
-                        <p className="ant-upload-drag-icon">
-                            <Icon type="inbox" />
-                        </p>
-                        <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-                        <p className="ant-upload-hint">
-                            支持单个或批量上传，单个文件大小不能超过10M，禁止上传exe/bat等可执行文件。
-                        </p>
-                    </Dragger>
-                </Modal>
-            </section>
+            <DocumentTitle title='文件管理'>
+                <section>
+                    <Col span={24} className="toolbar">
+                        <Form layout="inline">
+                            <Form.Item>
+                                <Input type='text' value={filters.filename} onChange={this.fileInputInputChange}
+                                       placeholder='请输入文件名'/>
+                            </Form.Item>
+                            <Form.Item>
+                                <RangePicker value={rangeDate} onChange={this.onChangeDate}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.getDatas}>
+                                    <Icon type="search" />查询
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.reloadPage}>
+                                    <Icon type="reload" />重置
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="button" onClick={this.handleOpenUpload}>
+                                    <Icon type="cloud-upload" />上传
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={24}>
+                        <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
+                               pagination={{
+                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+                                   pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
+                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+                                   onChange: this.changePage,
+                               }}/>
+                    </Col>
+                    <Modal
+                        title="上传文件"
+                        visible={uploadVisible === true}
+                        onOk={this.handleCancelUpload}
+                        onCancel={this.handleCancelUpload}>
+                        <Dragger {...this.uploadConfig}>
+                            <p className="ant-upload-drag-icon">
+                                <Icon type="inbox" />
+                            </p>
+                            <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+                            <p className="ant-upload-hint">
+                                支持单个或批量上传，单个文件大小不能超过10M，禁止上传exe/bat等可执行文件。
+                            </p>
+                        </Dragger>
+                    </Modal>
+                </section>
+            </DocumentTitle>
         );
     }
 }
