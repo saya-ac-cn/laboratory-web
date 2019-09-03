@@ -1,5 +1,5 @@
 import ajax from './ajax'
-
+import jsonp from 'jsonp'
 /**
  * 重要说明！！！
  * 因为，后台已对「/backend，/frontend，/files」接口代理,页面路由绝对禁止出现/backend、/frontend、/files（远景包括map）
@@ -14,10 +14,10 @@ let backendAPI = '/backend';
 let publicAPI = '/frontend';
 let frontendAPI = publicAPI + '/Pandora';
 
-// 百度模糊搜索地址
-export const baiduSearchSelect = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su';
 // 百度搜索地址
 export const baiduSearchWord = 'http://www.baidu.com/s';
+// 百度模糊搜索地址
+export const baiduSearchSelect = `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su`
 // 登录接口
 export const requestLogin = params => ajax(`${backendAPI}/login`, params, 'POST');
 // 注销接口

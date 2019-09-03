@@ -48,3 +48,5 @@ npm install --save echarts-for-react
 npm install echarts --save
 ## 安装词云统计
 * npm install echarts-wordcloud
+## 安装jsonp
+* npm install jsonp --save
