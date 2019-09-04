@@ -1,5 +1,4 @@
 import ajax from './ajax'
-import jsonp from 'jsonp'
 /**
  * 重要说明！！！
  * 因为，后台已对「/backend，/frontend，/files」接口代理,页面路由绝对禁止出现/backend、/frontend、/files（远景包括map）

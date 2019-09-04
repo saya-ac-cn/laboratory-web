@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Login from './pages/login/index'
 import Backend from './pages/layout/backend'
 import Home from './pages/frontend/home'
-
+import Admin from './pages/layout/backend2'
 /**
  * 应用根组件
  * @returns {*}
@@ -22,6 +22,7 @@ function App() {
             <Switch>
                 <Route path='/login' component={Login}/>
                 <Route path='/backstage' component={Backend}/>
+                <Route path='/admin' component={Admin}/>
                 <Route path='/' component={Home}/>
             </Switch>
         </BrowserRouter>

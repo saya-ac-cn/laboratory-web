@@ -1,0 +1,96 @@
+// 定义一些公关变量
+// 头部高度
+@header-height:60px;
+// 底部版权区域高度
+@footer-height:30px;
+// 左边菜单展开时宽度
+@leftmenu-width:240px;
+// 左边菜单关闭时宽度
+@leftmenu-width-close:80px;
+.this-container {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  .background-div{
+    position: absolute;
+    z-index: -999;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    bottom: 0px;
+    img{
+      width: 100vw;
+      height: 100vh;
+      padding: 0;
+      margin: 0;
+      top: 0;
+      bottom: 0;
+      position: absolute;
+      /* 背景图垂直、水平均居中 */
+      background-position: center center;
+      /* 背景图不平铺 */
+      background-repeat: no-repeat;
+      /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+      background-attachment: fixed;
+      /* 让背景图基于容器大小伸缩 */
+      background-size: cover;
+    }
+  }
+  .this-header{
+    height: @header-height;
+    width: 100vw;
+    padding: 0;
+    font-family: Arial,Helvetica,Sans-Serif;
+    background-color:#8FBC8B;
+  }
+  .this-content{
+    width: 100vw;
+    display: flex;
+    // background: #324057;
+    position: absolute;
+    top: @header-height;
+    bottom: @footer-height;
+    overflow: hidden;
+    height: auto;
+    background-color: #b1e0dd;
+    min-height: 300px;
+      .leftmunu-open{
+        flex: 0 0 @leftmenu-width;
+        width: @leftmenu-width;
+        background-color: cornsilk;
+      }
+      .leftmunu-close{
+        flex: 0 0 @leftmenu-width-close;
+        width: @leftmenu-width-close;
+      }
+      .content-container {
+        flex: 1;
+        overflow-y: scroll;
+        padding: 20px;
+      }
+    }
+  .this-content::-webkit-scrollbar {
+    display: none;
+  }
+  .this-footer{
+    /* 实现footer贴底部 */
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    height: @footer-height;
+    /*flex 布局*/
+    display: flex;
+    /*实现垂直居中*/
+    align-items: center;
+    /*实现水平居中*/
+    /*justify-content: center;*/
+    text-align: justify;
+    opacity: 0.8;
+    filter: alpha(opacity=70);
+    background-color: #90EE90;
+  }
+}

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title'
+import menuConfig from '../../../config/frontendMenuConfig'
 import {Col, Row, Carousel, Icon, Button, AutoComplete} from "antd";
 import {baiduSearchSelect,baiduSearchWord} from '../../../api'
 import './index.less'
@@ -15,6 +16,7 @@ import jsonp from 'jsonp'
 class Home extends Component {
 
     state = {
+        copyrightDate: new Date().getFullYear(),
         value: '',
         dataSource: [],
     };
@@ -62,12 +64,36 @@ class Home extends Component {
         window.open('about:blank').location.href = baiduSearchWord + '?wd=' + value
     }
 
+    /**
+     * 单击搜索
+     */
     goSearch = () => {
         window.open('about:blank').location.href = baiduSearchWord + '?wd=' + this.state.value
     }
 
+    /*
+     根据menu的数据数组生成对应的标签数组
+     使用reduce() + 递归调用
+     */
+    getMenuNodes = (menuList) => {
+        return menuList.reduce((pre, item) => {
+            pre.push(<li key={item.key}><a href={item.key}>{item.title}</a></li>)
+            return pre
+        },[])
+    }
+
+
+    /*
+    * 为第一次render()准备数据
+    */
+    componentWillMount() {
+        let _this = this; //声明一个变量指向vue实例this,保证作用域一致
+        _this.menuNodes = _this.getMenuNodes(menuConfig)
+    };
+
+
     render() {
-        const {dataSource} = this.state;
+        const {dataSource, copyrightDate} = this.state;
         return (
             <DocumentTitle title="saya.ac.cn-首页">
                 <div className="this-container">
@@ -81,17 +107,13 @@ class Home extends Component {
                     <header className="this-header">
                         <Col span={19} offset={1} className="header-center">
                             <ul>
-                                <li><a href='#'>网站首页</a></li>
-                                <li><a href='#'>关于个人</a></li>
-                                <li><a href='#'>消息动态</a></li>
-                                <li><a href='#'>文档下载</a></li>
-                                <li><a href='#'>随笔记录</a></li>
-                                <li><a href='#'>计划安排</a></li>
-                                <li><a href='#'>留言反馈</a></li>
+                                {
+                                    this.menuNodes
+                                }
                             </ul>
                         </Col>
                         <Col span={3} offset={1} style={{color:'#dbdbdb'}} className="header-center">
-                            2019-1-1
+
                         </Col>
                     </header>
                     <section className="this-main">
@@ -118,7 +140,7 @@ class Home extends Component {
                     <footer className="this-copright">
                         <Row gutter={20} style={{width: '100%'}}>
                             <Col span={20} offset={2}>
-                                Copyright &copy; 2016-2019 &nbsp; Saya.ac.cn-暖心阁 版权所有<br/>国家工信部域名备案信息：蜀ICP备16013222号
+                                Copyright &copy; 2016-{copyrightDate} &nbsp; Saya.ac.cn-暖心阁 版权所有<br/>国家工信部域名备案信息：蜀ICP备19027394号
                             </Col>
                         </Row>
                     </footer>
