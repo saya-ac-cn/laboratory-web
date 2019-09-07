@@ -37,6 +37,8 @@
     background-attachment: fixed;
     /* 让背景图基于容器大小伸缩 */
     background-size: cover;
+    /* 设置背景暗淡 */
+    filter: brightness(0.9);
   }
   .this-header{
     height: @header-height;
@@ -116,10 +118,12 @@
         flex: 1 1 auto;
         .header-search-form-input{
           font-size:16px;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: flex;
           height: 46px;
           margin-left: 0;
           margin-right: 0;
-          background: rgba(241,243,244,0.24);
           border: 1px solid transparent;
           -webkit-border-radius: 8px;
           border-radius: 8px;
@@ -127,22 +131,36 @@
           position: relative;
           -webkit-transition: background 100ms ease-in,width 100ms ease-out;
           transition: background 100ms ease-in,width 100ms ease-out;
-          i{
+          button{
+            height: 100%;
             font-size: 16px;
+            border: none;
+            -webkit-box-shadow: none;
+            box-shadow:none;
+            background: none;
+            i{
+              color: rgba(0,0,0,.25);
+            }
           }
           input{
+            flex: 1;
+            height: 100%;
             font-size: 16px;
             background-color: transparent;
             -webkit-text-fill-color: silver;
             color: silver;
-            border: 0;
+            border: none;
+            -webkit-box-shadow: none;
+            box-shadow:none;
             outline: 0;
           }
-          input:focus{
-            background: #fff;
-            opacity: 1;
-            border: 0;
-          }
+          //input:focus{
+          //  background: #fff;
+          //  opacity: 1;
+          //  -webkit-box-shadow: none;
+          //  box-shadow:none;
+          //  border: none;
+          //}
         }
       }
       .header-search-menu{

@@ -5,6 +5,7 @@ import Login from './pages/login/index'
 import Backend from './pages/layout/backend'
 import Home from './pages/frontend/home'
 import Admin from './pages/layout/backend2'
+import Frontend from './pages/layout/frontend'
 /**
  * 应用根组件
  * @returns {*}
@@ -23,6 +24,7 @@ function App() {
                 <Route path='/login' component={Login}/>
                 <Route path='/backstage' component={Backend}/>
                 <Route path='/admin' component={Admin}/>
+                <Route path='/saya' component={Frontend}/>
                 <Route path='/' component={Home}/>
             </Switch>
         </BrowserRouter>

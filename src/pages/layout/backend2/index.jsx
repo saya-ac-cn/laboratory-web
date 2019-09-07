@@ -33,6 +33,7 @@ class Admin extends Component {
         super(props);
         this.state = {
             collapsed: false,
+            searchfocus: false,
         };
     }
 
@@ -43,9 +44,36 @@ class Admin extends Component {
         this.setState({collapsed: collapsed})
     };
 
+    /**
+     * 执行搜索
+     */
+    handleSearch = () =>{
+        console.log("handleSearch")
+    }
+
+
+    /**
+     * 失去焦点
+     */
+    inputOnBlur = () => {
+        this.setState({
+            searchfocus: false
+        })
+    }
+
+
+    /**
+     * 获得焦点
+     */
+    inputOnFocus = () =>{
+        this.setState({
+            searchfocus: true
+        })
+    }
+
     render() {
         // 读取状态
-        const {collapsed} = this.state;
+        const {collapsed, searchfocus} = this.state;
         return (
             <div className="backend-container">
                 <div className='background-div' style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/backend/admin_background1.jpg"+')'}}>
@@ -65,11 +93,12 @@ class Admin extends Component {
                     </div>
                     <div className='header-search'>
                         <div className='header-search-form'>
-                            <div className='header-search-form-input'>
-                                <Input
-                                    prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                    placeholder="搜索笔记" style={{width:'100%',height:'100%'}}
-                                />
+                            <div className='header-search-form-input' style={{background:searchfocus?'#fff':'rgba(241,243,244,0.24)'}}>
+                                <Button onClick={this.handleSearch}><Icon type="search"/></Button>
+                                <Input placeholder="搜索笔记"
+                                       onPressEnter={this.handleSearch}
+                                       onBlur={this.inputOnBlur }
+                                       onFocus={this.inputOnFocus }/>
                             </div>
                         </div>
                         <div className='header-search-menu'>
