@@ -121,7 +121,8 @@ class Admin extends Component {
     logout = () => {
         // 显示确认框
         Modal.confirm({
-            title: '确定退出吗?',
+            title: '操作确认',
+            content:'确定退出吗?',
             onOk: async () => {
                 // 请求注销接口
                 await requestLogout();

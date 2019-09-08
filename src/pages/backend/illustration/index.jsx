@@ -40,7 +40,7 @@ class Lllustration extends Component {
     getDatas = async () => {
         let para = {
             type: 2,
-            nowPage: this.state.nowPage,
+            nowPage: this.state.nextpage,
             pageSize: this.state.pageSize,
             beginTime: this.state.filters.beginTime,
             endTime: this.state.filters.endTime,
@@ -56,6 +56,7 @@ class Lllustration extends Component {
             // 表格数据
             this.rendering(data);
         } else {
+            this.setState({nextpage: 'null'});
             openNotificationWithIcon("error", "错误提示", msg);
         }
     };
@@ -127,13 +128,13 @@ class Lllustration extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let {filters, nextpage} = _this.state;
+        nextpage = 1;
         filters.beginTime = null;
         filters.endTime = null;
         filters.filename = null;
         _this.setState({
-            nowPage: nowPage,
+            nextpage: nextpage,
             filters: filters
         }, function () {
             _this.getDatas()
@@ -254,7 +255,7 @@ class Lllustration extends Component {
                                 }
                                 {nextpage !=='null' ?
                                     <Col span={6} className="album-div-imgdiv">
-                                        <Button type="primary" shape="circle" icon="more" size="small" title="加载更多"/>
+                                        <Button type="primary" onClick={this.getDatas} shape="circle" icon="more" size="small" title="加载更多"/>
                                     </Col>
                                     :
                                     <Col span={6} className="album-div-imgdiv">

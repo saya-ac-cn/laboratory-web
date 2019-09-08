@@ -45,7 +45,7 @@ class Wallpaper extends Component {
     getDatas = async () => {
         let para = {
             type: 1,
-            nowPage: this.state.nowPage,
+            nowPage: this.state.nextpage,
             pageSize: this.state.pageSize,
             beginTime: this.state.filters.beginTime,
             endTime: this.state.filters.endTime,
@@ -60,6 +60,7 @@ class Wallpaper extends Component {
         if (code === 0) {
             // 表格数据
             this.rendering(data);
+            this.setState({nextpage: 'null'});
         } else {
             openNotificationWithIcon("error", "错误提示", msg);
         }
@@ -132,13 +133,13 @@ class Wallpaper extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let {filters, nextpage} = _this.state;
+        nextpage = 1;
         filters.beginTime = null;
         filters.endTime = null;
         filters.filename = null;
         _this.setState({
-            nowPage: nowPage,
+            nextpage: nextpage,
             filters: filters
         }, function () {
             _this.getDatas()
@@ -396,7 +397,7 @@ class Wallpaper extends Component {
                                 }
                                 {nextpage !=='null' ?
                                     <Col span={6} className="album-div-imgdiv">
-                                        <Button type="primary" shape="circle" icon="more" size="small" title="加载更多"/>
+                                        <Button type="primary" onClick={this.getDatas} shape="circle" icon="more" size="small" title="加载更多"/>
                                     </Col>
                                     :
                                     <Col span={6} className="album-div-imgdiv">

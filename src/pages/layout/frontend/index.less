@@ -1,8 +1,8 @@
 // 菜单栏高度
-@frontend-menu-height:60px;
+@frontend-menu-height: 60px;
 // 主页主体颜色
-@frontend-color:rgb(117, 43, 125);
-@frontend-body-color:#f0Daf2;
+@frontend-color: rgb(117, 43, 125);
+@frontend-body-color: #f0Daf2;
 .frontend-container {
   width: 100%;
   height: 100vh;
@@ -11,15 +11,17 @@
   display: flex;
   flex-direction: column;
   background-color: @frontend-body-color;
+
   .frontend-menu {
-    .frontend-menu-logo{
+    .frontend-menu-logo {
       height: 100%;
       width: 40px;
       background-position: center center;
       background-repeat: no-repeat;
-      background-size:100% 100%;
+      background-size: 100% 100%;
       margin-right: 1em;
     }
+
     height: @frontend-menu-height;
     border: 0;
     padding-left: 10em;
@@ -35,53 +37,293 @@
     /*实现水平居中*/
     /*justify-content: center;*/
     text-align: justify;
+
     ul {
       width: 100%;
       height: 100%;
       background-color: @frontend-color;
       border: none;
-      li{
-        text-align:center;
+
+      li {
+        text-align: center;
         height: 100%;
         top: 0;
-        a{
+
+        a {
           color: #fff !important;
           height: 100%;
           line-height: @frontend-menu-height;
         }
       }
-      li:hover{
+
+      li:hover {
         color: rgb(211, 211, 211);
         border-bottom-color: rgb(211, 211, 211);
         background-color: rgb(93, 34, 100);
       }
     }
   }
-  header{
+
+  header {
     margin-top: @frontend-menu-height;
     background-color: @frontend-body-color;
-    .banner{
+
+    .banner {
       background-position: center center;
       background-repeat: no-repeat;
-      background-size:100% 100%;
-      min-height:400px;
+      background-size: 100% 100%;
     }
   }
-  .main-section{
+
+  .main-section {
     background-color: @frontend-body-color;
     padding-left: 10em;
     padding-right: 10em;
+    /*用于应用母版下base-content的样式，注意：在主页中不能应用*/
+    .base-content{
+      /*background: #e3c6e6;*/
+      /*padding: 5em 0px;*/
+      min-height: 350px;
+      height: auto;
+      width: 100%;
+      /*栏目标题*/
+      .menu-title{
+        padding: 1em 0px;
+        /*栏目的样式*/
+        .menu-name{
+          font-size: 1.6rem;;
+          color: @frontend-color;
+          border-left: 0.1em solid @frontend-color;
+          padding-left: 0.5em;
+        }
+      }
+    }
   }
-  footer{
-    background-color: @frontend-color;
-    .copyright-img{
+
+  footer {
+    .copyright-img {
+      background-color: @frontend-body-color;
       background-position: center center;
       background-repeat: no-repeat;
-      background-size:100% 100%;
-      min-height:177px;
+      background-size: 100% 100%;
     }
-    .copyright-content{
-      padding:3em 0px;
+
+    .copyright-content {
+      background-color: @frontend-color;
+
+      .ant-row {
+        width: 100%;
+        height: 100%;
+
+        .copyright-logo {
+          height: 100%;
+          margin: 0 auto;
+          div{
+            width: 100%;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+          }
+        }
+
+        /*版权区域文本*/
+
+        p {
+          float: left;
+          height: auto;
+          color: #fff;
+          font-size: 14px;
+          font-weight: 400;
+          vertical-align: middle;
+          display: inline-block;
+          font-family: 'Play-Regular';
+
+          a {
+            color: #fff;
+            text-decoration: none;
+          }
+
+          a:hover {
+            color: #D3D3D3;
+            text-decoration: none;
+          }
+        }
+      }
     }
+  }
+}
+
+@media screen and (min-width: 1366px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 450px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 170px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 3.5em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 16px;
+  }
+  .copyright-content .copyright-logo>div{
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 426px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 151px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 3em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 14px;
+  }
+
+  .copyright-content .copyright-logo>div{
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 400px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 141px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 2.6em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 12px;
+  }
+  .copyright-content .copyright-logo>div{
+    width: 80px;
+    height: 100px
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 320px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 113px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 2.5em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 0.5em;
+  }
+  .copyright-content .copyright-logo>div{
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 240px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 85px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 2em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 1em;
+  }
+  .copyright-content .copyright-logo>div{
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 200px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 71px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 2em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 1em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /*欢迎div*/
+  .banner {
+    min-height: 150px;
+  }
+
+  /*版权区域图片*/
+  footer .copyright-img {
+    min-height: 53px;
+  }
+
+  /*版权区域内容*/
+  footer .copyright-content {
+    padding: 2em 0px;
+  }
+
+  /*版权区域文本*/
+  .copyright-content p {
+    font-size: 1em;
   }
 }

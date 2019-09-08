@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import menuConfig from '../../../config/frontendMenuConfig'
 import './index.less'
-import './index.css'
-import {Link} from 'react-router-dom'
-import {Col,Menu} from "antd";
+import {Redirect, Route, Switch, Link} from 'react-router-dom'
+import {Menu, Row, Col} from "antd";
+import FilesDownload from '../../frontend/files'
+import NewsList from '../../frontend/news'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
  * 创建日期：2019-09-07 - 19:53
  * 描述：
  */
-const {SubMenu} = Menu;
 // 定义组件（ES6）
 class Frontend extends Component {
 
@@ -61,7 +61,12 @@ class Frontend extends Component {
 
                 {/*主体部分开始*/}
                 <section className="main-section">
-8008989
+                <Switch>
+                    <Route path='/pandora/files' component={FilesDownload}/>
+                    <Route path='/pandora/news' component={NewsList}/>
+                    {/*默认、及匹配不到时的页面*/}
+                    <Redirect to='/'/>
+                </Switch>
                 </section>
                 {/*主体部分结束*/}
 
@@ -71,7 +76,25 @@ class Frontend extends Component {
                     <div className="copyright-img" style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/layout/copyright.png"+')'}}></div>
                     {/*版权区域主体*/}
                     <div className="copyright-content">
-                        2
+                        <Row>
+                            <Col xs={0} sm={0} md={8} xl={8} className='copyright-logo'>
+                                <div style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/svg/project.svg"+')'}}></div>
+                            </Col>
+                            <Col xs={12} sm={12} md={8} xl={8}>
+                                <p>
+                                    Copyright &copy; 2016-2019 Saya.ac.cn-暖心阁 All rights reserved<br/>
+                                    国家工信部域名备案信息：[Saya.ac.cn/蜀ICP备19027394号]<br/>
+                                    saya@Saya.ac.cn
+                                </p>
+                            </Col>
+                            <Col xs={12} sm={12} md={8} xl={8}>
+                                <p>
+                                    地址：四川省宜宾市五粮液大道酒圣路8号<br/>
+                                    邮编：644000<br/>
+                                    <a href="javascript:void(0)" target="_blank">网站建议</a>
+                                </p>
+                            </Col>
+                        </Row>
                     </div>
                 </footer>
 

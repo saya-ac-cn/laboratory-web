@@ -24,7 +24,7 @@ function App() {
                 <Route path='/login' component={Login}/>
                 <Route path='/backstage' component={Backend}/>
                 <Route path='/admin' component={Admin}/>
-                <Route path='/saya' component={Frontend}/>
+                <Route path='/pandora' component={Frontend}/>
                 <Route path='/' component={Home}/>
             </Switch>
         </BrowserRouter>
