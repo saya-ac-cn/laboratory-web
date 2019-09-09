@@ -5,6 +5,7 @@ import {Redirect, Route, Switch, Link} from 'react-router-dom'
 import {Menu, Row, Col} from "antd";
 import FilesDownload from '../../frontend/files'
 import NewsList from '../../frontend/news'
+import NewsInfo from '../../frontend/newsInfo'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -64,6 +65,7 @@ class Frontend extends Component {
                 <Switch>
                     <Route path='/pandora/files' component={FilesDownload}/>
                     <Route path='/pandora/news' component={NewsList}/>
+                    <Route path='/pandora/newsInfo/:id' component={NewsInfo}/>
                     {/*默认、及匹配不到时的页面*/}
                     <Redirect to='/'/>
                 </Switch>

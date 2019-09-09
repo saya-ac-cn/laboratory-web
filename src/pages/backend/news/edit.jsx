@@ -159,7 +159,7 @@ class EditPage extends Component {
 
 
     /**
-     * 获取动态列表数据
+     * 获取动态详情数据
      * @returns {Promise<void>}
      */
     initDatas = async (id) => {

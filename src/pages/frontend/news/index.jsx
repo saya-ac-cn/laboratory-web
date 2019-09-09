@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Icon, Row, Spin} from 'antd'
+import {Button, Spin} from 'antd'
 import DocumentTitle from 'react-document-title'
 import './index.less'
 import {queryNews} from "../../../api";
@@ -139,7 +139,7 @@ class NewsList extends Component {
                                                 </div>
                                                 <div className='newscontent'>
                                                     <div className="newstitle">
-                                                        <a target="_blank">{item.topic}</a>
+                                                        <a href={`/pandora/newsInfo/${item.id}`} target="_blank">{item.topic}</a>
                                                     </div>
                                                 </div>
                                             </div>
