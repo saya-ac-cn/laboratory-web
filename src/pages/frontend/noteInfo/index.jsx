@@ -1,29 +1,29 @@
 import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title'
 import './index.less'
-import {queryNewsInfo} from "../../../api";
+import {queryNotesInfo} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import {Spin, Tag} from "antd";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
  * 创建日期：2019-09-09 - 21:08
- * 描述：动态详情
+ * 描述：笔记详情
  */
 
 // 定义组件（ES6）
-class NewsInfo extends Component {
+class NoteInfo extends Component {
 
     state = {
         datas: null,
-        // 动态编号
+        // 笔记编号
         id: null,
         listLoading: false,
         tagColor: ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'],
     }
 
     /**
-     * 获取动态详情数据
+     * 获取笔记详情数据
      * @returns {Promise<void>}
      */
     initDatas = async () => {
@@ -34,7 +34,7 @@ class NewsInfo extends Component {
         // 发异步ajax请求, 获取数据
         // 在发请求前, 显示loading
         this.setState({listLoading: true});
-        const {msg, code, data} = await queryNewsInfo(para);
+        const {msg, code, data} = await queryNotesInfo(para);
         // 在请求完成后, 隐藏loading
         this.setState({listLoading: false});
         if (code === 0) {
@@ -93,7 +93,7 @@ class NewsInfo extends Component {
     render() {
         // 读取状态数据
         const {datas, listLoading} = this.state;
-        let title = '动态详情'
+        let title = '笔记详情'
         let tagChild = []
         if (!(this.isEmptyObject(datas))){
             if (!(this.isEmptyObject(datas.now))) {
@@ -107,7 +107,7 @@ class NewsInfo extends Component {
                     <div className="child-container">
                         <div className="menu-title">
                             <div className="menu-name">
-                                消息动态
+                                笔记详情
                             </div>
                         </div>
                         {
@@ -119,7 +119,7 @@ class NewsInfo extends Component {
                                                 <div className="news-name">{datas.now.topic}</div>
                                                 <div className="news-tool">
                                                     <div className="subtitle">
-                                                        {`${datas.now.createtime}  来源：${datas.now.source}`}
+                                                        {`${datas.now.createtime}  来源：${datas.now.notebook.source}`}
                                                     </div>
                                                     <div className="tools-share">
                                                         {tagChild}
@@ -133,13 +133,13 @@ class NewsInfo extends Component {
                                                             <li className="pre-li">
                                                                 <span>上一篇</span>
                                                                 {
-                                                                    !(this.isEmptyObject(datas.pre)) ? <a href={`/pandora/newsInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a>已是第一篇了</a>
+                                                                    !(this.isEmptyObject(datas.pre)) ? <a href={`/pandora/noteInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a>已是第一篇了</a>
                                                                 }
                                                             </li>
                                                             <li className="next-li">
                                                                 <span>下一篇</span>
                                                                 {
-                                                                    !(this.isEmptyObject(datas.next)) ? <a href={`/pandora/newsInfo/${datas.next.id}`}>{datas.next.topic}</a> :
+                                                                    !(this.isEmptyObject(datas.next)) ? <a href={`/pandora/noteInfo/${datas.next.id}`}>{datas.next.topic}</a> :
                                                                         <a>已是最后一篇了</a>
                                                                 }
                                                             </li>
@@ -159,4 +159,4 @@ class NewsInfo extends Component {
 }
 
 // 对外暴露
-export default NewsInfo;
+export default NoteInfo;

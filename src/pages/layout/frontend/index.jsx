@@ -6,6 +6,8 @@ import {Menu, Row, Col} from "antd";
 import FilesDownload from '../../frontend/files'
 import NewsList from '../../frontend/news'
 import NewsInfo from '../../frontend/newsInfo'
+import NoteList from '../../frontend/note'
+import NoteInfo from '../../frontend/noteInfo'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -65,7 +67,9 @@ class Frontend extends Component {
                 <Switch>
                     <Route path='/pandora/files' component={FilesDownload}/>
                     <Route path='/pandora/news' component={NewsList}/>
+                    <Route path='/pandora/note' component={NoteList}/>
                     <Route path='/pandora/newsInfo/:id' component={NewsInfo}/>
+                    <Route path='/pandora/noteInfo/:id' component={NoteInfo}/>
                     {/*默认、及匹配不到时的页面*/}
                     <Redirect to='/'/>
                 </Switch>

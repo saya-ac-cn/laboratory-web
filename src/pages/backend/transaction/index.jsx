@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {getTransactionList, getFinancialType, applyTransaction, updateTransaction, deleteTransaction, downTransaction, outTransactionInfoExcel} from '../../../api'
+import {
+    getTransactionList,
+    getFinancialType,
+    applyTransaction,
+    updateTransaction,
+    deleteTransaction,
+    downTransaction,
+    outTransactionInfoExcel
+} from '../../../api'
 import DocumentTitle from 'react-document-title'
 import moment from 'moment';
 import {Button, Col, DatePicker, Icon, Form, Select, Table, Modal} from "antd";
@@ -42,7 +50,6 @@ class Transaction extends Component {
         viewModalVisible: false,
         editModalVisible: false,
     }
-
 
     /*
     * 初始化Table所有列的数组
@@ -204,7 +211,7 @@ class Transaction extends Component {
             filters.endTime = null;
         }
         _this.setState({
-            filters
+            filters,
         }, function () {
             _this.getDatas()
         });
@@ -216,7 +223,7 @@ class Transaction extends Component {
         let {filters} = _this.state;
         filters.tradeType = value;
         _this.setState({
-            filters
+            filters,
         }, function () {
             _this.getDatas()
         });
@@ -354,7 +361,7 @@ class Transaction extends Component {
             onOk: async () => {
                 // 在发请求前, 显示loading
                 _this.setState({listLoading: true});
-                let para = {tradeId: item.tradeId };
+                let para = {tradeId: item.tradeId};
                 const {msg, code} = await deleteTransaction(para)
                 // 在请求完成后, 隐藏loading
                 _this.setState({listLoading: false});
@@ -371,7 +378,7 @@ class Transaction extends Component {
     /**
      * 导出财务流水
      */
-    exportListExcel = () =>{
+    exportListExcel = () => {
         let _this = this;
         // 在发请求前, 显示loading
         _this.setState({listLoading: true});
@@ -458,9 +465,9 @@ class Transaction extends Component {
      * 初始化页面配置信息
      */
     componentWillMount() {
-        this.initDatas();
         // 初始化表格属性设置
         this.initColumns();
+        this.initDatas();
     }
 
     /*
@@ -543,12 +550,12 @@ class Transaction extends Component {
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="button" onClick={this.exportListExcel}>
-                                    <Icon type="file-excel" />流水
+                                    <Icon type="file-excel"/>流水
                                 </Button>
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="button" onClick={this.exportInfoExcel}>
-                                    <Icon type="file-excel" />明细
+                                    <Icon type="file-excel"/>明细
                                 </Button>
                             </Form.Item>
                         </Form>
@@ -558,7 +565,10 @@ class Transaction extends Component {
                                dataSource={datas}
                                pagination={{
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                                   pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
+                                   pageSize: pageSize,
+                                   showQuickJumper: true,
+                                   total: dataTotal,
+                                   showSizeChanger: true,
                                    onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
                                    onChange: this.changePage,
                                }}/>
