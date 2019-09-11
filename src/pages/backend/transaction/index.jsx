@@ -222,6 +222,8 @@ class Transaction extends Component {
         let _this = this;
         let {filters} = _this.state;
         filters.tradeType = value;
+        console.log(this.pagination)
+        this.pagination.current = 1
         _this.setState({
             filters,
         }, function () {
@@ -488,6 +490,16 @@ class Transaction extends Component {
         } else {
             rangeDate = [null, null]
         }
+        this.pagination = {
+            current:nowPage,
+            showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+            pageSize: pageSize,
+            showQuickJumper: true,
+            total: dataTotal,
+            showSizeChanger: true,
+            onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+            onChange: this.changePage,
+        }
         return (
             <DocumentTitle title="财务流水">
                 <section>
@@ -563,15 +575,7 @@ class Transaction extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey="tradeId" loading={listLoading} columns={this.columns}
                                dataSource={datas}
-                               pagination={{
-                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-                                   pageSize: pageSize,
-                                   showQuickJumper: true,
-                                   total: dataTotal,
-                                   showSizeChanger: true,
-                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-                                   onChange: this.changePage,
-                               }}/>
+                               pagination={this.pagination}/>
                     </Col>
                 </section>
             </DocumentTitle>
