@@ -133,14 +133,14 @@ class NoteInfo extends Component {
                                                             <li className="pre-li">
                                                                 <span>上一篇</span>
                                                                 {
-                                                                    !(this.isEmptyObject(datas.pre)) ? <a href={`/pandora/noteInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a>已是第一篇了</a>
+                                                                    !(this.isEmptyObject(datas.pre)) ? <a href={`/pandora/noteInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a href="#base-content">已是第一篇了</a>
                                                                 }
                                                             </li>
                                                             <li className="next-li">
                                                                 <span>下一篇</span>
                                                                 {
                                                                     !(this.isEmptyObject(datas.next)) ? <a href={`/pandora/noteInfo/${datas.next.id}`}>{datas.next.topic}</a> :
-                                                                        <a>已是最后一篇了</a>
+                                                                        <a href="#base-content">已是最后一篇了</a>
                                                                 }
                                                             </li>
                                                         </ul>

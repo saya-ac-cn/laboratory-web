@@ -8,6 +8,8 @@ import NewsList from '../../frontend/news'
 import NewsInfo from '../../frontend/newsInfo'
 import NoteList from '../../frontend/note'
 import NoteInfo from '../../frontend/noteInfo'
+import Plan from '../../frontend/plan'
+import Board from '../../frontend/board'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -45,7 +47,7 @@ class Frontend extends Component {
             <section className='frontend-container'>
                 {/*顶部菜单开始*/}
                 <div className='frontend-menu'>
-                    <div className='frontend-menu-logo' style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/svg/project.svg"+')'}}></div>
+                    <div className='frontend-menu-logo' style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/svg/project.svg')`}}></div>
                     <Menu mode='horizontal'>
                         {
                             this.menuNodes
@@ -56,7 +58,7 @@ class Frontend extends Component {
                 {/*页头区域开始*/}
                 <header>
                     {/*网站欢迎部分开始*/}
-                    <div className="banner" style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/layout/banner.png"+')'}}>
+                    <div className="banner" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/layout/banner.png')`}}>
                     </div>
                     {/*网站欢迎部分结束*/}
                 </header>
@@ -70,6 +72,8 @@ class Frontend extends Component {
                     <Route path='/pandora/note' component={NoteList}/>
                     <Route path='/pandora/newsInfo/:id' component={NewsInfo}/>
                     <Route path='/pandora/noteInfo/:id' component={NoteInfo}/>
+                    <Route path='/pandora/plan' component={Plan}/>
+                    <Route path='/pandora/board' component={Board}/>
                     {/*默认、及匹配不到时的页面*/}
                     <Redirect to='/'/>
                 </Switch>
@@ -79,12 +83,12 @@ class Frontend extends Component {
                 {/*版权区域*/}
                 <footer>
                     {/*版权区域图片*/}
-                    <div className="copyright-img" style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/layout/copyright.png"+')'}}></div>
+                    <div className="copyright-img" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/layout/copyright.png')`}}></div>
                     {/*版权区域主体*/}
                     <div className="copyright-content">
                         <Row>
                             <Col xs={0} sm={0} md={8} xl={8} className='copyright-logo'>
-                                <div style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/svg/project.svg"+')'}}></div>
+                                <div style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/svg/project.svg')`}}></div>
                             </Col>
                             <Col xs={12} sm={12} md={8} xl={8}>
                                 <p>
@@ -97,7 +101,7 @@ class Frontend extends Component {
                                 <p>
                                     地址：四川省宜宾市五粮液大道酒圣路8号<br/>
                                     邮编：644000<br/>
-                                    <a href="javascript:void(0)" target="_blank">网站建议</a>
+                                    <a href="/pandora/board">网站建议</a>
                                 </p>
                             </Col>
                         </Row>
