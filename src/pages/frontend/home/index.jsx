@@ -77,7 +77,7 @@ class Home extends Component {
      */
     getMenuNodes = (menuList) => {
         return menuList.reduce((pre, item) => {
-            pre.push(<li key={item.key}><a href={item.key}>{item.title}</a></li>)
+            pre.push(<li key={item.id}><a href={item.key}>{item.title}</a></li>)
             return pre
         },[])
     }
@@ -98,11 +98,11 @@ class Home extends Component {
             <DocumentTitle title="saya.ac.cn-首页">
                 <div className="this-container">
                     <Carousel autoplay={true} dots={false} className="background">
-                        <div><img className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background1.jpg')`}}/></div>
-                        <div><img className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background2.jpg')`}}/></div>
-                        <div><img className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background3.jpg')`}}/></div>
-                        <div><img className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background4.jpg')`}}/></div>
-                        <div><img className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background5.jpg')`}}/></div>
+                        <div><div className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background1.jpg')`}}></div></div>
+                        <div><div className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background2.jpg')`}}></div></div>
+                        <div><div className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background3.jpg')`}}></div></div>
+                        <div><div className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background4.jpg')`}}></div></div>
+                        <div><div className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background5.jpg')`}}></div></div>
                     </Carousel>
                     <header className="this-header">
                         <Col span={19} offset={1} className="header-center">

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Input, Button, Icon, Dropdown, Menu, Col} from 'antd';
+import {Input, Button, Icon, Dropdown, Menu} from 'antd';
 import './index.less'
 /*
  * 文件名：index.jsx
@@ -76,7 +76,7 @@ class Admin extends Component {
         const {collapsed, searchfocus} = this.state;
         return (
             <div className="backend-container">
-                <div className='background-div' style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/backend/admin_background1.jpg"+')'}}>
+                <div className='background-div' style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/backend/admin_background1.jpg')`}}>
                 </div>
                 <header className="this-header">
                     <div className='header-logo'>
@@ -85,7 +85,7 @@ class Admin extends Component {
                                 <Icon type='menu'/>
                             </Button>
                         </div>
-                        <div className='project-div' style={{backgroundImage:'url('+process.env.PUBLIC_URL+"/picture/svg/project.svg"+')'}}>
+                        <div className='project-div' style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/svg/project.svg')`}}>
                         </div>
                         <div className='project-name'>
                             Lab
