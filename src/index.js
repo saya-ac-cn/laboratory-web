@@ -9,6 +9,8 @@ import storageUtils from './utils/storageUtils'
 import memoryUtils from './utils/memoryUtils'
 import {LocaleProvider} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import './console'
+
 // 读取local中保存user, 保存到内存中
 const user = storageUtils.getUser();
 memoryUtils.user = user;

@@ -59,11 +59,11 @@ class GuestBook extends Component {
             {
                 title: '状态',
                 render: (text,record) => {
-                    if (record.status === 1){
+                    if (record.status === 2){
                         return '未审核'
-                    } else if (record.status === 2) {
+                    } else if (record.status === 1) {
                         return '已通过'
-                    } else if (record.status === 3) {
+                    } else if (record.status === 4) {
                         return '已屏蔽'
                     } else {
                         return '未知'
@@ -127,14 +127,13 @@ class GuestBook extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let filters = _this.state.filters;
         filters.beginTime = null;
         filters.endTime = null;
         filters.name = null;
         filters.selectType = '';
         _this.setState({
-            nowPage: nowPage,
+            nowPage: 1,
             filters: filters,
         }, function () {
             _this.getDatas()
@@ -145,6 +144,7 @@ class GuestBook extends Component {
     changePageSize = (pageSize, current) => {
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
         this.setState({
+            nowPage: 1,
             pageSize: pageSize
         }, function () {
             this.getDatas();
@@ -173,6 +173,7 @@ class GuestBook extends Component {
             filters.endTime = null;
         }
         _this.setState({
+            nowPage: 1,
             filters
         }, function () {
             _this.getDatas()
@@ -189,7 +190,10 @@ class GuestBook extends Component {
         const value = event.target.value;
         let filters = _this.state.filters;
         filters.name = value;
-        _this.setState(filters)
+        _this.setState({
+            nowPage: 1,
+            filters
+        })
     };
 
     // 留言状态选框发生改变
@@ -198,6 +202,7 @@ class GuestBook extends Component {
         let {filters} = _this.state;
         filters.selectType = value;
         _this.setState({
+            nowPage: 1,
             filters
         }, function () {
             _this.getDatas()
@@ -212,9 +217,9 @@ class GuestBook extends Component {
         let filters = _this.state.filters;
         let type = [
             (<Option key={-1} value="">请选择</Option>),
-            (<Option key={1} value="1">未审核</Option>),
-            (<Option key={2} value="2">已通过</Option>),
-            (<Option key={3} value="3">已屏蔽</Option>)
+            (<Option key={1} value="2">未审核</Option>),
+            (<Option key={2} value="1">已通过</Option>),
+            (<Option key={3} value="4">已屏蔽</Option>)
         ];
         filters.type = type;
         _this.setState({
@@ -353,6 +358,7 @@ class GuestBook extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
+                                   current:nowPage,
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                    pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
                                    onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),

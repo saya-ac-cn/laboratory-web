@@ -77,7 +77,7 @@ class Home extends Component {
      */
     getMenuNodes = (menuList) => {
         return menuList.reduce((pre, item) => {
-            pre.push(<li key={item.id}><a href={item.key}>{item.title}</a></li>)
+            pre.push(<li key={item.key}><a href={item.key}>{item.title}</a></li>)
             return pre
         },[])
     }

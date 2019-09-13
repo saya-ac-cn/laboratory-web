@@ -84,6 +84,7 @@ class FinancialForYear extends Component {
         let _this = this;
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
         _this.setState({
+            nowPage: 1,
             pageSize: pageSize
         }, function () {
             _this.getDatas();
@@ -173,6 +174,7 @@ class FinancialForYear extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey='tradeDate' loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
+                                   current:nowPage,
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                    pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
                                    onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),

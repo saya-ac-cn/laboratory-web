@@ -23,7 +23,7 @@ function App() {
             <Switch>
                 <Route path='/login' component={Login}/>
                 <Route path='/backstage' component={Backend}/>
-                <Route path='/admin' component={Admin}/>
+              {/*  <Route path='/admin' component={Admin}/>*/}
                 <Route path='/pandora' component={Frontend}/>
                 <Route path='/' component={Home}/>
             </Switch>

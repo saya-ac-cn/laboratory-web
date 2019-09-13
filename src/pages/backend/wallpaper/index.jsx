@@ -121,6 +121,7 @@ class Wallpaper extends Component {
             filters.endTime = null;
         }
         _this.setState({
+            nextpage: 1,
             filters
         }, function () {
             _this.getDatas()
@@ -133,13 +134,12 @@ class Wallpaper extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nextpage} = _this.state;
-        nextpage = 1;
+        let filters = _this.state.filters;
         filters.beginTime = null;
         filters.endTime = null;
         filters.filename = null;
         _this.setState({
-            nextpage: nextpage,
+            nextpage: 1,
             filters: filters
         }, function () {
             _this.getDatas()
@@ -155,7 +155,10 @@ class Wallpaper extends Component {
         const value = event.target.value;
         let filters = _this.state.filters;
         filters.filename = value;
-        _this.setState(filters)
+        _this.setState({
+            nextpage: 1,
+            filters
+        })
     };
 
     /**

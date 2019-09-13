@@ -124,13 +124,12 @@ class Log extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let filters = _this.state.filters;
         filters.beginTime = null;
         filters.endTime = null;
         filters.selectType = '';
         _this.setState({
-            nowPage: nowPage,
+            nowPage: 1,
             filters: filters
         }, function () {
             _this.getDatas()
@@ -142,7 +141,8 @@ class Log extends Component {
         let _this = this;
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
         _this.setState({
-            pageSize: pageSize
+            pageSize: pageSize,
+            nowPage: 1,
         }, function () {
             _this.getDatas();
         });
@@ -171,7 +171,8 @@ class Log extends Component {
             filters.endTime = null;
         }
         _this.setState({
-            filters
+            filters,
+            nowPage: 1,
         }, function () {
             _this.getDatas()
         });
@@ -183,7 +184,8 @@ class Log extends Component {
         let {filters} = _this.state;
         filters.selectType = value;
         _this.setState({
-            filters
+            filters,
+            nowPage: 1,
         }, function () {
             _this.getDatas()
         });
@@ -292,6 +294,7 @@ class Log extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
+                                   current:nowPage,
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                    pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
                                    onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),

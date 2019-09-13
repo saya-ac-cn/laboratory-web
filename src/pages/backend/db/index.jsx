@@ -94,12 +94,11 @@ class DB extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let filters = _this.state.filters;
         filters.beginTime = null;
         filters.endTime = null;
         _this.setState({
-            nowPage: nowPage,
+            nowPage: 1,
             filters: filters
         }, function () {
             _this.getDatas()
@@ -110,6 +109,7 @@ class DB extends Component {
     changePageSize = (pageSize, current) => {
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
         this.setState({
+            nowPage: 1,
             pageSize: pageSize
         }, function () {
             this.getDatas();
@@ -138,6 +138,7 @@ class DB extends Component {
             filters.endTime = null;
         }
         _this.setState({
+            nowPage: 1,
             filters
         }, function () {
             _this.getDatas()
@@ -228,6 +229,7 @@ class DB extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey="url" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
+                                   current:nowPage,
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                    pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
                                    onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),

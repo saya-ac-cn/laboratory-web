@@ -74,6 +74,7 @@ class Frontend extends Component {
                     <Route path='/pandora/noteInfo/:id' component={NoteInfo}/>
                     <Route path='/pandora/plan' component={Plan}/>
                     <Route path='/pandora/board' component={Board}/>
+                    <Route path='/pandora/me' component={NewsList}/>
                     {/*默认、及匹配不到时的页面*/}
                     <Redirect to='/'/>
                 </Switch>

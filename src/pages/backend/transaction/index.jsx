@@ -139,13 +139,12 @@ class Transaction extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let filters = _this.state.filters;
         filters.beginTime = null;
         filters.endTime = null;
         filters.tradeType = null;
         _this.setState({
-            nowPage: nowPage,
+            nowPage: 1,
             filters: filters,
         }, function () {
             _this.getDatas()
@@ -158,6 +157,7 @@ class Transaction extends Component {
         let _this = this;
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
         _this.setState({
+            nowPage: 1,
             pageSize: pageSize
         }, function () {
             _this.getDatas();
@@ -212,6 +212,7 @@ class Transaction extends Component {
         }
         _this.setState({
             filters,
+            nowPage: 1,
         }, function () {
             _this.getDatas()
         });
@@ -220,12 +221,11 @@ class Transaction extends Component {
     // 交易方式选框发生改变
     onChangeType = (value) => {
         let _this = this;
-        let {filters} = _this.state;
+        let filters = _this.state.filters;
         filters.tradeType = value;
-        console.log(this.pagination)
-        this.pagination.current = 1
         _this.setState({
             filters,
+            nowPage: 1,
         }, function () {
             _this.getDatas()
         });
@@ -490,16 +490,6 @@ class Transaction extends Component {
         } else {
             rangeDate = [null, null]
         }
-        this.pagination = {
-            current:nowPage,
-            showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
-            pageSize: pageSize,
-            showQuickJumper: true,
-            total: dataTotal,
-            showSizeChanger: true,
-            onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-            onChange: this.changePage,
-        }
         return (
             <DocumentTitle title="财务流水">
                 <section>
@@ -575,7 +565,16 @@ class Transaction extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey="tradeId" loading={listLoading} columns={this.columns}
                                dataSource={datas}
-                               pagination={this.pagination}/>
+                               pagination={{
+                                   current:nowPage,
+                                   showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
+                                   pageSize: pageSize,
+                                   showQuickJumper: true,
+                                   total: dataTotal,
+                                   showSizeChanger: true,
+                                   onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+                                   onChange: this.changePage,
+                               }}/>
                     </Col>
                 </section>
             </DocumentTitle>

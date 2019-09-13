@@ -110,13 +110,12 @@ class Api extends Component {
     reloadPage = () => {
         // 重置查询条件
         let _this = this;
-        let {filters, nowPage} = _this.state;
-        nowPage = 1;
+        let filters = _this.state.filters;
         filters.beginTime = '';
         filters.endTime = '';
         filters.name = '';
         _this.setState({
-            nowPage: nowPage,
+            nowPage: 1,
             filters: filters
         }, function () {
             _this.getDatas()
@@ -128,6 +127,7 @@ class Api extends Component {
         let _this = this;
         // react在生命周期和event handler里的setState会被合并（异步）处理,需要在回调里回去获取更新后的 state.
         _this.setState({
+            nowPage:1,
             pageSize: pageSize
         }, function () {
             _this.getDatas();
@@ -153,7 +153,10 @@ class Api extends Component {
         const value = event.target.value;
         let filters = _this.state.filters;
         filters.name = value;
-        _this.setState(filters)
+        _this.setState({
+            filters,
+            nowPage:1,
+        })
     };
 
     /*
@@ -352,6 +355,7 @@ class Api extends Component {
                     <Col span={24}>
                         <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
+                                   current:nowPage,
                                    showTotal: () => `当前第${nowPage}页 共${dataTotal}条`,
                                    pageSize: pageSize, showQuickJumper: true, total: dataTotal, showSizeChanger: true,
                                    onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),

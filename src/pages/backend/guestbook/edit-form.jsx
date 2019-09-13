@@ -52,14 +52,14 @@ class GuestBookEdit extends Component {
                 <Form.Item label="审核：" {...this.formItemLayout}>
                     {
                         getFieldDecorator('status', {
-                            initialValue: guest.status,
+                            initialValue: 1,
                             rules: [
-                                {required: true, message: '请选择接口开启状态'},
+                                {required: true, message: '请选择接口审核状态'},
                             ]
                         })(
                             <Radio.Group>
-                                <Radio value={2}>通过</Radio>
-                                <Radio value={3}>不通过</Radio>
+                                <Radio value={1}>通过</Radio>
+                                <Radio value={4}>不通过</Radio>
                             </Radio.Group>
                         )
                     }
