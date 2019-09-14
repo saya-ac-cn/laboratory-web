@@ -198,6 +198,9 @@ class DashBoard extends Component {
     drawWordChart = () => {
         let _this = this
         let bookList = _this.state.data.bookList
+        if (null === bookList) {
+            return
+        }
         var data = [];
         for (var i = 0; i < bookList.length; i++) {
             var item = bookList[i]

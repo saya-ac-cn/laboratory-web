@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
 import Login from './pages/login/index'
-import Backend from './pages/layout/backend'
+//import Backend from './pages/layout/backend'
 import Home from './pages/frontend/home'
 import Admin from './pages/layout/backend2'
 import Frontend from './pages/layout/frontend'
@@ -22,8 +22,8 @@ function App() {
             */}
             <Switch>
                 <Route path='/login' component={Login}/>
-                <Route path='/backstage' component={Backend}/>
-              {/*  <Route path='/admin' component={Admin}/>*/}
+               {/* <Route path='/backstage' component={Backend}/>*/}
+                <Route path='/backstage' component={Admin}/>
                 <Route path='/pandora' component={Frontend}/>
                 <Route path='/' component={Home}/>
             </Switch>
