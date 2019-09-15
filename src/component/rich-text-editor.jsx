@@ -146,7 +146,7 @@ class RichTextEditor extends Component {
         return (
             <Editor
                 editorState={editorState}
-                editorStyle={{border: '1px solid #F1F1F1', minHeight: 200, paddingLeft: 10}}
+                editorStyle={{border: '1px solid #ccc', minHeight: 200, paddingLeft: 10}}
                 onEditorStateChange={this.onEditorStateChange}
                 toolbar={{
                     image: {uploadCallback: this.uploadImageCallBack, alt: {present: true, mandatory: true}},

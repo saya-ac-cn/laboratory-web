@@ -4,6 +4,7 @@ import RichTextEditor from '../../../component/rich-text-editor'
 import {openNotificationWithIcon} from "../../../utils/window";
 import {getNotes, updateNotes, createNotes, getNoteBookGroup} from "../../../api/index"
 import DocumentTitle from 'react-document-title'
+import "./index.less"
 /*
  * 文件名：edit.jsx
  * 作者：liunengkai
@@ -239,7 +240,7 @@ class EditPage extends Component {
         const tagChild = tags.map(this.forMap);
         return (
             <DocumentTitle title="编辑笔记">
-                <section>
+                <section className="b-edit-notes-page">
                     <div className="mytips">
                         <p>平台发布笔记约定：</p>
                         <blockquote>
@@ -257,8 +258,8 @@ class EditPage extends Component {
                             </p>
                         </blockquote>
                     </div>
-                    <Col span={24}>
-                        <Form {...this.formItemLayout}>
+                    <Col span={24} className="b-edit-notes-page-form">
+                        <Form {...this.formItemLayout} className="bk-transparent">
                             <Form.Item label="标题" {...this.formItemLayout}>
                                 {
                                     getFieldDecorator('topic', {

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './index.less'
 import {downloadBackUpDB, getBackUpDBList} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import {Button, Col, Form, DatePicker, Table,Icon} from "antd";
@@ -226,7 +225,7 @@ class DB extends Component {
                             </Form.Item>
                         </Form>
                     </Col>
-                    <Col span={24}>
+                    <Col span={24} className="dataTable">
                         <Table size="middle" rowKey="url" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
                                    current:nowPage,

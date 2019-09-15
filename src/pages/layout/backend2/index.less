@@ -177,6 +177,9 @@
       .header-search-menu {
         font-size: 18px;
         padding-right: 60px;
+        .ant-badge-dot{
+          background: #2db7f5;
+        }
       }
     }
 
@@ -290,7 +293,7 @@
         }
 
         .logo-item::before {
-          background-image: url(https://www.gstatic.com/images/icons/material/colored_icons/1x/create_32dp.png);
+          background-image: url('./add.png');
           background-position: center;
           background-repeat: no-repeat;
           background-size: 32px;
@@ -403,6 +406,12 @@
           -webkit-justify-content: space-between;
           justify-content: space-between;
           color: rgba(255, 255, 255, 0.70);
+          .breadcrumb-inner{
+            color: rgba(255, 255, 255, 0.70);
+            span:last-child {
+              color: #fff !important;
+            }
+          }
         }
       }
 
@@ -414,7 +423,7 @@
         overflow-y: scroll;
 
         .container-div {
-          min-height: 119px;
+          min-height: 110px;
           background-color: @container-background-color;
           // 定义子模块可能用到的样式
           .mytips {
@@ -437,7 +446,21 @@
               }
             }
           }
+          // 定义公共操作面板
           .toolbar{
+            background: none;
+            input{
+              background: none;
+            }
+            .ant-select-selection{
+              background: none;
+            }
+            .ant-calendar-picker-input{
+              background: none;
+            }
+          }
+          // 通用数据表格样式
+          .dataTable{
             background-color: @container-background-color;
           }
         }
@@ -485,7 +508,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      button{
+      a{
         margin-top: 2em;
         i{
           font-size: 1.6em;

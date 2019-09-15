@@ -253,7 +253,7 @@ class List extends Component {
                             </Form.Item>
                         </Form>
                     </Col>
-                    <Col span={24}>
+                    <Col span={24} className="dataTable">
                         <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
                                    current:nowPage,

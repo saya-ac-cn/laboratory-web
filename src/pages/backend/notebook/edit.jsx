@@ -38,7 +38,7 @@ class EditNoteBook extends Component {
               getFieldDecorator('name', {
                 initialValue: noteBook.name,
                 rules: [
-                  {required: true, message: '请输入接口名'},
+                  {required: true, message: '请输入笔记簿名'},
                   {min: 2, message: '长度在 2 到 15 个字符'},
                   {max: 15, message: '长度在 2 到 15 个字符'},
                 ]

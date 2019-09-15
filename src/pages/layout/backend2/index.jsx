@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Input, Button, Icon, Menu, Popover, Avatar, Breadcrumb, Col} from 'antd';
+import {Input, Button, Icon, Menu, Popover, Avatar, Breadcrumb, Badge, Modal} from 'antd';
 import {Redirect, Route, Switch, Link, withRouter} from 'react-router-dom'
 import './index.less'
 import menuConfig from '../../../config/backendMenuConfig'
@@ -22,6 +22,7 @@ import FinancialForDay from '../../backend/financialforday'
 import FinancialForMonth from '../../backend/financialformonth'
 import FinancialForYear from '../../backend/financialforyear'
 import DashBoard from '../../backend/dashboard'
+import {requestLogout} from "../../../api";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -37,6 +38,7 @@ class Admin extends Component {
         this.state = {
             collapsed: false,
             searchfocus: false,
+            searchValue: null
         };
     }
 
@@ -46,13 +48,6 @@ class Admin extends Component {
         // 更新状态
         this.setState({collapsed: collapsed})
     };
-
-    /**
-     * 执行搜索
-     */
-    handleSearch = () =>{
-        console.log("handleSearch")
-    }
 
 
     /**
@@ -80,15 +75,15 @@ class Admin extends Component {
     initHeaderMenu = () => (
         <div className="backend-layout-header-info-hover">
             <div className='user-img-div'>
-                <Avatar size={64} icon="user" src='https://saya.ac.cn/files/picture/logo/Pandora/20190914/2019091436913.png'/>
+                <Avatar size={64} icon="user" src={this.userCatche.logo}/>
                 <div className='operator-img'>
-                    <span>Pandora</span>
+                    <span>{this.userCatche.user}</span>
                     <Link to='/backstage/set/info'>更换头像</Link>
                 </div>
             </div>
             <div className='system-operator'>
                 <Button type="link" href='/backstage/set/info'>设置</Button>
-                <Button type="link">退出</Button>
+                <Button type="link" onClick={this.logout}>退出</Button>
             </div>
         </div>
     )
@@ -151,12 +146,68 @@ class Admin extends Component {
     };
 
     /*
-    *在第一次render()之前执行一次
+    退出登陆
+     */
+    logout = () => {
+        // 显示确认框
+        Modal.confirm({
+            title: '操作确认',
+            content:'确定退出吗?',
+            onOk: async () => {
+                // 请求注销接口
+                await requestLogout();
+                // 删除保存的user数据
+                storageUtils.removeUser();
+                memoryUtils.user = {};
+                // 跳转到login
+                this.props.history.replace('/login')
+            }
+        })
+    };
+
+    /**
+     * 搜索框内容改变事件（用于双向绑定数据）
+     * @param event
+     */
+    searchInputChange = (event) => {
+        let _this = this;
+        const value = event.target.value
+        _this.setState({
+            searchValue: value
+        })
+    };
+
+    /**
+     * 执行搜索
+     */
+    handleSearch = () =>{
+        let _this = this;
+        let searchValue = _this.state.searchValue || ""
+        searchValue = searchValue.trim()
+        if (!!searchValue) {
+            // 有效内容可以搜索
+            // 跳转到笔记列表界面 (需要再回退到当前页面),replace是不需要回退
+            this.props.history.push(`/backstage/grow/notes?search=${searchValue}`)
+        }
+    }
+
+    /**
+     * 写笔记
+     */
+    addNotes = () => {
+        // 跳转到笔记列表界面 (需要再回退到当前页面),replace是不需要回退
+        this.props.history.push('/backstage/grow/notes/create')
+    }
+
+    /*
+    * 在第一次render()之前执行一次
     * 为第一个render()准备数据(必须同步的)
     */
     componentWillMount() {
+        this.userCatche = memoryUtils.user || {};
         // 初始化左侧导航
         this.menuNodes = this.getMenuNodes(menuConfig);
+        // 顶部用户头像下拉
         this.headerUserInfo = this.initHeaderMenu()
     }
 
@@ -168,12 +219,16 @@ class Admin extends Component {
             return <Redirect to='/login'/>
         }
         // 读取状态
-        const {collapsed, searchfocus} = this.state;
+        const {collapsed, searchfocus, searchValue} = this.state;
         // 得到当前请求的路由路径
         let path = this.props.location.pathname;
         if (path.indexOf('/backstage/message/news') === 0){
             // 当前请求的是news及其下面的路由
             path = '/backstage/message/news'
+        }
+        if (path.indexOf('/backstage/grow/notes') === 0){
+            // 当前请求的是news及其下面的路由
+            path = '/backstage/grow/notes'
         }
         // 得到需要打开菜单项的key
         const openKey = this.openKey;
@@ -201,6 +256,8 @@ class Admin extends Component {
                             <div className='header-search-form-input' style={{background:searchfocus?'#fff':'rgba(241,243,244,0.24)'}}>
                                 <Button onClick={this.handleSearch}><Icon type="search"/></Button>
                                 <Input placeholder="搜索笔记"
+                                       value={searchValue}
+                                       onChange={this.searchInputChange}
                                        onPressEnter={this.handleSearch}
                                        onBlur={this.inputOnBlur }
                                        onFocus={this.inputOnFocus }/>
@@ -208,14 +265,16 @@ class Admin extends Component {
                         </div>
                         <div className='header-search-menu'>
                             <Popover content={'部署项目'} title="今天计划">
-                                <Icon type="bell" />
+                                <Badge count={1} dot color="#2db7f5">
+                                    <Icon type="bell" />
+                                </Badge>
                             </Popover>
                         </div>
                     </div>
                     <div className='header-info'>
                         <Popover trigger="hover" mouseEnterDelay={0.2} mouseLeaveDelay={0.4} content={this.headerUserInfo}  placement="bottomRight">
                             <span className="el-dropdown-link">
-                                <img src='https://saya.ac.cn/files/picture/logo/Pandora/20190914/2019091436913.png' alt="logo"/>
+                                <img src={user.logo} alt={user.user}/>
                             </span>
                         </Popover>
                     </div>
@@ -223,7 +282,7 @@ class Admin extends Component {
                 <section className="this-content">
                     <div className={`leftmunu ${collapsed ? 'leftmunu-close' : 'leftmunu-open'}`}>
                         <div className='menu-logo'>
-                            <div className={`logo-item ${collapsed?"menu-logo-close":null}`}>
+                            <div className={`logo-item ${collapsed?"menu-logo-close":null}`} onClick={this.addNotes}>
                                 写笔记
                             </div>
                         </div>
@@ -237,8 +296,8 @@ class Admin extends Component {
                         </div>
                         <div className={`menu-copyright ${collapsed?"menu-copyright-close":null}`}>
                             <Button type="link" title='切换壁纸'><Icon type="switcher"/></Button>
-                            <Button type="link" title='数据监控'><Icon type="stock"/></Button>
-                            <Button type="link" title='网站留言'><Icon type="message"/></Button>
+                            <Button type="link" title='数据监控' href="/backstage/set/dashBoard"><Icon type="stock"/></Button>
+                            <Button type="link" title='网站留言' href="/backstage/message/guestbook"><Icon type="message"/></Button>
                         </div>
                     </div>
                     <div className='content-container'>
@@ -281,10 +340,10 @@ class Admin extends Component {
                         </div>
                     </div>
                     <div className='quick-div'>
-                        <Button type="link" title='流水申报'><Icon type="money-collect"/></Button>
-                        <Button type="link" title='发布动态'><Icon type="notification"/></Button>
-                        <Button type="link" title='安排计划'><Icon type="carry-out"/></Button>
-                        <Button type="link" title='便利贴'><Icon type="pushpin"/></Button>
+                        <Button type="link" title='流水申报' href="/backstage/financial/transaction"><Icon type="money-collect"/></Button>
+                        <Button type="link" title='发布动态' href="/backstage/message/news/publish"><Icon type="notification"/></Button>
+                        <Button type="link" title='安排计划' href="/backstage/grow/plan"><Icon type="carry-out"/></Button>
+                        <Button type="link" title='便利贴' href="/backstage/grow/plan"><Icon type="pushpin"/></Button>
                     </div>
                 </section>
             </div>
@@ -293,4 +352,5 @@ class Admin extends Component {
 }
 
 // 对外暴露
-export default Admin;
+const LayoutBackend = withRouter(Admin);
+export default LayoutBackend;

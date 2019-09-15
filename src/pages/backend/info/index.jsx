@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Col, Tabs, Card, Form, Input, Button, Spin} from 'antd';
 import {getPersonal, setPassword, setUserInfo} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
+import './index.less'
 import UploadLogo from './uploadLogo'
 import DocumentTitle from 'react-document-title'
 const {TabPane} = Tabs;
@@ -175,7 +176,7 @@ class Info extends Component {
         const {personalInfo, loading} = this.state;
         return (
             <DocumentTitle title='个人信息'>
-                <section>
+                <section className="b-info-page">
                     <div className="mytips">
                         <p>修改前的提示：</p>
                         <blockquote>
@@ -193,11 +194,11 @@ class Info extends Component {
                             </p>
                         </blockquote>
                     </div>
-                    <Col span={24}>
+                    <Col span={24} className="b-info-page-form">
                         <Spin spinning={loading}>
                             <Tabs defaultActiveKey="1">
                                 <TabPane tab="查看资料" key="1">
-                                    <Card title="查看资料" bordered={false}>
+                                    <Card title="查看资料" bordered={false} className="bk-transparent">
                                         <Form {...this.formItemLayout}>
                                             <Form.Item label="用户名" {...this.formItemLayout}>
                                                 <Input type='text' value={personalInfo.user} disabled={true}/>
@@ -224,7 +225,7 @@ class Info extends Component {
                                     </Card>
                                 </TabPane>
                                 <TabPane tab="修改签名" key="2">
-                                    <Card title="修改签名" bordered={false}>
+                                    <Card title="修改签名" bordered={false} className="bk-transparent">
                                         <Form {...this.formItemLayout} onSubmit={this.handleAutographSubmit}>
                                             <Form.Item label="个性签名" {...this.formItemLayout}>
                                                 {
@@ -245,12 +246,12 @@ class Info extends Component {
                                     </Card>
                                 </TabPane>
                                 <TabPane tab="修改头像" key="3">
-                                    <Card title="修改头像" bordered={false}>
+                                    <Card title="修改头像" bordered={false} className="bk-transparent">
                                         <UploadLogo/>
                                     </Card>
                                 </TabPane>
                                 <TabPane tab="修改密码" key="4">
-                                    <Card title="修改密码" bordered={false}>
+                                    <Card title="修改密码" bordered={false} className="bk-transparent">
                                         <Form {...this.formItemLayout} onSubmit={this.handlePwdSubmit}>
                                             <Form.Item label="请输入密码" {...this.formItemLayout}>
                                                 {

@@ -5,6 +5,7 @@ import {openNotificationWithIcon} from "../../../utils/window";
 import {Link} from "react-router-dom";
 import DocumentTitle from 'react-document-title'
 import moment from 'moment';
+import {getUrlParameter} from "../../../utils/url"
 /*
  * 文件名：list.jsx
  * 作者：liunengkai
@@ -15,24 +16,51 @@ const {RangePicker} = DatePicker;
 // 定义组件（ES6）
 class NotesList extends Component {
 
-    state = {
-        // 返回的单元格数据
-        datas: [],
-        // 总数据行数
-        dataTotal: 0,
-        // 当前页
-        nowPage: 1,
-        // 页面宽度
-        pageSize: 10,
-        // 是否显示加载
-        listLoading: false,
-        filters: {
-            beginTime: null,// 搜索表单的开始时间
-            endTime: null,// 搜索表单的结束时间
-            topic: null, // 主题
-            name: null
-        },
-    };
+    constructor(props) {
+        super(props);
+        let _this = this
+        // 提取参数
+        const search = getUrlParameter ('search',props.location.search);
+        if (!!search){
+            _this.state = {
+                // 返回的单元格数据
+                datas: [],
+                // 总数据行数
+                dataTotal: 0,
+                // 当前页
+                nowPage: 1,
+                // 页面宽度
+                pageSize: 10,
+                // 是否显示加载
+                listLoading: false,
+                filters: {
+                    beginTime: null,// 搜索表单的开始时间
+                    endTime: null,// 搜索表单的结束时间
+                    topic: search, // 主题
+                    name: null
+                },
+            };
+        }else{
+            _this.state = {
+                // 返回的单元格数据
+                datas: [],
+                // 总数据行数
+                dataTotal: 0,
+                // 当前页
+                nowPage: 1,
+                // 页面宽度
+                pageSize: 10,
+                // 是否显示加载
+                listLoading: false,
+                filters: {
+                    beginTime: null,// 搜索表单的开始时间
+                    endTime: null,// 搜索表单的结束时间
+                    topic: null, // 主题
+                    name: null
+                },
+            };
+        }
+    }
 
     /*
     * 初始化Table所有列的数组
@@ -276,7 +304,7 @@ class NotesList extends Component {
                             </Form.Item>
                         </Form>
                     </Col>
-                    <Col span={24}>
+                    <Col span={24} className="dataTable">
                         <Table size="middle" rowKey="id" loading={listLoading} columns={this.columns} dataSource={datas}
                                pagination={{
                                    current:nowPage,

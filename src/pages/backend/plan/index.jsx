@@ -357,7 +357,7 @@ class Plan extends Component {
         const {getFieldDecorator} = this.props.form;
         return (
             <DocumentTitle title="日程安排">
-                <section>
+                <section className="b-plan-page">
                     <Modal
                         title="计划安排"
                         width="50%"
@@ -411,15 +411,15 @@ class Plan extends Component {
                         <Col span={24}>
                             <div
                                 style={{float: 'left',width: '30%',height: '100%',textAlign: 'left',lineHeight: '45px',cursor: 'pointer'}}>
-                                <span onClick={() => this.buttonQuery(-1)}><Icon type="left" /></span>
+                                <span onClick={() => this.buttonQuery(-1)}><Icon type="left" style={{color:'#000'}}/></span>
                             </div>
                             <div
-                                style={{float: 'left',width: '40%',height: '100%',textAlign: 'center',lineHeight: '45px',fontSize: '20px'}}>
+                                style={{float: 'left',width: '40%',height: '100%',textAlign: 'center',lineHeight: '45px',fontSize: '20px',color:'#000'}}>
                                 {date}
                             </div>
                             <div
                                 style={{float: 'right',width: '28%',height: '100%',textAlign: 'right',lineHeight: '45px',cursor: 'pointer'}}>
-                                <span onClick={() => this.buttonQuery(+1)}><Icon type="right" /></span>
+                                <span onClick={() => this.buttonQuery(+1)}><Icon type="right" style={{color:'#000'}}/></span>
                             </div>
                         </Col>
                     </Row>
