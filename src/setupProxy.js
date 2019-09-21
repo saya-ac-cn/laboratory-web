@@ -1,5 +1,6 @@
 const proxy = require('http-proxy-middleware');
 
+
 // 配置多个跨域设置
 //重要说明！！！
 //页面路由绝对禁止出现/backend、/frontend、/files（远景包括map）
@@ -7,15 +8,15 @@ const proxy = require('http-proxy-middleware');
 module.exports = function (app) {
     // ...You can now register proxies as you wish!
     app.use(proxy('/backend/**', {
-        target: 'http://laboratory.saya.ac.cn',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
     }));
     app.use(proxy('/frontend/**', {
-        target: 'http://laboratory.saya.ac.cn',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
     }));
     app.use(proxy('/files/**', {
-        target: 'http://laboratory.saya.ac.cn',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
     }));
 };

@@ -75,9 +75,9 @@ class Admin extends Component {
     initHeaderMenu = () => (
         <div className="backend-layout-header-info-hover">
             <div className='user-img-div'>
-                <Avatar size={64} icon="user" src={this.userCatche.logo}/>
+                <Avatar size={64} icon="user" src={this.userCatche.user.logo}/>
                 <div className='operator-img'>
-                    <span>{this.userCatche.user}</span>
+                    <span>{this.userCatche.user.user}</span>
                     <Link to='/backstage/set/info'>更换头像</Link>
                 </div>
             </div>
@@ -199,6 +199,19 @@ class Admin extends Component {
         this.props.history.push('/backstage/grow/notes/create')
     }
 
+    /**
+     * 判断对象是否为空
+     * @param data
+     * @returns {boolean}
+     */
+    isEmptyObject = (data) => {
+        // 手写实现的判断一个对象{}是否为空对象，没有任何属性 非空返回false
+        var item;
+        for (item in data)
+            return false;
+        return true;
+    }
+
     /*
     * 在第一次render()之前执行一次
     * 为第一个render()准备数据(必须同步的)
@@ -264,17 +277,25 @@ class Admin extends Component {
                             </div>
                         </div>
                         <div className='header-search-menu'>
-                            <Popover content={'部署项目'} title="今天计划">
-                                <Badge count={1} dot color="#2db7f5">
-                                    <Icon type="bell" />
-                                </Badge>
-                            </Popover>
+                            {
+                                !(this.isEmptyObject(user.plan)) ?
+                                    <Popover content={user.plan.reduce((pre, item) => {pre.push(<p key={item.id}>{item.describe}</p>);return pre},[])} title="今天计划">
+                                        <Badge count={user.plan.length} dot color="#2db7f5">
+                                            <Icon type="notification" />
+                                        </Badge>
+                                    </Popover> :
+                                    <Popover content="暂无计划" title="今天计划">
+                                        <Badge count={0} dot>
+                                            <Icon type="notification" />
+                                        </Badge>
+                                    </Popover>
+                            }
                         </div>
                     </div>
                     <div className='header-info'>
                         <Popover trigger="hover" mouseEnterDelay={0.2} mouseLeaveDelay={0.4} content={this.headerUserInfo}  placement="bottomRight">
                             <span className="el-dropdown-link">
-                                <img src={user.logo} alt={user.user}/>
+                                <img src={user.user.logo} alt={user.user.user}/>
                             </span>
                         </Popover>
                     </div>
@@ -336,7 +357,13 @@ class Admin extends Component {
                                     <Redirect to='/backstage/set/info'/>
                                 </Switch>
                             </div>
-                            <div className='operation-info'>上次操作明细</div>
+                            <div className='operation-info'>
+                                {
+                                    !(this.isEmptyObject(user.log)) ?
+                                        <span>{`您上次操作时间:${user.log.date},操作地点:${user.log.city}(${user.log.ip}),操作明细:${user.log.logType.describe}`}</span> :
+                                        <span>Hi，这是您第一次使用吧？如有需要帮助的请及时联系运营团队。</span>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className='quick-div'>

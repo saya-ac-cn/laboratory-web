@@ -29,9 +29,7 @@ class Login extends Component {
     validatePwd = (rule, value, callback) => {
         if (!value) {
             callback('密码必须输入')
-        } else if (value.length < 6) {
-            callback('密码长度不能小于6位')
-        } else if (value.length > 20) {
+        }else if (value.length > 20) {
             callback('密码长度不能大于20位')
         } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
             callback('密码必须是英文、数字或下划线组成')
