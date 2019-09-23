@@ -162,6 +162,12 @@ const backstageMenuList = [
                 hidden: false,
                 requireAuth: true
             },
+            {
+                title: '便利贴',
+                key: '/backstage/grow/memo',
+                hidden: false,
+                requireAuth: true
+            },
         ]
     },
 ]

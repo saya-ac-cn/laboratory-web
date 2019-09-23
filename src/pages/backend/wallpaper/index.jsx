@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 import {Button, Row, Col, Icon, Input, Form, DatePicker, Modal, Spin, Upload} from "antd";
 import moment from 'moment';
 import './index.less'
-import {getPictureList, deletePicture, uploadWallpaper} from "../../../api";
+import {getPictureList, deletePicture, uploadWallpaper, setUserInfo} from "../../../api";
 import {openNotificationWithIcon} from "../../../utils/window";
 import DocumentTitle from 'react-document-title'
+import axios from 'axios'
+import memoryUtils from "../../../utils/memoryUtils";
+import storageUtils from "../../../utils/storageUtils";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -179,6 +182,49 @@ class Wallpaper extends Component {
     };
 
     /**
+     * 设置壁纸
+     * @param e
+     */
+    handleSetBackbround = async (e) => {
+        let _this = this;
+        // 得到自定义属性
+        let src =  e.currentTarget.getAttribute('data-src')
+        let id =  e.currentTarget.getAttribute('data-id')
+        let flag = false;
+        // 利用axios检测该壁纸能否打开
+        await axios.get(src)
+            .then(function(response){
+                flag = true
+            })
+            .catch(function(err){
+                flag = false
+            });
+        if (true === flag) {
+            let para = {
+                background: parseInt(id)
+            };
+            // 在发请求前, 显示loading
+            _this.setState({listLoading: true});
+            const result = await setUserInfo(para);
+            // 在请求完成后, 隐藏loading
+            _this.setState({listLoading: false});
+            let {msg, code} = result;
+            if (code === 0) {
+                const data = memoryUtils.user;
+                data.user.background = src;
+                data.user.backgroundId = parseInt(id);
+                memoryUtils.user = data;// 保存在内存中
+                storageUtils.saveUser(data); // 保存到local中
+                openNotificationWithIcon("success", "操作结果", "壁纸设置成功");
+            } else {
+                openNotificationWithIcon("error", "错误提示", msg);
+            }
+        }else{
+            openNotificationWithIcon("error", "错误提示", '当前壁纸图片无效，该壁纸不能设置');
+        }
+    }
+
+    /**
      * 执行删除操作
      * @param para
      * @returns {Promise<void>}
@@ -324,6 +370,7 @@ class Wallpaper extends Component {
         } else {
             rangeDate = [null, null]
         }
+        const user = memoryUtils.user;
         const uploadButton = (
             <div>
                 <Icon type="plus" />
@@ -387,6 +434,12 @@ class Wallpaper extends Component {
                                         <Col span={6} className="album-div-imgdiv" key={item.id}>
                                             <div className="tools">
                                                 <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
+                                                {
+                                                    user.user.backgroundId === item.id ?
+                                                        null
+                                                    :
+                                                        <Button type="primary" style={{marginLeft: '0.5em'}} shape="circle" icon="heart" data-id={item.id} data-src={item.weburl} onClick={this.handleSetBackbround} size="small" title="设为壁纸"/>
+                                                }
                                             </div>
                                             <a href="#toolbar" onClick={this.previewPhoto} rel="noopener noreferrer" className="a-img">
                                                 <img src={item.weburl} alt={item.filename}

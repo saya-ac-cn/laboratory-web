@@ -259,7 +259,7 @@ class NoteBook extends Component {
     };
 
     /*
-    * 删除指定接口
+    * 删除指定笔记簿
     */
     handleDeleteNoteBook = (item) => {
         let _this = this;

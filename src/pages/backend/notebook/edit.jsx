@@ -43,7 +43,7 @@ class EditNoteBook extends Component {
                   {max: 15, message: '长度在 2 到 15 个字符'},
                 ]
               })(
-                  <Input placeholder='请输入接口名'/>
+                  <Input placeholder='请输入标题'/>
               )
             }
           </Form.Item>

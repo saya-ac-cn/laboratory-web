@@ -22,6 +22,7 @@ import FinancialForDay from '../../backend/financialforday'
 import FinancialForMonth from '../../backend/financialformonth'
 import FinancialForYear from '../../backend/financialforyear'
 import DashBoard from '../../backend/dashboard'
+import Memo from '../../backend/memo'
 import {requestLogout} from "../../../api";
 /*
  * 文件名：index.jsx
@@ -239,9 +240,13 @@ class Admin extends Component {
             // 当前请求的是news及其下面的路由
             path = '/backstage/message/news'
         }
+        // 显示搜索框
+        let showSearch = true
         if (path.indexOf('/backstage/grow/notes') === 0){
             // 当前请求的是news及其下面的路由
             path = '/backstage/grow/notes'
+            // 如果进入笔记模块，则不显示
+            showSearch = false
         }
         // 得到需要打开菜单项的key
         const openKey = this.openKey;
@@ -249,7 +254,7 @@ class Admin extends Component {
         const {title, local} = this.getTitle();
         return (
             <div className="backend-container">
-                <div className='background-div' style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/backend/admin_background1.jpg')`}}>
+                <div className='background-div' style={{backgroundImage:`url('${user.user.background || process.env.PUBLIC_URL+'/picture/backend/admin_background1.jpg'}')`}}>
                 </div>
                 <header className="this-header">
                     <div className='header-logo'>
@@ -266,15 +271,19 @@ class Admin extends Component {
                     </div>
                     <div className='header-search'>
                         <div className='header-search-form'>
-                            <div className='header-search-form-input' style={{background:searchfocus?'#fff':'rgba(241,243,244,0.24)'}}>
-                                <Button onClick={this.handleSearch}><Icon type="search"/></Button>
-                                <Input placeholder="搜索笔记"
-                                       value={searchValue}
-                                       onChange={this.searchInputChange}
-                                       onPressEnter={this.handleSearch}
-                                       onBlur={this.inputOnBlur }
-                                       onFocus={this.inputOnFocus }/>
-                            </div>
+                            {
+                                showSearch ?
+                                    <div className='header-search-form-input' style={{background:searchfocus?'#fff':'rgba(241,243,244,0.24)'}}>
+                                        <Button onClick={this.handleSearch}><Icon type="search"/></Button>
+                                        <Input placeholder="搜索笔记"
+                                               value={searchValue}
+                                               onChange={this.searchInputChange}
+                                               onPressEnter={this.handleSearch}
+                                               onBlur={this.inputOnBlur }
+                                               onFocus={this.inputOnFocus }/>
+                                    </div>
+                                    : null
+                            }
                         </div>
                         <div className='header-search-menu'>
                             {
@@ -316,7 +325,7 @@ class Admin extends Component {
                             </Menu>
                         </div>
                         <div className={`menu-copyright ${collapsed?"menu-copyright-close":null}`}>
-                            <Button type="link" title='切换壁纸'><Icon type="switcher"/></Button>
+                            <Button type="link" title='切换壁纸' href="/backstage/oss/wallpaper"><Icon type="switcher"/></Button>
                             <Button type="link" title='数据监控' href="/backstage/set/dashBoard"><Icon type="stock"/></Button>
                             <Button type="link" title='网站留言' href="/backstage/message/guestbook"><Icon type="message"/></Button>
                         </div>
@@ -353,6 +362,7 @@ class Admin extends Component {
                                     <Route path='/backstage/grow/plan' component={Plan}/>
                                     <Route path='/backstage/grow/notebook' component={NoteBook}/>
                                     <Route path='/backstage/grow/notes' component={Notes}/>
+                                    <Route path='/backstage/grow/memo' component={Memo}/>
                                     {/*默认、及匹配不到时的页面*/}
                                     <Redirect to='/backstage/set/info'/>
                                 </Switch>
@@ -370,7 +380,7 @@ class Admin extends Component {
                         <Button type="link" title='流水申报' href="/backstage/financial/transaction"><Icon type="money-collect"/></Button>
                         <Button type="link" title='发布动态' href="/backstage/message/news/publish"><Icon type="notification"/></Button>
                         <Button type="link" title='安排计划' href="/backstage/grow/plan"><Icon type="carry-out"/></Button>
-                        <Button type="link" title='便利贴' href="/backstage/grow/plan"><Icon type="pushpin"/></Button>
+                        <Button type="link" title='便利贴' href="/backstage/grow/memo"><Icon type="pushpin"/></Button>
                     </div>
                 </section>
             </div>

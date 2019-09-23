@@ -145,6 +145,16 @@ export const getBackUpDBList = params => ajax(`${backendAPI}/api/oss/db`, params
 export const downloadBackUpDB = `${backendAPI}/api/oss/db/download/`;
 // 获取后台监控统计
 export const getDashBoard = params => ajax(`${backendAPI}/api/set/dashBoard`, params, 'GET');
+// 查询单条便笺
+export const getMemo = params => ajax(`${backendAPI}/api/message/memo/show`, params, 'GET');
+// 获取分页便笺
+export const getMemoList = params => ajax(`${backendAPI}/api/message/memo`, params, 'GET');
+// 添加便笺
+export const createMemo = params => ajax(`${backendAPI}/api/message/memo/create`, params, 'POST');
+// 修改便笺
+export const updateMemo = params => ajax(`${backendAPI}/api/message/memo/edit`, params, 'PUT');
+// 删除便笺
+export const deleteMemo = params => ajax(`${backendAPI}/api/message/memo/delete`, params, 'DELETE');
 
 // 前台部分
 // 获取动态列表
