@@ -40,7 +40,7 @@ class Lllustration extends Component {
     getDatas = async () => {
         let para = {
             type: 2,
-            nowPage: this.state.nextpage,
+            nowPage: 'null' === this.state.nextpage ? 1 : this.state.nextpage,
             pageSize: this.state.pageSize,
             beginTime: this.state.filters.beginTime,
             endTime: this.state.filters.endTime,

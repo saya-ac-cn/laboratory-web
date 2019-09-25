@@ -48,7 +48,7 @@ class Wallpaper extends Component {
     getDatas = async () => {
         let para = {
             type: 1,
-            nowPage: this.state.nextpage,
+            nowPage: 'null' === this.state.nextpage ? 1 : this.state.nextpage,
             pageSize: this.state.pageSize,
             beginTime: this.state.filters.beginTime,
             endTime: this.state.filters.endTime,
@@ -63,8 +63,8 @@ class Wallpaper extends Component {
         if (code === 0) {
             // 表格数据
             this.rendering(data);
-            this.setState({nextpage: 'null'});
         } else {
+            this.setState({nextpage: 'null'});
             openNotificationWithIcon("error", "错误提示", msg);
         }
     };
@@ -87,11 +87,13 @@ class Wallpaper extends Component {
             datas = 'null';
         }
         //显示是否加载下一页(当前页是最后一页)
+        console.log("是否当前页：",data.pageNow === data.totalPage)
         if (data.pageNow === data.totalPage) {
             nextpage = 'null';
         } else {
             nextpage = data.pageNow + 1;
         }
+        console.log("设置下一页：",nextpage)
         this.setState({
             datas: datas,
             nextpage: nextpage

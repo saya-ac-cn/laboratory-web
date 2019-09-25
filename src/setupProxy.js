@@ -1,5 +1,8 @@
 const proxy = require('http-proxy-middleware');
 
+const dev = "http://127.0.0.1:8080";
+const pro = "http://laboratory.saya.ac.cn";
+const url = dev;
 
 // 配置多个跨域设置
 //重要说明！！！
@@ -8,15 +11,15 @@ const proxy = require('http-proxy-middleware');
 module.exports = function (app) {
     // ...You can now register proxies as you wish!
     app.use(proxy('/backend/**', {
-        target: 'http://laboratory.saya.ac.cn',
+        target: url,
         changeOrigin: true,
     }));
     app.use(proxy('/frontend/**', {
-        target: 'http://laboratory.saya.ac.cn',
+        target: url,
         changeOrigin: true,
     }));
     app.use(proxy('/files/**', {
-        target: 'http://laboratory.saya.ac.cn',
+        target: url,
         changeOrigin: true,
     }));
 };
