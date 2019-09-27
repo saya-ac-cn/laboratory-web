@@ -1,13 +1,5 @@
 import React, {Component} from 'react';
-import {
-    getTransactionList,
-    getFinancialType,
-    applyTransaction,
-    updateTransaction,
-    deleteTransaction,
-    downTransaction,
-    outTransactionInfoExcel
-} from '../../../api'
+import {getTransactionList, getFinancialType, applyTransaction, updateTransaction, deleteTransaction, downTransaction, outTransactionInfoExcel} from '../../../api'
 import DocumentTitle from 'react-document-title'
 import moment from 'moment';
 import {Button, Col, DatePicker, Icon, Form, Select, Table, Modal} from "antd";

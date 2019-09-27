@@ -219,7 +219,7 @@ class Plan extends Component {
     render() {
         const {outhtml, listLoading, filters} = this.state;
         return (
-            <DocumentTitle title="日程安排">
+            <DocumentTitle title="saya.ac.cn-日程安排">
                 <div className="base-content">
                     <div className="child-container">
                         <div className="menu-title">

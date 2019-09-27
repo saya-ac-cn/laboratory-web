@@ -206,7 +206,7 @@ class DB extends Component {
             rangeDate = [null,null]
         }
         return (
-            <DocumentTitle title='数据库备份'>
+            <DocumentTitle title='数据备份'>
                 <section>
                     <Col span={24} className="toolbar">
                         <Form layout="inline">

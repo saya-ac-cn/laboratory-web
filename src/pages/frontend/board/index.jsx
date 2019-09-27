@@ -103,7 +103,7 @@ class Board extends Component {
         const {getFieldDecorator} = form;
         const {addForm, loading} = this.state;
         return (
-            <DocumentTitle title="留言反馈">
+            <DocumentTitle title="saya.ac.cn-留言反馈">
                 <div className="base-content">
                     <div className="child-container">
                         <div className="menu-title">
