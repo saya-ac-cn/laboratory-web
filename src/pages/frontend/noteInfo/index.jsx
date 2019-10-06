@@ -38,11 +38,11 @@ class NoteInfo extends Component {
         // 在请求完成后, 隐藏loading
         this.setState({listLoading: false});
         if (code === 0) {
-            var thisNews = data.now;
+            var thisNotes = data.now;
             thisData = data
-            thisData.now.topic = thisNews.topic
-            thisData.now.label = (thisNews.label).split(';')
-            thisData.now.content = thisNews.content
+            thisData.now.topic = thisNotes.topic
+            thisData.now.label = thisNotes.label === null ? [] : (thisNotes.label).split(';')
+            thisData.now.content = thisNotes.content
             this.setState({
                 datas: thisData
             });

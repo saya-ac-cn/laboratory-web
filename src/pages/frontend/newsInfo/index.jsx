@@ -41,7 +41,7 @@ class NewsInfo extends Component {
             var thisNews = data.now;
             thisData = data
             thisData.now.topic = thisNews.topic
-            thisData.now.label = (thisNews.label).split(';')
+            thisData.now.label = thisNews.label === null ? [] : (thisNews.label).split(';')
             thisData.now.content = thisNews.content
             this.setState({
                 datas: thisData

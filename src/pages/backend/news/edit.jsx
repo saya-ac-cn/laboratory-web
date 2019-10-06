@@ -171,7 +171,7 @@ class EditPage extends Component {
         const {msg, code, data} = await getNews(para);
         if (code === 0) {
             this.setState({
-                tags:(data.label).split(';'),
+                tags: data.label === null ? [] : (data.label).split(';'),
                 form: data,
                 isUpdate:true,
                 id: id

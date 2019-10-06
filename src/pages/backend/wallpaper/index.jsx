@@ -431,9 +431,9 @@ class Wallpaper extends Component {
                     </Row>
                     {
                         listLoading === true ? <Spin/> :
-                            <Row>
+                            <ul className="wallpaper-ul">
                                 {datas !=='null' ? datas.map((item) => (
-                                        <Col span={6} className="album-div-imgdiv" key={item.id}>
+                                        <li span={6} className="album-div-imgdiv" key={item.id}>
                                             <div className="tools">
                                                 <Button type="primary" shape="circle" icon="delete" data-id={item.id} onClick={this.handleDeleteFile} size="small" title="删除"/>
                                                 {
@@ -447,22 +447,22 @@ class Wallpaper extends Component {
                                                 <img src={item.weburl} alt={item.filename}
                                                      className="img-responsive"/>
                                             </a>
-                                        </Col>
+                                        </li>
                                     )):
-                                    <Col span={6} className="album-div-imgdiv">
+                                    <li span={6} className="album-div-imgdiv">
                                         <Button type="primary" shape="circle" icon="minus" size="small" title="好像并没有照片诶"/>
-                                    </Col>
+                                    </li>
                                 }
                                 {nextpage !=='null' ?
-                                    <Col span={6} className="album-div-imgdiv">
+                                    <li span={6} className="album-div-imgdiv">
                                         <Button type="primary" onClick={this.getDatas} shape="circle" icon="more" size="small" title="加载更多"/>
-                                    </Col>
+                                    </li>
                                     :
-                                    <Col span={6} className="album-div-imgdiv">
+                                    <li span={6} className="album-div-imgdiv">
                                         <Button type="primary" shape="circle" icon="check" size="small" title="已经加载完壁纸了"/>
-                                    </Col>
+                                    </li>
                                 }
-                            </Row>
+                            </ul>
                     }
                 </section>
             </DocumentTitle>

@@ -1,32 +1,43 @@
-.album-div-imgdiv {
-  padding: 1em;
+.illustration-ul{
+  width: 100%;
+  height: auto;
+  list-style: none;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  .album-div-imgdiv {
+    padding: 0.5em;
+    position:relative;/*相对定位*/
+    .tools{
+      /*display: none;*/
+      z-index: 10;
+      position:absolute;/*绝对定位*/
+      padding-top: 1em;
+      padding-bottom: 1em;
+      padding-left: 1em;
 
-  .tools{
-    /*display: none;*/
-    z-index: 10;
-    position:absolute;/*绝对定位*/
-    padding-top: 1em;
-    padding-bottom: 1em;
-    padding-left: 1em;
-
-    a{
-      position:relative;/*相对定位*/
-      margin-right: 1em;
+      a{
+        position:relative;/*相对定位*/
+        margin-right: 1em;
+      }
     }
-  }
 
-  .a-img{
-    display: block;
-    width: 100%;
-    overflow: hidden;
+    .a-img{
+      display: block;
+      overflow: hidden;
 
-    .img-responsive{
-      z-index: 8;
-      position:relative;/*相对定位*/
+      .img-responsive{
+        height: 190px;
+        width: auto;
+        z-index: 8;
+      }
     }
-  }
 
+  }
 }
+
+
 
 
 .album-div a {
