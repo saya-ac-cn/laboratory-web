@@ -100,15 +100,14 @@ class Frontend extends Component {
                             </Col>
                             <Col xs={12} sm={12} md={8} xl={8}>
                                 <p>
-                                    地址：四川省宜宾市五粮液大道酒圣路8号<br/>
-                                    邮编：644000<br/>
+                                    地址：四川省成都市金牛区兴平路100号<br/>
+                                    邮编：610036<br/>
                                     <a href="/pandora/board">网站建议</a>
                                 </p>
                             </Col>
                         </Row>
                     </div>
                 </footer>
-
             </section>
         );
     }

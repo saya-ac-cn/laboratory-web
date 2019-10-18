@@ -5,12 +5,12 @@ const frontendMenuList = [
         hidden: false,
         requireAuth: true
     },
-    {
-        title: '关于个人',
-        key: '/pandora/me',
-        hidden: false,
-        requireAuth: true
-    },
+    // {
+    //     title: '关于个人',
+    //     key: '/pandora/me',
+    //     hidden: false,
+    //     requireAuth: true
+    // },
     {
         title: '消息动态',
         key: '/pandora/news',
