@@ -3,7 +3,7 @@ import {Button, Icon, Spin} from 'antd'
 import DocumentTitle from 'react-document-title'
 import './index.less'
 import {downloadFiles, queryFile} from "../../../api";
-import {openNotificationWithIcon} from "../../../utils/window";
+import {openNotificationWithIcon_} from "../../../utils/window";
 import axios from "axios";
 /*
  * 文件名：index.jsx
@@ -45,7 +45,7 @@ class FilesDownload extends Component {
             // 表格数据
             this.rendering(data);
         } else {
-            openNotificationWithIcon("error", "错误提示", msg);
+            openNotificationWithIcon_("error", "错误提示", msg);
             this.setState({nextpage: null});
         }
     };
@@ -143,7 +143,7 @@ class FilesDownload extends Component {
             })
             .catch(function (res) {
                 _this.setState({listLoading: false});
-                openNotificationWithIcon("error", "错误提示", "下载文件失败"+res);
+                openNotificationWithIcon_("error", "错误提示", "下载文件失败"+res);
             });
     };
 

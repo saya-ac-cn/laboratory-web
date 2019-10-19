@@ -3,7 +3,7 @@ import DocumentTitle from 'react-document-title'
 import './index.less'
 import {Spin, Modal, Icon} from "antd";
 import {queryPlan} from "../../../api";
-import {openNotificationWithIcon} from "../../../utils/window";
+import {openNotificationWithIcon_} from "../../../utils/window";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -45,7 +45,7 @@ class Plan extends Component {
                 _this.rendering()
             });
         } else {
-            openNotificationWithIcon("error", "错误提示", msg);
+            openNotificationWithIcon_("error", "错误提示", msg);
         }
     };
 

@@ -3,7 +3,7 @@ import {Button, Spin} from 'antd'
 import DocumentTitle from 'react-document-title'
 import './index.less'
 import {queryNews} from "../../../api";
-import {openNotificationWithIcon} from "../../../utils/window";
+import {openNotificationWithIcon_} from "../../../utils/window";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -44,7 +44,7 @@ class NewsList extends Component {
             // 表格数据
             this.rendering(data);
         } else {
-            openNotificationWithIcon("error", "错误提示", msg);
+            openNotificationWithIcon_("error", "错误提示", msg);
             this.setState({nextpage: null});
         }
     };

@@ -3,7 +3,7 @@ import {Button, Spin, Tag} from 'antd'
 import DocumentTitle from 'react-document-title'
 import './index.less'
 import {queryNote, queryNotebook} from '../../../api'
-import {openNotificationWithIcon} from "../../../utils/window";
+import {openNotificationWithIcon_} from "../../../utils/window";
 
 /*
  * 文件名：index.jsx
@@ -39,7 +39,7 @@ class NoteList extends Component {
                 notes:data
             })
         } else {
-            openNotificationWithIcon("error", "错误提示", msg);
+            openNotificationWithIcon_("error", "错误提示", msg);
         }
     }
 
@@ -69,7 +69,7 @@ class NoteList extends Component {
             // 表格数据
             this.rendering(data);
         } else {
-            openNotificationWithIcon("error", "错误提示", msg);
+            openNotificationWithIcon_("error", "错误提示", msg);
             this.setState({nextpage: null});
         }
     };

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title'
 import './index.less'
 import {queryNotesInfo} from "../../../api";
-import {openNotificationWithIcon} from "../../../utils/window";
+import {openNotificationWithIcon_} from "../../../utils/window";
 import {Spin, Tag} from "antd";
 /*
  * 文件名：index.jsx
@@ -47,7 +47,7 @@ class NoteInfo extends Component {
                 datas: thisData
             });
         } else {
-            openNotificationWithIcon("error", "错误提示", msg);
+            openNotificationWithIcon_("error", "错误提示", msg);
         }
     };
 

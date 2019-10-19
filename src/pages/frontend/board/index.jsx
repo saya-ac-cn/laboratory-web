@@ -3,7 +3,7 @@ import DocumentTitle from 'react-document-title'
 import './index.less'
 import {Button, Input, Form, Spin} from "antd";
 import {writeboard} from "../../../api";
-import {openNotificationWithIcon} from "../../../utils/window";
+import {openNotificationWithIcon_} from "../../../utils/window";
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -76,9 +76,9 @@ class Board extends Component {
                 _this.setState({loading: false});
                 if (code === 0) {
                     _this.props.form.resetFields(['name', 'phone', 'email', 'content'])
-                    openNotificationWithIcon("success", "操作结果", "感谢您的留言，我们收到后将及时回复您。");
+                    openNotificationWithIcon_("success", "操作结果", "感谢您的留言，我们收到后将及时回复您。");
                 } else {
-                    openNotificationWithIcon("error", "错误提示", msg);
+                    openNotificationWithIcon_("error", "错误提示", msg);
                 }
             }
         })
