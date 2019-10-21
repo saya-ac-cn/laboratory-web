@@ -102,7 +102,7 @@ class Frontend extends Component {
                                 <p>
                                     地址：四川省成都市金牛区兴平路100号<br/>
                                     邮编：610036<br/>
-                                    <a href="/pandora/board">网站建议</a>
+                                    {/*<a href="/pandora/board">网站建议</a>*/}
                                 </p>
                             </Col>
                         </Row>

@@ -35,11 +35,11 @@ const frontendMenuList = [
         hidden: false,
         requireAuth: true
     },
-    {
-        title: '留言反馈',
-        key: '/pandora/board',
-        hidden: false,
-        requireAuth: true
-    },
+    // {
+    //     title: '留言反馈',
+    //     key: '/pandora/board',
+    //     hidden: false,
+    //     requireAuth: true
+    // },
 ]
 export default frontendMenuList;
