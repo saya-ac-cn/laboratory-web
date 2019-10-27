@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Form, Col, Input, Tag, Icon, Select} from "antd";
-import RichTextEditor from '../../../component/rich-text-editor'
+import RichTextEditor from '../../../component/for-editor'
 import {openNotificationWithIcon} from "../../../utils/window";
 import {getNotes, updateNotes, createNotes, getNoteBookGroup} from "../../../api/index"
 import DocumentTitle from 'react-document-title'
@@ -100,10 +100,12 @@ class EditPage extends Component {
     submit = () => {
         let _this = this;
         let {tags, isUpdate, id} = _this.state
+        // 调用子组件
         if (_this.editor.current.isNull() === true){
-            openNotificationWithIcon("error", "错误提示", "请填写您要发布的主题内容");
+            openNotificationWithIcon("error", "错误提示", "请填写您要发布的内容");
             return
         }
+        // 调用子组件
         const editor = _this.editor.current.getDetail()
         this.props.form.validateFields( (error, values) => {
             if (!error) {
@@ -225,11 +227,11 @@ class EditPage extends Component {
             });
         }
         this.formItemLayout = {
-            labelCol: {span: 4},
-            wrapperCol: {span: 18},
+            labelCol: {span: 2},
+            wrapperCol: {span: 21},
         };
         this.buttonItemLayout = {
-            wrapperCol: {span: 18, offset: 4},
+            wrapperCol: {span: 21, offset: 2},
         };
     };
 

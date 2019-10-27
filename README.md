@@ -50,3 +50,5 @@ npm install echarts --save
 * npm install echarts-wordcloud
 ## 安装jsonp
 * npm install jsonp --save
+## 安装MarkDown
+* npm install for-editor -S

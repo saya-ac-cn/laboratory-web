@@ -71,7 +71,7 @@ class Memo extends Component {
     };
 
     /**
-     * 获取笔记簿列表数据
+     * 获取便利贴列表数据
      * @returns {Promise<void>}
      */
     getDatas = async () => {
@@ -223,7 +223,7 @@ class Memo extends Component {
         _this.form.validateFields((err, values) => {
             if (!err) {
                 Modal.confirm({
-                    title: '您确定创建该便笺?',
+                    title: '您确定创建该便利贴?',
                     onOk: async () => {
                         // 关闭页面表单
                         _this.setState({

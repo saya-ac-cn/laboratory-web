@@ -3,6 +3,7 @@ import DocumentTitle from 'react-document-title'
 import './index.less'
 import {queryNewsInfo} from "../../../api";
 import {openNotificationWithIcon_} from "../../../utils/window";
+import {isEmptyObject} from "../../../utils/var"
 import {Spin, Tag} from "antd";
 /*
  * 文件名：index.jsx
@@ -51,19 +52,6 @@ class NewsInfo extends Component {
         }
     };
 
-    /**
-     * 判断对象是否为空
-     * @param data
-     * @returns {boolean}
-     */
-    isEmptyObject = (data) => {
-        // 手写实现的判断一个对象{}是否为空对象，没有任何属性 非空返回false
-        var item;
-        for (item in data)
-            return false;
-        return true;
-    };
-
     forMap = tag => {
         let colors = this.state.tagColor;
         const tagElem = (
@@ -95,8 +83,8 @@ class NewsInfo extends Component {
         const {datas, listLoading} = this.state;
         let title = '动态详情'
         let tagChild = []
-        if (!(this.isEmptyObject(datas))){
-            if (!(this.isEmptyObject(datas.now))) {
+        if (!(isEmptyObject(datas))){
+            if (!(isEmptyObject(datas.now))) {
                 title = datas.now.topic
                  tagChild = datas.now.label.map(this.forMap);
             }
@@ -114,7 +102,7 @@ class NewsInfo extends Component {
                             listLoading === true ? <Spin/> :
                                 <div>
                                     {
-                                        !(this.isEmptyObject(datas)) ?
+                                        !(isEmptyObject(datas)) ?
                                             <div>
                                                 <div className="news-name">{datas.now.topic}</div>
                                                 <div className="news-tool">
@@ -133,13 +121,13 @@ class NewsInfo extends Component {
                                                             <li className="pre-li">
                                                                 <span>上一篇</span>
                                                                 {
-                                                                    !(this.isEmptyObject(datas.pre)) ? <a href={`/pandora/newsInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a href="#base-content">已是第一篇了</a>
+                                                                    !(isEmptyObject(datas.pre)) ? <a href={`/pandora/newsInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a href="#base-content">已是第一篇了</a>
                                                                 }
                                                             </li>
                                                             <li className="next-li">
                                                                 <span>下一篇</span>
                                                                 {
-                                                                    !(this.isEmptyObject(datas.next)) ? <a href={`/pandora/newsInfo/${datas.next.id}`}>{datas.next.topic}</a> :
+                                                                    !(isEmptyObject(datas.next)) ? <a href={`/pandora/newsInfo/${datas.next.id}`}>{datas.next.topic}</a> :
                                                                         <a href="#base-content">已是最后一篇了</a>
                                                                 }
                                                             </li>
