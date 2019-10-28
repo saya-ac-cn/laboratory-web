@@ -6,7 +6,6 @@ import Login from './pages/login/index'
 import Home from './pages/frontend/home'
 import Admin from './pages/layout/backend2'
 import Frontend from './pages/layout/frontend'
-import Edit from './component/for-editor'
 /**
  * 应用根组件
  * @returns {*}
@@ -26,7 +25,6 @@ function App() {
                {/* <Route path='/backstage' component={Backend}/>*/}
                 <Route path='/backstage' component={Admin}/>
                 <Route path='/pandora' component={Frontend}/>
-                <Route path='/edit' component={Edit}/>
                 <Route path='/' component={Home}/>
             </Switch>
         </BrowserRouter>
