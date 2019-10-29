@@ -5,6 +5,7 @@ import {queryNotesInfo} from "../../../api";
 import {openNotificationWithIcon_} from "../../../utils/window";
 import {isEmptyObject} from "../../../utils/var"
 import {Spin, Tag} from "antd";
+import Editor from 'for-editor'
 /*
  * 文件名：index.jsx
  * 作者：liunengkai
@@ -114,7 +115,14 @@ class NoteInfo extends Component {
                                                     </div>
                                                 </div>
                                                 <div className="news-wrap">
-                                                    <div className="news-content" dangerouslySetInnerHTML={{__html:datas.now.content}}>
+                                                    <div className="news-content">
+                                                        {/*dangerouslySetInnerHTML={{__html:datas.now.content}}*/}
+                                                        <Editor
+                                                            heigh="auto"
+                                                            value={datas.now.content}
+                                                            style={{border:'none',boxShadow:'none',background:'none',height:'100%'}}
+                                                            toolbar={{}}
+                                                            preview={true} />
                                                     </div>
                                                     <div className="news-footer">
                                                         <ul>
