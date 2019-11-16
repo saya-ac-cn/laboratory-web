@@ -93,7 +93,7 @@ class EditMemo extends Component {
                         getFieldDecorator('title', {
                             initialValue: memo.title,
                             rules: [
-                                {required: true, message: '请输入笔记簿名'},
+                                {required: true, message: '请输入便利贴标题'},
                                 {min: 2, message: '长度在 2 到 15 个字符'},
                                 {max: 15, message: '长度在 2 到 15 个字符'},
                             ]
@@ -107,11 +107,11 @@ class EditMemo extends Component {
                         getFieldDecorator('content', {
                             initialValue: memo.content,
                             rules: [
-                                {required: true, message: '请输入笔记簿描述'},
+                                {required: true, message: '请输入便利贴正文'},
                                 {max: 128, message: '长度在 1 到 128 个字符'},
                             ]
                         })(
-                            <Input.TextArea rows={3} placeholder='请输入便笺正文'/>
+                            <Input.TextArea rows={3} placeholder='请输入便利贴正文'/>
                         )
                     }
                 </Form.Item>
