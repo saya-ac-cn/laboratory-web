@@ -1,8 +1,9 @@
 const proxy = require('http-proxy-middleware');
 
 const dev = "http://127.0.0.1:8080";
+const test = "http://saya.ac.cn:8080";
 const pro = "http://laboratory.saya.ac.cn";
-const url = dev;
+const url = pro;
 // 配置多个跨域设置
 //重要说明！！！
 //页面路由绝对禁止出现/backend、/frontend、/warehouse（远景包括map）
