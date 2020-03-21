@@ -9,7 +9,7 @@ import DocumentTitle from 'react-document-title'
  * 文件名：list.jsx
  * 作者：liunengkai
  * 创建日期：2019-07-24 - 22:28
- * 描述：动态列表
+ * 描述：动态管理页面
  */
 const {RangePicker} = DatePicker;
 // 定义组件（ES6）
