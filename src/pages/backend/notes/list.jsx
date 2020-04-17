@@ -11,6 +11,7 @@ import {getUrlParameter} from "../../../utils/url"
  * 作者：liunengkai
  * 创建日期：2019-08-26 - 21:09
  * 描述：笔记列表
+ * 注意：在本页面中，不显示笔记搜索框
  */
 const {RangePicker} = DatePicker;
 // 定义组件（ES6）

@@ -5,6 +5,7 @@ import {Col, Row, Carousel, Icon, Button, AutoComplete} from "antd";
 import {baiduSearchSelect,baiduSearchWord} from '../../../api'
 import './index.less'
 import jsonp from 'jsonp'
+
 /*
  * 文件名：index.jsx
  * 作者：liunengkai

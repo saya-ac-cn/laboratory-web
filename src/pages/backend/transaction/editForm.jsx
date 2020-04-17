@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Form, Select, Input} from "antd";
+import {Form, Select, Input, DatePicker} from "antd";
 import PropTypes from "prop-types";
+import moment from 'moment';
 /*
  * 文件名：editForm.jsx
  * 作者：liunengkai
@@ -36,6 +37,18 @@ class EditForm extends Component {
             <Form {...this.formItemLayout} style={{marginTop: '1.5em'}}>
                 <Form.Item label="流水号：" {...this.formItemLayout}>
                     <Input type='text' value={line.tradeId} disabled={true}/>
+                </Form.Item>
+                <Form.Item label="交易日期：" {...this.formItemLayout}>
+                    {
+                        getFieldDecorator('tradeDate', {
+                            initialValue: moment(line.tradeDate),
+                            rules: [
+                                {required: true, message: '请选择交易日期'}
+                            ]
+                        })(
+                            <DatePicker style={{width: '200px'}} format={"YYYY-MM-DD"} placeholder="请选择交易日期"/>
+                        )
+                    }
                 </Form.Item>
                 <Form.Item label="交易类别：" {...this.formItemLayout}>
                     {

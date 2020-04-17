@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
-import {Row, Col, Form, Input, Select, Button, Icon} from "antd";
+import {Row, Col, Form, Input, Select, Button, Icon, DatePicker} from "antd";
 import {openNotificationWithIcon} from "../../../utils/window";
 
 /*
@@ -81,7 +81,7 @@ class AddForm extends Component {
 
 
     render() {
-        const {tradeType, transactionAmount, infoList} = this.state.form
+        const {tradeType,tradeDate, transactionAmount, infoList} = this.state.form
         const {type} = this.props;
         const {getFieldDecorator, getFieldValue} = this.props.form;
         let _this = this
@@ -104,6 +104,18 @@ class AddForm extends Component {
                     </blockquote>
                 </div>
                 <Form {...this.formItemLayout} style={{marginTop: '1.5em'}}>
+                    <Form.Item label="交易日期：" {...this.formItemLayout}>
+                        {
+                            getFieldDecorator('tradeDate', {
+                                initialValue: tradeDate,
+                                rules: [
+                                    {required: true, message: '请选择交易日期'}
+                                ]
+                            })(
+                                <DatePicker style={{width: '200px'}} format={"YYYY-MM-DD"} placeholder="请选择交易日期"/>
+                            )
+                        }
+                    </Form.Item>
                     <Form.Item label="交易类别：" {...this.formItemLayout}>
                         {
                             getFieldDecorator('tradeType', {
@@ -112,7 +124,7 @@ class AddForm extends Component {
                                     {required: true, message: '请选择交易类别'}
                                 ]
                             })(
-                                <Select style={{width: '200px'}} showSearch onChange={this.onChangeType}
+                                <Select style={{width: '200px'}} showSearch
                                         allowClear={true} placeholder="请选择交易类别">
                                     {type}
                                 </Select>

@@ -66,18 +66,18 @@ class Frontend extends Component {
 
                 {/*主体部分开始*/}
                 <section className="main-section">
-                <Switch>
-                    <Route path='/pandora/files' component={FilesDownload}/>
-                    <Route path='/pandora/news' component={NewsList}/>
-                    <Route path='/pandora/note' component={NoteList}/>
-                    <Route path='/pandora/newsInfo/:id' component={NewsInfo}/>
-                    <Route path='/pandora/noteInfo/:id' component={NoteInfo}/>
-                    <Route path='/pandora/plan' component={Plan}/>
-                    <Route path='/pandora/board' component={Board}/>
-                    <Route path='/pandora/me' component={NewsList}/>
-                    {/*默认、及匹配不到时的页面*/}
-                    <Redirect to='/'/>
-                </Switch>
+                    <Switch>
+                        <Route path='/pandora/files' component={FilesDownload}/>
+                        <Route path='/pandora/news' component={NewsList}/>
+                        <Route path='/pandora/note' component={NoteList}/>
+                        <Route path='/pandora/newsInfo/:id' component={NewsInfo}/>
+                        <Route path='/pandora/noteInfo/:id' component={NoteInfo}/>
+                        <Route path='/pandora/plan' component={Plan}/>
+                        <Route path='/pandora/board' component={Board}/>
+                        <Route path='/pandora/me' component={NewsList}/>
+                        {/*默认、及匹配不到时的页面*/}
+                        <Redirect to='/'/>
+                    </Switch>
                 </section>
                 {/*主体部分结束*/}
 
@@ -93,7 +93,7 @@ class Frontend extends Component {
                             </Col>
                             <Col xs={12} sm={12} md={8} xl={8}>
                                 <p>
-                                    Copyright &copy; 2016-2019 Saya.ac.cn-暖心阁 All rights reserved<br/>
+                                    Copyright &copy; 2016-{(new Date()).getFullYear() } Saya.ac.cn-暖心阁 All rights reserved<br/>
                                     国家工信部域名备案信息：[Saya.ac.cn/蜀ICP备19027394号]<br/>
                                     saya@Saya.ac.cn
                                 </p>

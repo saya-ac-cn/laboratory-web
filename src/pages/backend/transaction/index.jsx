@@ -73,8 +73,8 @@ class Transaction extends Component {
                 dataIndex: 'transactionAmount',// 显示数据对应的属性名
             },
             {
-                title: '创建时间',
-                dataIndex: 'createTime', // 显示数据对应的属性名
+                title: '交易时间',
+                dataIndex: 'tradeDate', // 显示数据对应的属性名
             },
             {
                 title: '修改时间',
@@ -243,12 +243,13 @@ class Transaction extends Component {
         // 阻止表单的默认提交
         e.preventDefault();
         let _this = this
-        _this.form.validateFields(['transactionAmount', 'tradeType', 'applyContent'], async (err, values) => {
+        _this.form.validateFields(['transactionAmount', 'tradeType', 'tradeDate','applyContent'], async (err, values) => {
             console.log(values)
             if (!err) {
                 _this.setState({listLoading: true});
                 let para = {
                     tradeType: values.tradeType,
+                    tradeDate: (values.tradeDate).format('YYYY-MM-DD'),
                     transactionAmount: values.transactionAmount,
                     infoList: values.applyContent
                 }
@@ -319,12 +320,13 @@ class Transaction extends Component {
         // 阻止表单的默认提交
         e.preventDefault();
         let _this = this
-        _this.form.validateFields(['updateTradeType', 'updateTransactionAmount'], async (err, values) => {
+        _this.form.validateFields(['updateTradeType', 'tradeDate', 'updateTransactionAmount'], async (err, values) => {
             console.log(values)
             if (!err) {
                 let para = {
                     tradeId: _this.updateData.tradeId,
                     tradeType: values.updateTradeType,
+                    tradeDate: (values.tradeDate).format('YYYY-MM-DD'),
                     transactionAmount: values.updateTransactionAmount,
                 }
                 const {msg, code} = await updateTransaction(para)
