@@ -26,7 +26,7 @@ class DashBoard extends Component {
         chartLine: {},
         chartPie: {},
         activeLine: {},
-        boardColumn: {},
+        memoColumn: {},
         data: {
             newsCount: 11,
             guestCount: 6,
@@ -101,7 +101,7 @@ class DashBoard extends Component {
                 "2019-01": 3,
                 "2019-02": 1
             },
-            board: {
+            memo: {
                 "2018-09": 1,
                 "2018-10": 3,
                 "2018-11": 2,
@@ -333,18 +333,18 @@ class DashBoard extends Component {
     }
 
     /**
-     * 过去的6个月里网站留言量
+     * 过去的6个月里便笺发布
      */
-    chartBoardColumn = () => {
+    chartMemoColumn = () => {
         let _this = this
-        let board = _this.state.data.board
+        let memo = _this.state.data.memo
         var mongth = [];
         var count = [];
-        for(var key in board){
+        for(var key in memo){
             mongth.push(key)
-            count.push(board[key])
+            count.push(memo[key])
         }
-        let boardColumn = {
+        let memoColumn = {
             title: { text: '过去的6个月里网站留言量' },
             tooltip: {},
             xAxis: {
@@ -357,7 +357,7 @@ class DashBoard extends Component {
                 data: count
             }]
         }
-        _this.setState({boardColumn})
+        _this.setState({memoColumn})
     }
 
 
@@ -383,7 +383,7 @@ class DashBoard extends Component {
                 _this.drawLineChart();
                 _this.chartLineActive();
                 _this.drawColumnChart();
-                _this.chartBoardColumn();
+                _this.chartMemoColumn();
             });
         } else {
             openNotificationWithIcon("error", "错误提示", msg);
@@ -401,14 +401,14 @@ class DashBoard extends Component {
         // this.drawLineChart();
         // this.chartLineActive();
         // this.drawColumnChart();
-        // this.chartBoardColumn();
+        // this.chartMemoColumn();
         // 获取后台数据进行渲染
         this.getDatas();
     };
 
 
     render() {
-        const {chartColumn, chartBar, chartLine, chartPie, activeLine, boardColumn} = this.state;
+        const {chartColumn, chartBar, chartLine, chartPie, activeLine, memoColumn} = this.state;
         return (
             <DocumentTitle title='平台监控'>
                 <section>
@@ -436,7 +436,7 @@ class DashBoard extends Component {
                             <ReactEcharts option={chartColumn} lazyUpdate={true} style={{width: '100%', height: '300px'}}></ReactEcharts>
                         </Col>
                         <Col span={12}>
-                            <ReactEcharts option={boardColumn} lazyUpdate={true} style={{width: '100%', height: '300px'}}></ReactEcharts>
+                            <ReactEcharts option={memoColumn} lazyUpdate={true} style={{width: '100%', height: '300px'}}></ReactEcharts>
                         </Col>
                     </Row>
                 </section>
