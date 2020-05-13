@@ -29,7 +29,6 @@ class DashBoard extends Component {
         memoColumn: {},
         data: {
             newsCount: 11,
-            guestCount: 6,
             pictureCount: 2,
             fileCount: 1,
             logCount: 61,
@@ -101,7 +100,7 @@ class DashBoard extends Component {
                 "2019-01": 3,
                 "2019-02": 1
             },
-            memo: {
+            memo6: {
                 "2018-09": 1,
                 "2018-10": 3,
                 "2018-11": 2,
@@ -117,7 +116,7 @@ class DashBoard extends Component {
      */
     drawPieChart = () => {
         let _this = this
-        let {newsCount, guestCount, pictureCount, fileCount, notesCount, planCount, bookCount} = _this.state.data
+        let {newsCount, pictureCount, fileCount, notesCount, planCount, bookCount} = _this.state.data
         let chartPie = {
             title: {
                 text: '数据分布',
@@ -130,7 +129,7 @@ class DashBoard extends Component {
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['动态', '留言', '图片', '文件', '笔记', '计划', '笔记簿']
+                data: ['动态', '图片', '文件', '笔记', '计划', '笔记簿']
             },
             series: [
                 {
@@ -140,7 +139,6 @@ class DashBoard extends Component {
                     center: ['50%', '60%'],
                     data: [
                         {value: newsCount, name: '动态'},
-                        {value: guestCount, name: '留言'},
                         {value: pictureCount, name: '图片'},
                         {value: fileCount, name: '文件'},
                         {value: notesCount, name: '笔记'},
@@ -337,7 +335,7 @@ class DashBoard extends Component {
      */
     chartMemoColumn = () => {
         let _this = this
-        let memo = _this.state.data.memo
+        let memo = _this.state.data.memo6
         var mongth = [];
         var count = [];
         for(var key in memo){
@@ -345,14 +343,14 @@ class DashBoard extends Component {
             count.push(memo[key])
         }
         let memoColumn = {
-            title: { text: '过去的6个月里网站留言量' },
+            title: { text: '过去的6个月里保存的便笺数' },
             tooltip: {},
             xAxis: {
                 data: mongth
             },
             yAxis: {},
             series: [{
-                name: '留言数',
+                name: '便笺数',
                 type: 'bar',
                 data: count
             }]

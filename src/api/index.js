@@ -155,6 +155,10 @@ export const createMemo = params => ajax(`${backendAPI}/api/message/memo/create`
 export const updateMemo = params => ajax(`${backendAPI}/api/message/memo/edit`, params, 'PUT');
 // 删除便笺
 export const deleteMemo = params => ajax(`${backendAPI}/api/message/memo/delete`, params, 'DELETE');
+// 网盘-获取文件列表
+export const getPanFileList = params => ajax(`${backendAPI}/api/pan/file/parent`, params, 'GET');
+// 网盘-创建文件夹
+export const createFolder = params => ajax(`${backendAPI}/api/pan/file`, params, 'POST');
 
 // 前台部分
 // 获取动态列表

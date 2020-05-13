@@ -81,6 +81,12 @@ const backstageMenuList = [
                 hidden: false,
                 requireAuth: true
             },
+            {
+                title: '私密网盘',
+                key: '/backstage/oss/pan',
+                hidden: false,
+                requireAuth: true
+            },
         ]
     },
     {
