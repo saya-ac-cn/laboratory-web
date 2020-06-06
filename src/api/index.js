@@ -16,7 +16,7 @@ let frontendAPI = publicAPI + '/Pandora';
 // 百度搜索地址
 export const baiduSearchWord = 'http://www.baidu.com/s';
 // 百度模糊搜索地址
-export const baiduSearchSelect = `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su`
+export const baiduSearchSelect = `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su`;
 // 登录接口
 export const requestLogin = params => ajax(`${backendAPI}/login`, params, 'POST');
 // 注销接口
@@ -155,10 +155,6 @@ export const createMemo = params => ajax(`${backendAPI}/api/message/memo/create`
 export const updateMemo = params => ajax(`${backendAPI}/api/message/memo/edit`, params, 'PUT');
 // 删除便笺
 export const deleteMemo = params => ajax(`${backendAPI}/api/message/memo/delete`, params, 'DELETE');
-// 网盘-获取文件列表
-export const getPanFileList = params => ajax(`${backendAPI}/api/pan/file/parent`, params, 'GET');
-// 网盘-创建文件夹
-export const createFolder = params => ajax(`${backendAPI}/api/pan/file`, params, 'POST');
 
 // 前台部分
 // 获取动态列表

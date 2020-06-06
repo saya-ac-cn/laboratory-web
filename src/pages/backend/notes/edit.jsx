@@ -270,7 +270,7 @@ class EditPage extends Component {
                                             {required: true, message: '请输入标题'},
                                             {max: 50, message: '最多不超过50个字符'},
                                         ]
-                                    })(<Input type='text'/>)
+                                    })(<Input type='text' style={{width:'40em'}}/>)
                                 }
                             </Form.Item>
                             <Form.Item label="所属分类" {...this.formItemLayout}>
@@ -281,7 +281,7 @@ class EditPage extends Component {
                                             {required: true, message: '请选择所属分类'}
                                         ]
                                     })(
-                                        <Select showSearch
+                                        <Select style={{width:'34em'}} showSearch
                                                 placeholder="请选择所属分类">
                                             {notebooks}
                                         </Select>

@@ -143,7 +143,7 @@ class ForEditor extends Component {
                 ref={this.editor}
                 value={value}
                 lineNum={false}
-                style={{border:'none',boxShadow:'none'}}
+                style={{maxWidth: '80vw',border:'none',boxShadow:'none'}}
                 addImg={(file) => this.handleAddImg(file)}
                 onChange={value => this.handleChange(value)}
             />

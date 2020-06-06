@@ -23,7 +23,6 @@ import FinancialForMonth from '../../backend/financialformonth'
 import FinancialForYear from '../../backend/financialforyear'
 import DashBoard from '../../backend/dashboard'
 import Memo from '../../backend/memo'
-import Pan from '../../backend/pan'
 import {requestLogout} from "../../../api";
 /*
  * 文件名：index.jsx
@@ -354,7 +353,6 @@ class Admin extends Component {
                                     <Route path='/backstage/oss/wallpaper' component={Wallpaper}/>
                                     <Route path='/backstage/oss/illustration' component={Lllustration}/>
                                     <Route path='/backstage/oss/files' component={FilesMana}/>
-                                    <Route path='/backstage/oss/pan' component={Pan}/>
                                     <Route path='/backstage/message/news' component={News}/>
                                     <Route path='/backstage/message/guestbook' component={GuestBook}/>
                                     <Route path='/backstage/financial/transaction' component={Transaction}/>
