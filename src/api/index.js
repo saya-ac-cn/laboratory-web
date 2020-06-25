@@ -18,7 +18,7 @@ export const baiduSearchWord = 'http://www.baidu.com/s';
 // 百度模糊搜索地址
 export const baiduSearchSelect = `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su`;
 // 登录接口
-export const requestLogin = params => ajax(`${backendAPI}/login`, params, 'POST');
+export const requestLogin = params => ajax(`${backendAPI}/login/lab`, params, 'POST');
 // 注销接口
 export const requestLogout = params => ajax(`${backendAPI}/logout`, params, 'POST');
 // 获取日志接口

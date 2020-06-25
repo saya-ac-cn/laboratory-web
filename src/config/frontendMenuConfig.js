@@ -1,7 +1,8 @@
-const frontendMenuList = [
+// V1版本菜单
+const frontendMenuListV1 = [
     {
         title: '网站首页',
-        key: '/',
+        key: '/v1',
         hidden: false,
         requireAuth: true
     },
@@ -13,33 +14,33 @@ const frontendMenuList = [
     // },
     {
         title: '消息动态',
-        key: '/pandora/news',
+        key: '/v1/pandora/news',
         hidden: false,
         requireAuth: true
     },
     {
         title: '文档下载',
-        key: '/pandora/files',
+        key: '/v1/pandora/files',
         hidden: false,
         requireAuth: true
     },
     {
         title: '随笔记录',
-        key: '/pandora/note',
+        key: '/v1/pandora/note',
         hidden: false,
         requireAuth: true
     },
     {
         title: '计划安排',
-        key: '/pandora/plan',
+        key: '/v1/pandora/plan',
         hidden: false,
         requireAuth: true
     },
     // {
     //     title: '留言反馈',
-    //     key: '/pandora/board',
+    //     key: '/v1/pandora/board',
     //     hidden: false,
     //     requireAuth: true
     // },
 ]
-export default frontendMenuList;
+export default frontendMenuListV1;

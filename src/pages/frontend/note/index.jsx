@@ -198,7 +198,7 @@ class NoteList extends Component {
                                                 </div>
                                                 <div className='newscontent'>
                                                     <div className="newstitle">
-                                                        <a href={`/pandora/noteInfo/${item.id}`} rel="noopener noreferrer" target="_blank">{item.topic}</a>
+                                                        <a href={`/v1/pandora/noteInfo/${item.id}`} rel="noopener noreferrer" target="_blank">{item.topic}</a>
                                                     </div>
                                                 </div>
                                             </div>

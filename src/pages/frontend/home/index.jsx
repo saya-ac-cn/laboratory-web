@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title'
-import menuConfig from '../../../config/frontendMenuConfig'
+import frontendMenuListV1 from '../../../config/frontendMenuConfig'
 import {Col, Row, Carousel, Icon, Button, AutoComplete} from "antd";
 import {baiduSearchSelect,baiduSearchWord} from '../../../api'
 import './index.less'
@@ -89,14 +89,14 @@ class Home extends Component {
     */
     componentWillMount() {
         let _this = this; //声明一个变量指向vue实例this,保证作用域一致
-        _this.menuNodes = _this.getMenuNodes(menuConfig)
+        _this.menuNodes = _this.getMenuNodes(frontendMenuListV1)
     };
 
 
     render() {
         const {dataSource, copyrightDate} = this.state;
         return (
-            <DocumentTitle title="saya.ac.cn-首页">
+            <DocumentTitle title="Saya.ac.cn-首页">
                 <div className="this-container">
                     <Carousel autoplay={true} dots={false} className="background">
                         <div><div className="img-item" style={{backgroundImage:`url('${process.env.PUBLIC_URL}/picture/login/login_background1.jpg')`}}></div></div>

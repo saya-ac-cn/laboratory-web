@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Login from './pages/login/index'
 //import Backend from './pages/layout/backend'
 import Home from './pages/frontend/home'
+import Home2 from './pages/frontend2/home'
 import Admin from './pages/layout/backend2'
 import Frontend from './pages/layout/frontend'
 /**
@@ -21,11 +22,13 @@ function App() {
             *在定义接口代理时，上述的路由单词已经被定义，如果使用，刷新页面将出现404，
             */}
             <Switch>
+                {/*登录认证*/}
                 <Route path='/login' component={Login}/>
                 {/* <Route path='/backstage' component={Backend}/>*/}
                 <Route path='/backstage' component={Admin}/>
-                <Route path='/pandora' component={Frontend}/>
-                <Route path='/' component={Home}/>
+                <Route path='/v1/pandora' component={Frontend}/>
+                <Route path='/v1' component={Home}/>
+                <Route path='/' component={Home2}/>
             </Switch>
         </BrowserRouter>
     );

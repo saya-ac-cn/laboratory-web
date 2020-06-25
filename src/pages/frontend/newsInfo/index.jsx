@@ -128,13 +128,13 @@ class NewsInfo extends Component {
                                                             <li className="pre-li">
                                                                 <span>上一篇</span>
                                                                 {
-                                                                    !(isEmptyObject(datas.pre)) ? <a href={`/pandora/newsInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a href="#base-content">已是第一篇了</a>
+                                                                    !(isEmptyObject(datas.pre)) ? <a href={`/v1/pandora/newsInfo/${datas.pre.id}`}>{datas.pre.topic}</a> : <a href="#base-content">已是第一篇了</a>
                                                                 }
                                                             </li>
                                                             <li className="next-li">
                                                                 <span>下一篇</span>
                                                                 {
-                                                                    !(isEmptyObject(datas.next)) ? <a href={`/pandora/newsInfo/${datas.next.id}`}>{datas.next.topic}</a> :
+                                                                    !(isEmptyObject(datas.next)) ? <a href={`/v1/pandora/newsInfo/${datas.next.id}`}>{datas.next.topic}</a> :
                                                                         <a href="#base-content">已是最后一篇了</a>
                                                                 }
                                                             </li>

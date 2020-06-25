@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import menuConfig from '../../../config/frontendMenuConfig'
+import frontendMenuListV1 from '../../../config/frontendMenuConfig'
 import './index.less'
 import {Redirect, Route, Switch, Link} from 'react-router-dom'
 import {Menu, Row, Col} from "antd";
@@ -39,7 +39,7 @@ class Frontend extends Component {
     */
     componentWillMount() {
         let _this = this; //声明一个变量指向vue实例this,保证作用域一致
-        _this.menuNodes = _this.getMenuNodes(menuConfig)
+        _this.menuNodes = _this.getMenuNodes(frontendMenuListV1)
     };
 
     render() {
@@ -67,14 +67,14 @@ class Frontend extends Component {
                 {/*主体部分开始*/}
                 <section className="main-section">
                     <Switch>
-                        <Route path='/pandora/files' component={FilesDownload}/>
-                        <Route path='/pandora/news' component={NewsList}/>
-                        <Route path='/pandora/note' component={NoteList}/>
-                        <Route path='/pandora/newsInfo/:id' component={NewsInfo}/>
-                        <Route path='/pandora/noteInfo/:id' component={NoteInfo}/>
-                        <Route path='/pandora/plan' component={Plan}/>
-                        <Route path='/pandora/board' component={Board}/>
-                        <Route path='/pandora/me' component={NewsList}/>
+                        <Route path='/v1/pandora/files' component={FilesDownload}/>
+                        <Route path='/v1/pandora/news' component={NewsList}/>
+                        <Route path='/v1/pandora/note' component={NoteList}/>
+                        <Route path='/v1/pandora/newsInfo/:id' component={NewsInfo}/>
+                        <Route path='/v1/pandora/noteInfo/:id' component={NoteInfo}/>
+                        <Route path='/v1/pandora/plan' component={Plan}/>
+                        <Route path='/v1/pandora/board' component={Board}/>
+                        <Route path='/v1/pandora/me' component={NewsList}/>
                         {/*默认、及匹配不到时的页面*/}
                         <Redirect to='/'/>
                     </Switch>

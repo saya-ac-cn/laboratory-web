@@ -1,11 +1,11 @@
 const proxy = require('http-proxy-middleware');
 
 // 开发环境接口
-const url = "http://127.0.0.1:8080";
+//const url = "http://127.0.0.1:8080";
 // 测试环境接口
 // const url = "http://saya.ac.cn:8080";
 // 线上环境接口
-//const url = "http://laboratory.saya.ac.cn";
+const url = "http://laboratory.saya.ac.cn";
 // 配置多个跨域设置
 //重要说明！！！
 //页面路由绝对禁止出现/backend、/frontend、/warehouse（远景包括map）

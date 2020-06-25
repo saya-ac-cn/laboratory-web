@@ -1,0 +1,176 @@
+.frontend2-home-root {
+  position: absolute;
+  top: 0em;
+  bottom: 0em;
+  width: 100vw;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: #f0Daf2; /* 不支持线性的时候显示 */
+  background-image: linear-gradient(to bottom right, #473a3a, #906f6a);
+
+  header {
+    height: 6em;
+    width: 100vw;
+    padding: 0;
+    font-family: Arial, Helvetica, Sans-Serif;
+    /* opacity: 0.8; */
+    /* background-color: #dbdbdb;*/
+  }
+
+  section {
+    margin: 0 auto;
+    margin-top: 6em;
+    width: 70vw;
+    height: auto;
+    min-height: 16em;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    > div{
+      display: inline-block;
+      .frontend2-home-hi{
+        height: 4em;
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between ;
+        align-items: center;
+        .frontend2-home-hi-symbol{
+          display: -webkit-flex; /* Safari */
+          display: flex;
+          justify-content: center;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          hr{
+            width: 1.5em;
+            border: none;
+            height: 0.15em;
+            background-color: #6b5e5e;
+          }
+          i{
+            margin-left: 1em;
+            margin-right: 1em;
+            width: 0.4em;
+            height: 0.4em;
+            border-radius: 0.2em;
+            background-color: #fbfefc;
+          }
+          div{
+            color: #fbfefc;
+            font-size: 2em;
+          }
+        }
+        .frontend2-home-hi-motto{
+          color: #91746d;
+          width: 20em;
+          font-size: 0.8em;
+          word-break:break-all; //支持IE，chrome，FF不支持
+          word-wrap:break-word;//支持IE，chrome，FF
+        }
+      }
+      .frontend2-home-calendar{
+        padding-left: 5em;
+        font-size: 0.8em;
+        color: #a69b9d;
+      }
+      .frontend2-home-menu {
+        margin-top: 3em;
+        margin-bottom: 3em;
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+
+        .frontend2-home-menu-border {
+          width: 0.1em;
+          height: 10em;
+          background: #6b5e5e;
+          margin-right: 4em;
+          margin-left: 2em;
+        }
+
+        .frontend2-home-menu-circle {
+          width: 6em;
+          height: 6em;
+          margin-right: 2em;
+          background-size: cover;
+          //border-radius: 50%;
+          //background: -webkit-radial-gradient( circle closest-side,#009966 94%,#fefcfb 50%);
+          display: -webkit-flex; /* Safari */
+          display: flex;
+          justify-content: center;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          color: #fbfefc;
+        }
+      }
+      .frontend2-home-memo-news{
+        border-top:0.12em solid #fff;
+        border-bottom:0.12em solid #fff;
+        opacity: 0.2;
+        background-color:rgba(144,111,106,0.4);
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between ;
+        align-items: center;
+        padding: 2em 6em 2em 6em;
+        color:  #fff;
+        font-size: 0.9em;
+        .frontend2-home-memo-newsdiv:before{
+          content: "<";
+          margin-right: 1.5em;
+        }
+        .frontend2-home-memodiv-news:after{
+          content: ">";
+          margin-left: 1.5em;
+        }
+      }
+      .frontend2-home-logo{
+        margin-top: 6em;
+        width: 10em;
+        height: 10em;
+        background-size: cover;
+      }
+    }
+
+  }
+
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    height: 7em;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    text-align: justify;
+    opacity: 0.8;
+    filter: alpha(opacity=70);
+    /*background-color: #D3D3D3;*/
+
+    .trapezoid {
+      width: 100vw;
+      height: 100%;
+      border-left: 100vw solid #ca9f8e;
+      border-top: 3em solid transparent;
+    }
+
+    .copyright-text {
+      position: absolute;
+      bottom: 1em;
+      color: #fff;
+      font-size: 1.1em;
+      padding-left: 1em;
+    }
+  }
+}
